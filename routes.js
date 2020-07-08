@@ -33,7 +33,7 @@ const routes = {
     users: USERS,
     userDetail: (id) => {
         if (id) {
-            return "/users/${id}";
+            return USERS + "/" + id;
         }
         else{
             return USERS_DETAIL;
@@ -43,7 +43,14 @@ const routes = {
     changePassword: CHANGE_PASSWORD,
     videos: VIDEOS,
     upload: UPLOAD,
-    videoDetail: VIDEO_DETAIL,
+    videoDetail: (id) => {
+        if (id) {
+            return VIDEOS  + "/" + id;
+        }
+        else{
+            return VIDEO_DETAIL;
+        }
+    },
     editVideo: EDIT_VIDEO,
     deleteVideo: DELETE_VIDEO
 };

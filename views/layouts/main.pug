@@ -4,7 +4,8 @@ html
         title #{pageTitle} | #{siteName}
     body
         header
-            h1.title 하위~
+            h1.title
+                a(href=routes.home) #{siteName}
         main
             block content
         include ../partials/footer

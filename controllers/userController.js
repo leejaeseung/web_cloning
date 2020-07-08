@@ -44,8 +44,12 @@ export const postLogin = (req, res) => {
     //}
 };
 
-export const logout = (req, res) => res.send("로그아웃 화면!");
+export const logout = (req, res) => {
 
+//로그아웃 기능 구현!
+
+    res.redirect(routes.home);
+};
 
 export const editProfile = (req, res) => {
     res.render("editProfile", {
@@ -58,3 +62,4 @@ export const userDetail = (req, res) => {
         pageTitle: "User's Detail"
     })
 };
+
