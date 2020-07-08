@@ -1,0 +1,20 @@
+header
+    h1.title
+        a(href=routes.home) #{siteName}
+    div.search
+        form(action=routes.search, method="get")
+            input(type="text", placeholder="검색", name="search", value=searchTerm)
+    ul
+        if !user.isAuthenticated
+            li
+                a(href=routes.login) Login
+            li
+                a(href=routes.join) Join
+        else
+            li
+                a(href="/videos/${routes.upload}") Upload
+            li
+                a(href=routes.userDetail(user.id)) Profile
+            li
+                a(href=routes.logout) Logout
+    hr
