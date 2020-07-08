@@ -1,0 +1,18 @@
+
+extends layouts/main
+include mixins/myTitle
+include mixins/videoBlock
+
+block content
+    +myTitle
+    include ./partials/header
+
+    .videos
+        h1 videos
+            each item in videos
+                +videoBlock({
+                    title: item.title,
+                    description: item.description,
+                    videoFile: item.videoFile
+                })
+
