@@ -2,7 +2,7 @@ extends layouts/main
 
 block content
     .login
-        p 로그인 페이지입니다
+        p 로그인 페이지입니다 #{tryMsg}
         br
         form(action=routes.login, method="post")
             input(type="text", placeholder="아이디를 입력하세요.", name="id")

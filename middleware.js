@@ -6,7 +6,7 @@ export const localsMiddleware = (req, res, next) =>{
     res.locals.siteName = "JTube";
     res.locals.routes = routes;
 
-    res.locals.user = {
+    res.locals.nowUser = {
         isAuthenticated: false,
         id: 0
     };

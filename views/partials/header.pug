@@ -3,7 +3,7 @@ header
         form(action=routes.search, method="get")
             input(type="text", placeholder="검색", name="search", value=searchTerm)
     ul
-        if !user.isAuthenticated
+        if !nowUser.isAuthenticated
             li
                 a(href=routes.login) Login
             li
