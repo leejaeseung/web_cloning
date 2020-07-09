@@ -1,4 +1,28 @@
-export const videos = [{
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
+
+const startDB = () =>{
+    function connect() {
+        var url = process.env.MONGO_URL;
+
+        mongoose.connect( url, {useUnifiedTopology: true, useNewUrlParser: true} , function(err){
+            if(err){
+                console.error("mongodb connection error", err);
+            }
+            console.log("mongodb connected");
+        });
+    };
+    connect();
+    mongoose.connection.on("disconnected", connect);
+    require("./DBmodel/videos.js");
+};
+
+startDB();
+
+export default startDB;
+
+/*export const videos = [{
     id: 1881,
     title: "A Study in Scarlet",
     description: "I should like to meet him",
@@ -33,4 +57,4 @@ export const videos = [{
         name: "LJS",
         email: "wasd222@naver.com",
     }
-}]
+}]*/

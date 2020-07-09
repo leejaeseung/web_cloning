@@ -5,9 +5,10 @@ import morgan from "morgan";
 import helmet from "helmet";
 //보안 미들웨어
 import bodyParser from "body-parser";
-//바디 미들웨어
+//바디 미들웨어 (POST 방식 전송을 위해)
 import cookieParser from "cookie-parser";
 //쿠키 데이터 미들웨어
+import methodOverride from "method-override";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 import globalRouter from "./routers/globalRouter";
@@ -22,6 +23,7 @@ app.set("view engine", "pug");
 //뷰 엔진을 pug로 설정
 
 app.use(cookieParser());
+app.use(methodOverride());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(helmet());
