@@ -10,6 +10,7 @@ import cookieParser from "cookie-parser";
 //쿠키 데이터 미들웨어
 import methodOverride from "method-override";
 import session from "express-session";
+import expressValidator from "express-validator";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 import globalRouter from "./routers/globalRouter";
@@ -36,6 +37,7 @@ app.use(session({
     //store: new FileStore()
     store: false
 }));
+app.use(expressValidator());
 //여러 미들웨어 붙여주기
 
 app.use(localsMiddleware);

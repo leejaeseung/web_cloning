@@ -11,8 +11,23 @@ export const getJoin = (req, res) => {
     })
 };
 
-export const postJoin = (req, res, next) => {
+export const postJoin = (req, res) => {
     const { body: { id, email, password1 , password2}} = req;
+
+    req.checkBody("id", "id는 5글자 이상, 15글자 이하입니다.").isLength({max: 15, min: 5});
+    req.checkBody("email", "이메일 형식이 아닙니다.").isEmail();
+    req.checkBody("password", "password는 5글자 이상입니다.").isLength({min: 5});
+    
+
+    var errors = req.validationErrors();
+    if(errors.length > 0){
+        return res.render("join", {
+            pageTitle: "Join",
+            tryMsg: errors[0].msg
+        });
+    }
+
+    console.log(errors);
 
     User.findOne( {"id": id}, function(err, user) {
         if(err) return res.status(500).json({error: err});
