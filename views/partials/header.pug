@@ -3,7 +3,7 @@ header
         form(action=routes.search, method="get")
             input(type="text", placeholder="검색", name="search", value=searchTerm)
     ul
-        if !nowUser.isAuthenticated
+        if !nowUser.isLogin
             li
                 a(href=routes.login) Login
             li
@@ -12,7 +12,7 @@ header
             li
                 a(href=routes.videos + routes.upload) Upload
             li
-                a(href=routes.userDetail(user.id)) Profile
+                a(href=routes.userDetail(nowUser.id)) Profile
             li
                 a(href=routes.logout) Logout
     hr

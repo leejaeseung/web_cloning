@@ -2,6 +2,7 @@ import express from "express";
 import routes from "../routes"
 import User from "../DBmodel/users";
 
+var loginFail = false;
 
 export const getJoin = (req, res) => {
     res.render("join", {
@@ -47,38 +48,49 @@ export const postJoin = (req, res, next) => {
 };
 
 export const getLogin = (req, res) => {
+
+    res.locals.loginFail = loginFail;
+
     res.render("login", {
-        pageTitle: "Login",
-        tryMsg: ""
+        pageTitle: "Login"
     })
 };
 
-export const postLogin = (req, res) => {
+export const postLogin = (req, res, next) => {
 
     const { body: { id, password}} = req;
 
     User.findOne( {"id" : id}, function(err, user) {
         if(!user || user.password !== password){
             //id가 존재하지 않거나 비밀번호 미일치
-            return res.render("login", {
-                pageTitle: "Login",
-                tryMsg: "(잘못된 정보입니다. 다시 입력해 주세요.)"
-            });
+
+            loginFail = true;
+            
+            res.redirect(routes.login);
         }
         else{
             console.log("로그인 성공~");
 
-            nowUser.isAuthenticated = true;
-            nowUser.id = id;
-    
-            return res.redirect(routes.home);
+            req.session.isLogin = true;
+            req.session.userID = id;
+
+            //세션에 로그인한 유저 등록
+
+            res.redirect(routes.home);
         }
     });
 };
 
 export const logout = (req, res) => {
 
-//로그아웃 기능 구현!
+    //로그아웃 기능 구현!
+    if(req.session.isLogin){
+        req.session.destroy(function(err) {
+            if(err) {
+                console.log(err);
+            }
+        })
+    }
 
     res.redirect(routes.home);
 };

@@ -9,6 +9,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 //쿠키 데이터 미들웨어
 import methodOverride from "method-override";
+import session from "express-session";
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 import globalRouter from "./routers/globalRouter";
@@ -28,6 +29,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(helmet());
 app.use(morgan("short"));
+app.use(session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+    //store: new FileStore()
+    store: false
+}));
 //여러 미들웨어 붙여주기
 
 app.use(localsMiddleware);
