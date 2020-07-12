@@ -1,49 +1,41 @@
 import express from "express";
 import routes from "../routes"
 import User from "../DBmodel/users";
+import validCheck from "../mylib/validator";
 
 var loginFail = false;
+var t_msg = "";
 
 export const getJoin = (req, res) => {
     res.render("join", {
         pageTitle: "Join",
-        tryMsg: ""
+        tryMsg: t_msg
     })
 };
 
 export const postJoin = (req, res) => {
     const { body: { id, email, password1 , password2}} = req;
 
-    req.checkBody("id", "id는 5글자 이상, 15글자 이하입니다.").isLength({max: 15, min: 5});
-    req.checkBody("email", "이메일 형식이 아닙니다.").isEmail();
-    req.checkBody("password", "password는 5글자 이상입니다.").isLength({min: 5});
-    
+    t_msg = validCheck(req);
 
-    var errors = req.validationErrors();
-    if(errors.length > 0){
-        return res.render("join", {
-            pageTitle: "Join",
-            tryMsg: errors[0].msg
-        });
-    }
-
-    console.log(errors);
+    if(t_msg !== "")
+        return res.redirect(routes.join);
 
     User.findOne( {"id": id}, function(err, user) {
         if(err) return res.status(500).json({error: err});
         if(user) {
             //id가 이미 있으면
-            return res.render("join", {
-                pageTitle: "Join",
-                tryMsg: "(이미 존재하는 ID입니다. 다시 입력해 주세요.)"
-            });
+
+            t_msg = "이미 존재하는 ID입니다. 다시 입력해 주세요.";
+
+            return res.redirect(routes.join);
         }
         else if(password1 !== password2){
             //비밀번호 미 일치시
-            return res.render("join", {
-                pageTitle: "Join",
-                tryMsg: "(비밀번호가 일치하지 않습니다. 다시 입력해 주세요.)"
-            });
+            
+            t_msg = "비밀번호가 일치하지 않습니다. 다시 입력해 주세요.";
+
+            return res.redirect(routes.join);
         }
         else{
             //성공 시
@@ -88,6 +80,7 @@ export const postLogin = (req, res, next) => {
 
             req.session.isLogin = true;
             req.session.userID = id;
+            req.session.email = user.email;
 
             //세션에 로그인한 유저 등록
 
@@ -111,14 +104,40 @@ export const logout = (req, res) => {
 };
 
 export const editProfile = (req, res) => {
-    res.render("editProfile", {
-        pageTitle: "Edit Your Profile"
-    })
+
+    User.findOne( {"id" : req.params.id}, function(err, user) {
+        if(!user){
+            //id가 존재하지 않을 때
+
+            return res.status(404).json({error : "없는 아이디"});
+        }
+        else if(req.session.userID !== req.params.id){
+            return res.status(404).json({error : "로그인 된 아이디가 아님"});
+        }
+        else {
+
+            res.render("editProfile", {
+                pageTitle: "Edit Your Profile"
+            })
+        }
+    });
 };
 
 export const userDetail = (req, res) => {
-    res.render("userDetail", {
-        pageTitle: "User's Detail"
-    })
+
+    User.findOne( {"id" : req.params.id}, function(err, user) {
+        if(!user){
+            //id가 존재하지 않을 때
+
+            return res.status(404).json({error : "없는 아이디"});
+        }
+        else {
+            res.render("userDetail", {
+                pageTitle: req.params.id + "'s Detail",
+                userID: user.id,
+                userEmail: user.email
+            })
+        }
+    });
 };
 

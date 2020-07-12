@@ -3,10 +3,14 @@ extends layouts/main
 block content
     .editProfile
         h3 프로필 수정
-        form(action=routes.editProfile, method="post")
+        form(action=routes.editProfile(userID), method="post")
             label(for="avatar") Avatar
+            br
             input(type="file", id="avatar", name="avatar")
+            br
             input(type="text", name="userName", placeholder="이름을 입력하세요.")
+            br
             input(type="email", name="email", placeholder="이메일을 입력하세요.")
+            br
             input(type="submit", value="프로필 업데이트")
         a(href="${routes.users}${routes.changePassword}")

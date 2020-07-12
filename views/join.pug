@@ -2,8 +2,8 @@ extends layouts/main
 
 block content
     .join
-        p 회원가입 페이지입니다 #{tryMsg}
-        br
+        p 회원가입 페이지입니다 
+        p #{tryMsg}
         form(action=routes.join, method="post")
             input(type="text", placeholder="아이디를 입력하세요.", name="id")
             br

@@ -39,7 +39,14 @@ const routes = {
             return USERS_DETAIL;
         }
     },
-    editProfile: EDIT_PROFILE,
+    editProfile: (id) => {
+        if (id) {
+            return USERS + "/" + id + EDIT_PROFILE;
+        }
+        else{
+            return "/:id" + EDIT_PROFILE;
+        }
+    },
     changePassword: CHANGE_PASSWORD,
     videos: VIDEOS,
     upload: UPLOAD,

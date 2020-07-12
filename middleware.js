@@ -9,7 +9,8 @@ export const localsMiddleware = (req, res, next) =>{
 
     res.locals.nowUser = {
         isLogin: req.session.isLogin,
-        id: req.session.userID
+        id: req.session.userID,
+        email: req.session.email
     };
 
     next();
