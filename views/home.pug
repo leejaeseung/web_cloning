@@ -10,10 +10,11 @@ block content
     .videos
         h1 videos
             each item in videos
-                +videoBlock({
-                    title: item.title,
-                    description: item.description,
-                    videoFile: item.videoFile,
-                    id: item.id
-                })
+                    +videoBlock({
+                        id: item.id,
+                        videoName: item.videoName,
+                        description: item.description,
+                        fileUrl: item.fileUrl,
+                        views: item.views,
+                    })
 

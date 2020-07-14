@@ -1,14 +1,12 @@
 import mongoose from "mongoose";
 
 const videoSchema = new mongoose.Schema({
-    id: Number,
-    title: String,
+    videoName: String,
     description: String,
     views: Number,
-    videoFile: String,
+    fileUrl: String,
     creator: {
-        id: Number,
-        name: String,
+        userName: String,
         email: String,
     }
 });

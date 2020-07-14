@@ -3,7 +3,7 @@ extends layouts/main
 block content
     .editProfile
         h3 프로필 수정
-        form(action=routes.editProfile(userID), method="post")
+        form(action=routes.editProfile(userName), method="post")
             label(for="avatar") Avatar
             br
             input(type="file", id="avatar", name="avatar")

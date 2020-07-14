@@ -14,14 +14,14 @@ export const getJoin = (req, res) => {
 };
 
 export const postJoin = (req, res) => {
-    const { body: { id, email, password1 , password2}} = req;
+    const { body: { userName, email, password1 , password2}} = req;
 
     t_msg = validCheck(req);
 
     if(t_msg !== "")
         return res.redirect(routes.join);
 
-    User.findOne( {"id": id}, function(err, user) {
+    User.findOne( {"userName": userName}, function(err, user) {
         if(err) return res.status(500).json({error: err});
         if(user) {
             //id가 이미 있으면
@@ -40,13 +40,12 @@ export const postJoin = (req, res) => {
         else{
             //성공 시
             console.log("회원가입 성공~");
-            //새 user Save
-            new User({
-                id: id,
+            //새 user Create
+
+            User.create({
+                userName: userName,
                 password: password1,
                 email: email
-            }).save(function (err) {
-                if(err) return console.error(err);
             });
     
             return res.redirect(routes.home);
@@ -65,9 +64,9 @@ export const getLogin = (req, res) => {
 
 export const postLogin = (req, res, next) => {
 
-    const { body: { id, password}} = req;
+    const { body: { userName, password}} = req;
 
-    User.findOne( {"id" : id}, function(err, user) {
+    User.findOne( {"userName" : userName}, function(err, user) {
         if(!user || user.password !== password){
             //id가 존재하지 않거나 비밀번호 미일치
 
@@ -79,7 +78,8 @@ export const postLogin = (req, res, next) => {
             console.log("로그인 성공~");
 
             req.session.isLogin = true;
-            req.session.userID = id;
+            //req.session.userID = user.id;
+            req.session.userName = user.userName;
             req.session.email = user.email;
 
             //세션에 로그인한 유저 등록
@@ -105,13 +105,13 @@ export const logout = (req, res) => {
 
 export const editProfile = (req, res) => {
 
-    User.findOne( {"id" : req.params.id}, function(err, user) {
+    User.findOne( {"userName" : req.params.id}, function(err, user) {
         if(!user){
             //id가 존재하지 않을 때
 
             return res.status(404).json({error : "없는 아이디"});
         }
-        else if(req.session.userID !== req.params.id){
+        else if(req.session.userName !== req.params.id){
             return res.status(404).json({error : "로그인 된 아이디가 아님"});
         }
         else {
@@ -125,7 +125,7 @@ export const editProfile = (req, res) => {
 
 export const userDetail = (req, res) => {
 
-    User.findOne( {"id" : req.params.id}, function(err, user) {
+    User.findOne( {"id" : req.params.userName}, function(err, user) {
         if(!user){
             //id가 존재하지 않을 때
 
@@ -133,8 +133,8 @@ export const userDetail = (req, res) => {
         }
         else {
             res.render("userDetail", {
-                pageTitle: req.params.id + "'s Detail",
-                userID: user.id,
+                pageTitle: req.params.userName + "'s Detail",
+                userName: user.userName,
                 userEmail: user.email
             })
         }

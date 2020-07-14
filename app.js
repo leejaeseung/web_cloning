@@ -10,7 +10,9 @@ import cookieParser from "cookie-parser";
 //쿠키 데이터 미들웨어
 import methodOverride from "method-override";
 import session from "express-session";
+//세션 미들웨어
 import expressValidator from "express-validator";
+//유효성 검사 미들웨어
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 import globalRouter from "./routers/globalRouter";
@@ -19,10 +21,13 @@ import { localsMiddleware } from "./middleware";
 
 import routes from "./routes";
 
+
 const app = express();
 
 app.set("view engine", "pug");
 //뷰 엔진을 pug로 설정
+
+app.use("/uploads", express.static("uploads"));
 
 app.use(cookieParser());
 app.use(methodOverride());

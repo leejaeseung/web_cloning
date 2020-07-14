@@ -27,7 +27,7 @@ const validate = (req, res, next) => {
 
 function validCheck (req) {
 
-    req.checkBody("id", "id는 5글자 이상, 15글자 이하입니다.").isLength({max: 15, min: 5});
+    req.checkBody("userName", "userName은 5글자 이상, 15글자 이하입니다.").isLength({max: 15, min: 5});
     req.checkBody("email", "이메일 형식이 아닙니다.").isEmail();
     req.checkBody("password1", "password는 5글자 이상입니다.").isLength({min: 5});
 
