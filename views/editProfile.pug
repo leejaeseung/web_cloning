@@ -3,10 +3,20 @@ extends layouts/main
 block content
     .editProfile
         h3 프로필 수정
-        form(action=routes.editProfile(userName), method="post")
-            label(for="avatar") Avatar
-            br
-            input(type="file", id="avatar", name="avatar")
+        form(action=routes.editProfile(nowUser.userName), method="post")
+            input(type="file", id="imgFile", name="imgFile", accept="image/*", onchange="common.inputFileReturnImg(this, 100, 120, &nbsp;'imgFile');")            
+            script.
+                inputFileReturnImg: function (input, width, height, inputId){
+                    if (input.files && input.files[0]){
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            $('#' + inputId).attr('src', e.target.result)
+                            .width(width)
+                            .height(height);
+                        };
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
             br
             input(type="text", name="userName", placeholder="이름을 입력하세요.")
             br

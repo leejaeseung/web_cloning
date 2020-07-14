@@ -39,7 +39,7 @@ export const search = (req, res) => {
 
 export const videoDetail = async (req, res) => {
 
-    console.log(req.params.id);
+    //console.log(req.params.id);
 
     const video = await Video.findOne( { _id: req.params.id });
 
