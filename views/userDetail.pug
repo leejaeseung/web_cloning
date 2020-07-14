@@ -2,4 +2,6 @@ extends layouts/main
 
 block content
     h1 여긴 유저 디테일
-    p #{user.id}
+    p ID : #{userName}
+    p E-mail : #{userEmail}
+    a(href=routes.editProfile(userName)) Edit

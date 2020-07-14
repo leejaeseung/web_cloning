@@ -7,9 +7,10 @@ block content
         h3 "#{searchTerm}" 으로 검색한 결과입니다.
     .search__video
     each item in videos
-        if item.title == searchTerm
-            +videoBlock({
-                title: item.title,
-                description: item.description,
-                videoFile: item.videoFile
-            })
+        +videoBlock({
+            id: item.id,
+            videoName: item.videoName,
+            description: item.description,
+            fileUrl: item.fileUrl,
+            views: item.views,
+        })
