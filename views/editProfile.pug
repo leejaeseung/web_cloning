@@ -4,17 +4,21 @@ block content
     .editProfile
         h3 프로필 수정
         form(action=routes.editProfile(nowUser.userName), method="post")
-            input(type="file", id="imgFile", name="imgFile", accept="image/*", onchange="common.inputFileReturnImg(this, 100, 120, &nbsp;'imgFile');")            
+            img(id="img_section", src="#")
+            br
+            input(type="file", id="imgFile", name="imgFile", accept="image/*", onchange="inputFileReturnImg(this, 200, 200);")
             script.
-                inputFileReturnImg: function (input, width, height, inputId){
+                function inputFileReturnImg (input, width, height) {
                     if (input.files && input.files[0]){
                         var reader = new FileReader();
+
                         reader.onload = function(e) {
-                            $('#' + inputId).attr('src', e.target.result)
-                            .width(width)
-                            .height(height);
-                        };
-                        reader.readAsDataURL(input.files[0]);
+                        $('#img_section').attr('src', e.target.result)
+                        .width(width)
+                        .height(height);
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
                     }
                 }
             br

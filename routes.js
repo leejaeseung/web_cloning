@@ -20,7 +20,7 @@ const PROFILES = "/uploads/profiles"
 const VIDEOS = "/videos";
 const UPLOAD = "/upload";
 const VIDEO_DETAIL = "/:id";
-const EDIT_VIDEO = "/:id/edit";
+const EDIT_VIDEO = "/edit";
 const DELETE_VIDEO = "/:id/delete";
 
 // Object
@@ -60,7 +60,14 @@ const routes = {
             return VIDEO_DETAIL;
         }
     },
-    editVideo: EDIT_VIDEO,
+    editVideo: (id) => {
+        if(id) {
+            return VIDEOS + "/" + id + EDIT_VIDEO;
+        }
+        else{
+            return "/:id" + EDIT_VIDEO;
+        }
+    },
     deleteVideo: DELETE_VIDEO
 };
 
