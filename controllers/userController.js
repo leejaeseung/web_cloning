@@ -78,7 +78,7 @@ export const postLogin = (req, res, next) => {
             console.log("로그인 성공~");
 
             req.session.isLogin = true;
-            //req.session.userID = user.id;
+            req.session.userID = user._id;
             req.session.userName = user.userName;
             req.session.email = user.email;
 
@@ -103,7 +103,7 @@ export const logout = (req, res) => {
     res.redirect(routes.home);
 };
 
-export const editProfile = (req, res) => {
+export const getEditProfile = (req, res) => {
 
     User.findOne( {"userName" : req.params.id}, function(err, user) {
         if(!user){
@@ -123,17 +123,54 @@ export const editProfile = (req, res) => {
     });
 };
 
+export const postEditProfile = (req, res) => {
+
+    const {
+        body: {
+            userName,
+            email
+        },
+        file: { path }
+    } = req;
+
+
+    User.findOne( {"userName" : req.params.id}, async function(err, user) {
+        if(!user){
+
+            return res.status(404).json({error : "없는 아이디"});
+        }
+        else {
+            
+
+            await User.update({ userName: user.userName },
+            {
+                $set: {
+                    userName: userName,
+                    email: email
+                    }
+            }
+            );
+
+            req.session.userName = userName;
+            req.session.email = email;
+
+            res.redirect(routes.userDetail(req.session.userName));
+        }
+    });
+}
+
 export const userDetail = (req, res) => {
 
-    User.findOne( {"id" : req.params.userName}, function(err, user) {
+    User.findOne( {"userName" : req.params.id}, function(err, user) {
         if(!user){
-            //id가 존재하지 않을 때
+            //userName이 존재하지 않을 때
 
             return res.status(404).json({error : "없는 아이디"});
         }
         else {
             res.render("userDetail", {
                 pageTitle: req.params.userName + "'s Detail",
+                userID: user._id,
                 userName: user.userName,
                 userEmail: user.email
             })

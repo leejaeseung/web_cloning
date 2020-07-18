@@ -1,7 +1,7 @@
 extends layouts/main
 
 block content
-    h1 여긴 유저 디테일
-    p ID : #{userName}
+    h1 #{userName}'s Profile
+    img(src=routes.profile + "/" + userID + ".png", alt="프로필을 적용해 주세요.", width="200", height="200")
     p E-mail : #{userEmail}
     a(href=routes.editProfile(userName)) Edit
