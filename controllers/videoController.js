@@ -72,8 +72,7 @@ export const postUpload = async (req, res) => {
         views: 0,
         fileUrl: path,
         creator: {
-            userName: req.session.userName,
-            email: req.session.email
+            ownerID: req.session.userID
         }
     });
 

@@ -11,8 +11,9 @@ import cookieParser from "cookie-parser";
 import methodOverride from "method-override";
 import session from "express-session";
 //세션 미들웨어
-import expressValidator from "express-validator";
-//유효성 검사 미들웨어
+import flash from "connect-flash";
+//일회성 메세지 전용 미들웨어
+
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 import globalRouter from "./routers/globalRouter";
@@ -28,6 +29,8 @@ app.set("view engine", "pug");
 //뷰 엔진을 pug로 설정
 
 app.use("/uploads", express.static("uploads"));
+app.use(express.static(__dirname + "/public"));
+//정적 파일 경로 설정 -> uploads는 나중에 수정해야됨.
 
 app.use(cookieParser());
 app.use(methodOverride());
@@ -42,7 +45,7 @@ app.use(session({
     //store: new FileStore()
     store: false
 }));
-app.use(expressValidator());
+app.use(flash());
 //여러 미들웨어 붙여주기
 
 app.use(localsMiddleware);

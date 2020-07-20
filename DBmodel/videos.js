@@ -6,8 +6,7 @@ const videoSchema = new mongoose.Schema({
     views: Number,
     fileUrl: String,
     creator: {
-        userName: String,
-        email: String,
+        ownerID: String,
     }
 });
 

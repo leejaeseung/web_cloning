@@ -3,8 +3,5 @@ extends layouts/main
 block content
     .login
         p 로그인 페이지입니다
-        if !loginFail
-            include ./partials/loginForm
-        else
-            p (잘못된 정보입니다. 다시 입력해 주세요.)
-            include ./partials/loginForm
+        p #{tryMsg}
+        include ./partials/loginForm

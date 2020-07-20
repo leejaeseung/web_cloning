@@ -1,39 +1,36 @@
 import express from "express";
 import routes from "../routes"
 import User from "../DBmodel/users";
-import validCheck from "../mylib/validator";
-
-var loginFail = false;
-var t_msg = "";
 
 export const getJoin = (req, res) => {
+
     res.render("join", {
         pageTitle: "Join",
-        tryMsg: t_msg
+        tryMsg: req.flash("tryMsg")
     })
 };
 
 export const postJoin = (req, res) => {
-    const { body: { userName, email, password1 , password2}} = req;
+    const { body: { userName, email, password1 , password2, t_msg}} = req;
 
-    t_msg = validCheck(req);
-
-    if(t_msg !== "")
+    if(t_msg !== ""){
+        req.flash("tryMsg", t_msg);
         return res.redirect(routes.join);
+    }
 
     User.findOne( {"userName": userName}, function(err, user) {
         if(err) return res.status(500).json({error: err});
         if(user) {
             //id가 이미 있으면
 
-            t_msg = "이미 존재하는 ID입니다. 다시 입력해 주세요.";
+            req.flash("tryMsg", "이미 존재하는 ID입니다. 다시 입력해 주세요.");
 
             return res.redirect(routes.join);
         }
         else if(password1 !== password2){
             //비밀번호 미 일치시
             
-            t_msg = "비밀번호가 일치하지 않습니다. 다시 입력해 주세요.";
+            req.flash("tryMsg", "비밀번호가 일치하지 않습니다. 다시 입력해 주세요.");
 
             return res.redirect(routes.join);
         }
@@ -55,10 +52,9 @@ export const postJoin = (req, res) => {
 
 export const getLogin = (req, res) => {
 
-    res.locals.loginFail = loginFail;
-
     res.render("login", {
-        pageTitle: "Login"
+        pageTitle: "Login",
+        tryMsg: req.flash("tryMsg")
     })
 };
 
@@ -69,9 +65,8 @@ export const postLogin = (req, res, next) => {
     User.findOne( {"userName" : userName}, function(err, user) {
         if(!user || user.password !== password){
             //id가 존재하지 않거나 비밀번호 미일치
-
-            loginFail = true;
             
+            req.flash("tryMsg", "잘못된 정보입니다. 다시 입력해 주세요.");
             res.redirect(routes.login);
         }
         else{
@@ -116,8 +111,11 @@ export const getEditProfile = (req, res) => {
         }
         else {
 
+
+
             res.render("editProfile", {
-                pageTitle: "Edit Your Profile"
+                pageTitle: "Edit Your Profile",
+                defaultImg: routes.profile + "/" + user._id + ".png"
             })
         }
     });
@@ -169,7 +167,7 @@ export const userDetail = (req, res) => {
         }
         else {
             res.render("userDetail", {
-                pageTitle: req.params.userName + "'s Detail",
+                pageTitle: user.userName + "'s Detail",
                 userID: user._id,
                 userName: user.userName,
                 userEmail: user.email
