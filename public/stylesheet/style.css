@@ -1,0 +1,18 @@
+
+#edit_text {
+    width:175px; 
+    height:400px; 
+    float:left; 
+    margin-right:15px;
+}
+
+#edit_box{
+    width:300px; 
+    height:400px; 
+    float:left; 
+    line-height:12px;
+}
+
+.edit-boxes {
+    margin-top:14px;
+}
