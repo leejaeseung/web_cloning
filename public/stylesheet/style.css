@@ -1,9 +1,26 @@
 
-#edit_text {
-    width:175px; 
-    height:400px; 
-    float:left; 
-    margin-right:15px;
+#edit {
+    width:1500px; 
+    height:30px;
+}
+
+#edit-text {
+    display: inline-block;
+    width: 160px;
+    height: 20px;
+    margin-right:10px;
+}
+
+#edit-input {
+    display: inline-block;
+    width: 450px;
+    height: 20px;
+}
+
+#edit-warn {
+    display: inline-block;
+    width: 400px;
+    height: 20px;
 }
 
 #edit_box{
@@ -13,6 +30,13 @@
     line-height:12px;
 }
 
-.edit-boxes {
-    margin-top:14px;
+input[type="text"], input[type="password"], input[type="email"]  {
+    width:250px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }

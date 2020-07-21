@@ -58,7 +58,7 @@ export const getLogin = (req, res) => {
     })
 };
 
-export const postLogin = (req, res, next) => {
+export const postLogin = (req, res) => {
 
     const { body: { userName, password}} = req;
 
@@ -99,7 +99,7 @@ export const logout = (req, res) => {
 };
 
 export const getEditProfile = (req, res) => {
-
+    
     User.findOne( {"userName" : req.params.id}, function(err, user) {
         if(!user){
             //id가 존재하지 않을 때
@@ -113,7 +113,11 @@ export const getEditProfile = (req, res) => {
 
             res.render("editProfile", {
                 pageTitle: "Edit Your Profile",
-                defaultImg: routes.profile + "/" + user._id + ".png"
+                defaultImg: routes.profile + "/" + user._id + ".png",
+                id_warn: req.flash("id_warn"),
+                email_warn: req.flash("email_warn"),
+                pwori_warn: req.flash("pwori_warn"),
+                pwnew_warn: req.flash("pwnew_warn")
             })
         }
     });
@@ -160,18 +164,71 @@ export const postEditProfile = (req, res) => {
 
 export const patchEditProfile = (req, res) => {
 
-    console.log(req.body);
-    console.log("????");
-
-    const nowUser = req.params.id;
-
     const {
         body: {
             userName,
-            email
+            email,
+            password_ori,
+            password_new1,
+            password_new2
         },
     } = req;
 
+    User.findOne( {"userName" : req.params.id}, async function(err, user) {
+        if(!user){
+
+            return res.status(404).json({error : "없는 아이디"});
+        }
+        else {
+            
+            if(userName){
+                User.findOne({"userName" : userName}, async function(err, target) {
+
+                    if(target){
+                        await req.flash("id_warn", "이미 존재하는 아이디 입니다.");
+                        
+                    }
+                    else{
+                        await User.update({ userName: user.userName },
+                            {
+                                $set: {
+                                    userName
+                                }
+                            });
+
+                        req.session.userName = userName;
+                    }
+                    return res.redirect(routes.editProfile(req.session.userName));
+                });
+            }
+            else if(email){
+                User.findOne({"email" : email}, async function(err, target) {
+                    if(target){
+                        await req.flash("email_warn", "이미 존재하는 e-mail 입니다.");
+                    }
+                    else{
+                        await User.update({ userName: user.userName },
+                            {
+                                $set: {
+                                    email
+                                    }
+                            });
+                        
+                        req.session.email = email;  
+                    }
+                    return res.redirect(routes.editProfile(req.session.userName));
+                });
+            }
+            else if(password_ori){
+                console.log(req.body);
+
+                return res.redirect(routes.editProfile(req.session.userName));
+            }
+            else{
+                return res.redirect(routes.editProfile(req.session.userName));
+            }
+        }
+    });
 }
 
 export const userDetail = (req, res) => {
