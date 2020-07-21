@@ -3,7 +3,7 @@ extends layouts/main
 block content
     .editProfile
         h3 프로필 수정
-        form(action=routes.editProfile(nowUser.userName), method="post", enctype="multipart/form-data")
+        form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post", enctype="multipart/form-data")
             img(id="img_section", src=defaultImg)
             br
             input(type="file", id="imgFile", name="imgFile", accept="image/*", onchange="inputFileReturnImg(this, 200, 200);")
@@ -32,15 +32,15 @@ block content
             p New Password :   
             p Retry New Password : 
         #edit_box(align="left")
-            form(action=routes.editProfile(nowUser.userName), method="post")
-                input(type="text", name="userName", placeholder="변경할 이름을 입력하세요.", class="edit-boxes")
+            form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
+                input(type="text", id="userName", name="userName", placeholder="변경할 이름을 입력하세요.", class="edit-boxes")
                 input(type="submit", value="ID 변경", class="edit-boxes")
-            form(action=routes.editProfile(nowUser.userName), method="post")
-                input(type="email", name="email", placeholder="변경할 이메일을 입력하세요.", class="edit-boxes")
+            form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
+                input(type="email", id="email", name="email", placeholder="변경할 이메일을 입력하세요.", class="edit-boxes")
                 input(type="submit", value="email 변경", class="edit-boxes")
-            form(action=routes.editProfile(nowUser.userName), method="post")
-                input(type="password", name="password_ori", placeholder="기존 비밀번호를 입력하세요.", class="edit-boxes")
-                input(type="password", name="password_new1", placeholder="바꿀 비밀번호를 입력하세요.", class="edit-boxes") 
-                input(type="password", name="password_new2", placeholder="비밀번호를 한번 더 입력하세요.", class="edit-boxes")
+            form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
+                input(type="password", id="password_ori", name="password_ori", placeholder="기존 비밀번호를 입력하세요.", class="edit-boxes")
+                input(type="password", id="password_new1", name="password_new1", placeholder="바꿀 비밀번호를 입력하세요.", class="edit-boxes") 
+                input(type="password", id="password_new2", name="password_new2", placeholder="비밀번호를 한번 더 입력하세요.", class="edit-boxes")
                 input(type="submit", value="비밀번호 변경", class="edit-boxes")
             //a(href="${routes.users}${routes.changePassword}")

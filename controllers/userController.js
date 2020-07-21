@@ -111,8 +111,6 @@ export const getEditProfile = (req, res) => {
         }
         else {
 
-
-
             res.render("editProfile", {
                 pageTitle: "Edit Your Profile",
                 defaultImg: routes.profile + "/" + user._id + ".png"
@@ -123,24 +121,27 @@ export const getEditProfile = (req, res) => {
 
 export const postEditProfile = (req, res) => {
 
+    console.log(req.body);
+
+    const nowUser = req.params.id;
+
     const {
         body: {
             userName,
             email
         },
-        file: { path }
     } = req;
 
+    console.log(nowUser);
 
-    User.findOne( {"userName" : req.params.id}, async function(err, user) {
+    User.findOne( {"userName" : nowUser}, async function(err, user) {
         if(!user){
 
             return res.status(404).json({error : "없는 아이디"});
         }
         else {
             
-
-            await User.update({ userName: user.userName },
+            /*await User.update({ userName: user.userName },
             {
                 $set: {
                     userName: userName,
@@ -150,11 +151,27 @@ export const postEditProfile = (req, res) => {
             );
 
             req.session.userName = userName;
-            req.session.email = email;
+            req.session.email = email;*/
 
             res.redirect(routes.userDetail(req.session.userName));
         }
     });
+}
+
+export const patchEditProfile = (req, res) => {
+
+    console.log(req.body);
+    console.log("????");
+
+    const nowUser = req.params.id;
+
+    const {
+        body: {
+            userName,
+            email
+        },
+    } = req;
+
 }
 
 export const userDetail = (req, res) => {
@@ -175,4 +192,3 @@ export const userDetail = (req, res) => {
         }
     });
 };
-

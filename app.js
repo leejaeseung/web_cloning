@@ -33,7 +33,7 @@ app.use(express.static(__dirname + "/public"));
 //정적 파일 경로 설정 -> uploads는 나중에 수정해야됨.
 
 app.use(cookieParser());
-app.use(methodOverride());
+app.use(methodOverride("_method"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(helmet());
