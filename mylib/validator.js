@@ -12,14 +12,27 @@ export const userValidationRules = () => {
     ]
 };
 
+export const userEditValidationRules = () => {
+    return [
+        check("userName", "ID는 5글자 이상, 15글자 이하입니다.").isLength({max: 15, min: 5}),
+
+        check("email", "이메일 형식이 아닙니다.").isEmail(),
+
+        check("password_ori", "password는 5글자 이상입니다.").isLength({min: 5}),
+
+        check("password_new1", "password는 5글자 이상입니다.").isLength({min: 5}),
+
+        check("password_new2", "password는 5글자 이상입니다.").isLength({min: 5})
+    ]
+};
 
 export const validate = (req, res, next) => {
     const errors = validationResult(req);
 
     if(errors.isEmpty())
-        req.body.t_msg = "";
+        req.body.t_msg = null;
     else
-        req.body.t_msg = errors.errors[0].msg;
+        req.body.t_msg = errors.errors;
 
     return next();
 }

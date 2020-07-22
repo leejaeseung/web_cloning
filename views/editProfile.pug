@@ -6,7 +6,7 @@ block content
         form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post", enctype="multipart/form-data")
             img(id="img_section", src=defaultImg)
             br
-            input(type="file", id="imgFile", name="imgFile", accept="image/*", onchange="inputFileReturnImg(this, 200, 200);")
+            input(type="file", id="imgFile", name="imgFile", accept="image/*", onchange="inputFileReturnImg(this, 200, 200);", required=true)
             script.
                 function inputFileReturnImg (input, width, height) {
                     if (input.files && input.files[0]){
@@ -24,33 +24,35 @@ block content
             input(type="submit", value="프로필 이미지 변경")
             br
             br
-            br   
+            br
+    p #{tryMsg}
     #edit
         #edit-text(align="right") ID : 
         #edit-input
             form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
-                input(type="text", id="userName", name="userName", placeholder="변경할 이름을 입력하세요.")
+                input(type="text", id="userName", name="userName", placeholder="변경할 이름을 입력하세요.", required=true)
                 input(type="submit", value="ID 변경")
         #edit-warn #{id_warn}
     #edit
         #edit-text(align="right") E-mail : 
         #edit-input
             form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
-                input(type="email", id="email", name="email", placeholder="변경할 이메일을 입력하세요.")
+                input(type="email", id="email", name="email", placeholder="변경할 이메일을 입력하세요.", required=true)
                 input(type="submit", value="email 변경")
         #edit-warn #{email_warn}
     form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
         #edit
             #edit-text(align="right") Original Password : 
             #edit-input
-                    input(type="password", id="password_ori", name="password_ori", placeholder="기존 비밀번호를 입력하세요.")
+                input(type="password", id="password_ori", name="password_ori", placeholder="기존 비밀번호를 입력하세요.", required=true)
+            #edit-warn #{pwori_warn}
         #edit
             #edit-text(align="right") New Password : 
             #edit-input
-                    input(type="password", id="password_new1", name="password_new1", placeholder="바꿀 비밀번호를 입력하세요.") 
+                input(type="password", id="password1", name="password_new1", placeholder="바꿀 비밀번호를 입력하세요.", required=true) 
         #edit
             #edit-text(align="right") Retry New Password : 
             #edit-input
-                    input(type="password", id="password_new2", name="password_new2", placeholder="비밀번호를 한번 더 입력하세요.", width="500")
-                    input(type="submit", value="비밀번호 변경")
+                input(type="password", id="password2", name="password_new2", placeholder="비밀번호를 한번 더 입력하세요.", required=true)
+                input(type="submit", value="비밀번호 변경")
             #edit-warn #{pwnew_warn}
