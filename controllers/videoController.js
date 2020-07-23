@@ -43,11 +43,27 @@ export const videoDetail = async (req, res) => {
 
     const video = await Video.findOne( { _id: req.params.id });
 
+    await Video.update({  })
+
     res.render("videoDetail", {
         pageTitle: "Video's Detail",
         video
     });
 
+};
+
+export const postView = async (req, res) => {
+    
+    await Video.findOne({_id: req.params.id}, (err, video) => {
+        if(!video)  return res.status(404).json({error : "없는 비디오"});
+        if(err) return res.status(400).json({error : "DB 에러"});
+
+        console.log(video.views);
+
+        video.views += 1;
+        video.save();
+        res.status(200);
+    });
 };
 
 export const getUpload = (req, res) => {

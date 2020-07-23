@@ -4,7 +4,8 @@ import {
     videoDetail,
     editVideo,
     getUpload,
-    postUpload
+    postUpload,
+    postView
 } from "../controllers/videoController";
 import { uploadVideo} from "../middleware";
 
@@ -16,5 +17,7 @@ videoRouter.post(routes.upload, uploadVideo, postUpload);
 
 videoRouter.get(routes.editVideo(), editVideo);
 videoRouter.get(routes.videoDetail(), videoDetail);
+
+videoRouter.post(routes.view, postView);
 
 export default videoRouter;

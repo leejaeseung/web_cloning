@@ -3,9 +3,26 @@ include mixins/videoBlock
 
 block content
     .video_player
-        video(src=routes.home + video.fileUrl, width="1280px". height="720px", controls)
+        video(src=routes.home + video.fileUrl, width="1280px". height="720px", controls, id="nowVideo")
+        script.
+            const video = document.getElementById("nowVideo");
+
+            const view = () => {
+                var url = document.location.href;
+
+                videoID = url.split("/videos/")[1];
+
+                fetch("/videos/" + videoID + "/view", {
+                    method: "POST"
+                });
+            }
+            
+            video.addEventListener("playing", view);
+            //비디오 재생 시 이벤트 발생
     .video_edit
-        h2=video.videoName
-        p=video.description
-        p=video.views
+        h2 #{video.videoName}
+        p #{video.description}
+        p 
+            b Views 
+            | : #{video.views}
         a(href=routes.editVideo(video.id)) Edit

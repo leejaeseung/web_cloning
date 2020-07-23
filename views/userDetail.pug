@@ -4,4 +4,5 @@ block content
     h1 #{userName}'s Profile
     img(src=routes.profile + "/" + userID + ".png", alt="프로필을 적용해 주세요.", width="200", height="200")
     p E-mail : #{userEmail}
-    a(href=routes.editProfile(userName)) Edit
+    if nowUser.userName == userName
+        a(href=routes.editProfile(userName)) Edit
