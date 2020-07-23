@@ -53,6 +53,7 @@ export const videoDetail = async (req, res) => {
 };
 
 export const postView = async (req, res) => {
+    //조회수 증가
     
     await Video.findOne({_id: req.params.id}, (err, video) => {
         if(!video)  return res.status(404).json({error : "없는 비디오"});

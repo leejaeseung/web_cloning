@@ -7,17 +7,9 @@ block content
         script.
             const video = document.getElementById("nowVideo");
 
-            const view = () => {
-                var url = document.location.href;
-
-                videoID = url.split("/videos/")[1];
-
-                fetch("/videos/" + videoID + "/view", {
-                    method: "POST"
-                });
-            }
-            
-            video.addEventListener("playing", view);
+            video.addEventListener("playing", () => {
+                view(document.location.href);
+            });
             //비디오 재생 시 이벤트 발생
     .video_edit
         h2 #{video.videoName}
