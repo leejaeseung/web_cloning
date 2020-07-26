@@ -14,6 +14,7 @@ const USERS_DETAIL = "/:id";
 const EDIT_PROFILE = "/edit-profile";
 const CHANGE_PASSWORD = "/change-password";
 const PROFILES = "/uploads/profiles"
+const MYVIDEOS = "/:id/myvideos";
 
 // Videos
 
@@ -39,6 +40,14 @@ const routes = {
         }
         else{
             return USERS_DETAIL;
+        }
+    },
+    myVideos: (id) => {
+        if (id) {
+            return USERS + "/" + id + "/myvideos";
+        }
+        else{
+            return MYVIDEOS;
         }
     },
     editProfile: (id) => {

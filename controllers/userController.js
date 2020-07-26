@@ -111,35 +111,33 @@ export const logout = (req, res) => {
 };
 
 export const getEditProfile = (req, res) => {
-    
-    User.findOne( {"userName" : req.params.id}, function(err, user) {
-        if(!user){
-            //id가 존재하지 않을 때
 
-            return res.status(404).json({error : "없는 아이디"});
-        }
-        else if(req.session.userName !== req.params.id){
-            return res.status(404).json({error : "로그인 된 아이디가 아님"});
-        }
-        else {
+    const {
+        body: {user}
+    } = req;
 
-            res.render("editProfile", {
-                pageTitle: "Edit Your Profile",
-                defaultImg: routes.profile + "/" + user._id + ".png",
-                tryMsg: req.flash("tryMsg"),
-                id_warn: req.flash("id_warn"),
-                email_warn: req.flash("email_warn"),
-                pwori_warn: req.flash("pwori_warn"),
-                pwnew_warn: req.flash("pwnew_warn")
-            })
-        }
-    });
+    if(!user)
+        return res.status(404).json({error : "없는 아이디"});
+    else if(req.session.userName !== req.params.id)
+        return res.status(404).json({error : "로그인 된 아이디가 아님"});
+    else {
+        res.render("editProfile", {
+            pageTitle: "Edit Your Profile",
+            defaultImg: routes.profile + "/" + user._id + ".png",
+            tryMsg: req.flash("tryMsg"),
+            id_warn: req.flash("id_warn"),
+            email_warn: req.flash("email_warn"),
+            pwori_warn: req.flash("pwori_warn"),
+            pwnew_warn: req.flash("pwnew_warn")
+        })
+    }
 };
 
 export const patchEditProfile = (req, res) => {
 
     const {
         body: {
+            user,
             userName,
             email,
             password_ori,
@@ -151,9 +149,7 @@ export const patchEditProfile = (req, res) => {
 
     console.log(t_msg);
 
-    User.findOne( {"userName" : req.params.id}, async function(err, user) {
         if(!user){
-
             return res.status(404).json({error : "없는 아이디"});
         }
         else {
@@ -216,7 +212,7 @@ export const patchEditProfile = (req, res) => {
                 }
 
                 if(password_ori !== user.password){
-                    await req.flash("pwori_warn", "기존 비밀번호가 일치하지 않습니다.");
+                    req.flash("pwori_warn", "기존 비밀번호가 일치하지 않습니다.");
 
                     return res.redirect(routes.editProfile(req.session.userName));
                 }
@@ -224,21 +220,21 @@ export const patchEditProfile = (req, res) => {
                     if(password_new1 !== password_new2){
                         //비밀번호 중복 확인
 
-                        await req.flash("pwnew_warn", "두 비밀번호가 일치하지 않습니다.");
+                        req.flash("pwnew_warn", "두 비밀번호가 일치하지 않습니다.");
 
                         return res.redirect(routes.editProfile(req.session.userName));
                     }
                     else if(password_new1 == password_ori){
                         //기존 비밀번호와 일치 여부
 
-                        await req.flash("pwnew_warn", "기존 비밀번호와 동일한 비밀번호 입니다.");
+                        req.flash("pwnew_warn", "기존 비밀번호와 동일한 비밀번호 입니다.");
 
                         return res.redirect(routes.editProfile(req.session.userName));
                     }
                     else{
                         //비밀번호 변경 성공!
 
-                        await User.update({ userName: user.userName },
+                        User.update({ userName: user.userName },
                             {
                                 $set: {
                                     password: password_new1
@@ -254,24 +250,48 @@ export const patchEditProfile = (req, res) => {
                 return res.redirect(routes.editProfile(req.session.userName));
             }
         }
-    });
+}
+
+export const getMyVideos = (req, res) => {
+
+    const {
+        body: {user}
+    } = req;
+
+        if(!user){
+            //id가 존재하지 않을 때
+
+            return res.status(404).json({error : "없는 아이디"});
+        }
+        else if(req.session.userName !== req.params.id){
+            return res.status(404).json({error : "로그인 된 아이디가 아님"});
+        }
+        else {
+
+            res.render("myVideos", {
+                pageTitle: "My Videos"
+            })
+        }
 }
 
 export const userDetail = (req, res) => {
 
-    User.findOne( {"userName" : req.params.id}, function(err, user) {
-        if(!user){
-            //userName이 존재하지 않을 때
+    const {
+        body: {user}
+    } = req;
 
-            return res.status(404).json({error : "없는 아이디"});
-        }
-        else {
-            res.render("userDetail", {
-                pageTitle: user.userName + "'s Detail",
-                userID: user._id,
-                userName: user.userName,
-                userEmail: user.email
-            })
-        }
-    });
+    console.log(user);
+
+    if(!user){
+        //userName이 존재하지 않을 때
+        return res.status(404).json({error : "없는 아이디"});
+    }
+    else {
+        res.render("userDetail", {
+            pageTitle: user.userName + "'s Detail",
+            userID: user._id,
+            userName: user.userName,
+            userEmail: user.email
+        })
+    }
 };
