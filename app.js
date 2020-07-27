@@ -19,6 +19,7 @@ import videoRouter from "./routers/videoRouter";
 import globalRouter from "./routers/globalRouter";
 
 import { localsMiddleware } from "./middleware";
+import { handleError } from "./mylib/errorHandler";
 
 import routes from "./routes";
 
@@ -54,10 +55,7 @@ app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter);
 app.use(routes.videos, videoRouter);
 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    
-})
+app.use(handleError);
 
 //여러 루트들 설정
 

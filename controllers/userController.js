@@ -11,10 +11,10 @@ export const getJoin = (req, res) => {
 };
 
 export const postJoin = (req, res) => {
-    const { body: { userName, email, password1 , password2, t_msg}} = req;
+    const { body: { userName, email, password1 , password2, err_msg}} = req;
 
-    if(t_msg){
-        req.flash("tryMsg", t_msg[0].msg);
+    if(err_msg){
+        req.flash("tryMsg", err_msg.msg);
         return res.redirect(routes.join);
     }
 
@@ -116,21 +116,14 @@ export const getEditProfile = (req, res) => {
         body: {user}
     } = req;
 
-    if(!user)
-        return res.status(404).json({error : "없는 아이디"});
-    else if(req.session.userName !== req.params.id)
-        return res.status(404).json({error : "로그인 된 아이디가 아님"});
-    else {
-        res.render("editProfile", {
-            pageTitle: "Edit Your Profile",
-            defaultImg: routes.profile + "/" + user._id + ".png",
-            tryMsg: req.flash("tryMsg"),
-            id_warn: req.flash("id_warn"),
-            email_warn: req.flash("email_warn"),
-            pwori_warn: req.flash("pwori_warn"),
-            pwnew_warn: req.flash("pwnew_warn")
-        })
-    }
+    res.render("editProfile", {
+        pageTitle: "Edit Your Profile",
+        defaultImg: routes.profile + "/" + user._id + ".png",
+        id_warn: req.flash("userName_warn"),
+        email_warn: req.flash("email_warn"),
+        pwori_warn: req.flash("password_ori_warn"),
+        pwnew_warn: req.flash("password_new_warn")
+    })
 };
 
 export const patchEditProfile = (req, res) => {
@@ -143,27 +136,21 @@ export const patchEditProfile = (req, res) => {
             password_ori,
             password_new1,
             password_new2,
-            t_msg
+            err_msg
         },
     } = req;
 
-    console.log(t_msg);
-
-        if(!user){
-            return res.status(404).json({error : "없는 아이디"});
-        }
-        else {
+    if(err_msg){
+        req.flash(err_msg.tag + "_warn", err_msg.msg);
+        return res.redirect(routes.editProfile(req.session.userName));
+    }
             
             if(userName){
-                if(t_msg.length > 4){
-                    req.flash("id_warn", t_msg[0].msg);
-                    return res.redirect(routes.editProfile(req.session.userName));
-                }
 
                 User.findOne({"userName" : userName}, async function(err, target) {
 
                     if(target){
-                        await req.flash("id_warn", "이미 존재하는 아이디 입니다.");
+                        await req.flash("userName", "이미 존재하는 아이디 입니다.");
                         
                     }
                     else{
@@ -180,11 +167,6 @@ export const patchEditProfile = (req, res) => {
                 });
             }
             else if(email){
-
-                if(t_msg.length > 4){
-                    req.flash("email_warn", t_msg[1].msg);
-                    return res.redirect(routes.editProfile(req.session.userName));
-                }
 
                 User.findOne({"email" : email}, async function(err, target) {
                     if(target){
@@ -205,14 +187,9 @@ export const patchEditProfile = (req, res) => {
             }
             else if(password_ori){
                 //비밀번호 체크 업데이트하자!
-                console.log(req.body);
-                if(t_msg.length > 2){
-                    req.flash("pwnew_warn", t_msg[2].msg);
-                    return res.redirect(routes.editProfile(req.session.userName));
-                }
 
                 if(password_ori !== user.password){
-                    req.flash("pwori_warn", "기존 비밀번호가 일치하지 않습니다.");
+                    req.flash("password_ori_warn", "기존 비밀번호가 일치하지 않습니다.");
 
                     return res.redirect(routes.editProfile(req.session.userName));
                 }
@@ -220,14 +197,14 @@ export const patchEditProfile = (req, res) => {
                     if(password_new1 !== password_new2){
                         //비밀번호 중복 확인
 
-                        req.flash("pwnew_warn", "두 비밀번호가 일치하지 않습니다.");
+                        req.flash("password_new_warn", "두 비밀번호가 일치하지 않습니다.");
 
                         return res.redirect(routes.editProfile(req.session.userName));
                     }
                     else if(password_new1 == password_ori){
                         //기존 비밀번호와 일치 여부
 
-                        req.flash("pwnew_warn", "기존 비밀번호와 동일한 비밀번호 입니다.");
+                        req.flash("password_new_warn", "기존 비밀번호와 동일한 비밀번호 입니다.");
 
                         return res.redirect(routes.editProfile(req.session.userName));
                     }
@@ -249,7 +226,6 @@ export const patchEditProfile = (req, res) => {
                 //사진 업데이트 시? -> 아무것도 안함
                 return res.redirect(routes.editProfile(req.session.userName));
             }
-        }
 }
 
 export const getMyVideos = (req, res) => {
@@ -258,20 +234,11 @@ export const getMyVideos = (req, res) => {
         body: {user}
     } = req;
 
-        if(!user){
-            //id가 존재하지 않을 때
+    
 
-            return res.status(404).json({error : "없는 아이디"});
-        }
-        else if(req.session.userName !== req.params.id){
-            return res.status(404).json({error : "로그인 된 아이디가 아님"});
-        }
-        else {
-
-            res.render("myVideos", {
-                pageTitle: "My Videos"
-            })
-        }
+    res.render("myVideos", {
+        pageTitle: "My Videos"
+    })
 }
 
 export const userDetail = (req, res) => {
@@ -280,18 +247,10 @@ export const userDetail = (req, res) => {
         body: {user}
     } = req;
 
-    console.log(user);
-
-    if(!user){
-        //userName이 존재하지 않을 때
-        return res.status(404).json({error : "없는 아이디"});
-    }
-    else {
-        res.render("userDetail", {
-            pageTitle: user.userName + "'s Detail",
-            userID: user._id,
-            userName: user.userName,
-            userEmail: user.email
-        })
-    }
+    res.render("userDetail", {
+        pageTitle: user.userName + "'s Detail",
+        userID: user._id,
+        userName: user.userName,
+        userEmail: user.email
+    })
 };

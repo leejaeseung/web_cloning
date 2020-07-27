@@ -27,12 +27,17 @@ export const userEditValidationRules = () => {
 };
 
 export const validate = (req, res, next) => {
-    const errors = validationResult(req);
+    const errors = validationResult(req).errors;
 
-    if(errors.isEmpty())
-        req.body.t_msg = null;
-    else
-        req.body.t_msg = errors.errors;
+    for(var i = 0; i < errors.length; i++){
+        if(errors[i].value){
+            if(errors[i].param == "password_new1" || "password_new2")
+                errors[i].param = "password_new";
+            req.body.err_msg = {tag: errors[i].param, msg: errors[i].msg};
+            break;
+        }
+    }
+    //에러 메세지 하나를 err_msg {tag, msg} 로 묶어서 보냄
 
     return next();
 }
