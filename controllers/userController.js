@@ -1,6 +1,6 @@
-import express from "express";
 import routes from "../routes"
 import User from "../DBmodel/users";
+import Video from "../DBmodel/videos";
 
 export const getJoin = (req, res) => {
 
@@ -228,17 +228,29 @@ export const patchEditProfile = (req, res) => {
             }
 }
 
-export const getMyVideos = (req, res) => {
+export const getMyVideos = async (req, res) => {
 
     const {
         body: {user}
     } = req;
 
-    
+    try{
+
+    const videos = await Video.find({ "creator.ownerID" : user.id});
 
     res.render("myVideos", {
-        pageTitle: "My Videos"
-    })
+        pageTitle: "My Videos",
+        videos
+    });
+    }
+    catch(error){
+        console.log(error);
+
+        res.render("myVideos", {
+            pageTitle: "My Videos",
+            videos: []
+        });
+    }
 }
 
 export const userDetail = (req, res) => {

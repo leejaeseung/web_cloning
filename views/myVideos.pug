@@ -1,5 +1,24 @@
 extends layouts/main
+include mixins/videoBlock
 
 block content
     .myVideos
-        p 내 비디오들 ~~
+        h1 My Videos
+            each item in videos
+                +videoBlock({
+                    id: item.id,
+                    videoName: item.videoName,
+                    description: item.description,
+                    fileUrl: item.fileUrl,
+                    views: item.views,
+                })
+            script.
+                var videos = document.getElementsByClassName("nowVideo");
+
+                for(var i = 0; i < videos.length; i++){
+                    var video = videos[i];
+
+                    video.addEventListener("playing", () => {
+                        viewHome(video.id)
+                        });  
+                }

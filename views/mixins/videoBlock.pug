@@ -2,7 +2,7 @@
 mixin videoBlock(video = {})
     .videoBlock
         a(href=routes.videoDetail(video.id))
-            video(src=video.fileUrl, width="1280px". height="720px", controls, class="nowVideo", id=video.id)
+            video(src=routes.home + video.fileUrl, controls, class="nowVideo", id=video.id)
             h2=video.videoName
             p=video.description
             p=video.views

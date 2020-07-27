@@ -30,6 +30,21 @@
     line-height:12px;
 }
 
+.videoBlock video {
+    width:700px; 
+    height:500px;
+}
+
+.myVideos video {
+    width:400px; 
+    height:300px;
+}
+
+.video_player  video{
+    width:800px; 
+    height:400px;
+}
+
 input[type="text"], input[type="password"], input[type="email"]  {
     width:250px;
 }

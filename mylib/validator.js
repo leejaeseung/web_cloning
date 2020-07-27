@@ -31,7 +31,7 @@ export const validate = (req, res, next) => {
 
     for(var i = 0; i < errors.length; i++){
         if(errors[i].value){
-            if(errors[i].param == "password_new1" || "password_new2")
+            if(errors[i].param == "password_new1" || errors[i].param == "password_new2")
                 errors[i].param = "password_new";
             req.body.err_msg = {tag: errors[i].param, msg: errors[i].msg};
             break;
