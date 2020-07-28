@@ -1,6 +1,8 @@
 import express from "express";
 import Video from "../DBmodel/videos";
 import routes from "../routes";
+import fs from "fs";
+import path from "path";
 
 export const home = async (req, res) => {
     //async , await로 비디오 목록을 db에서 가져 온 뒤 렌더링
@@ -97,6 +99,34 @@ export const postUpload = async (req, res) => {
 
     res.redirect(routes.videoDetail(newVideo.id));
 };
+
+export const deleteVideo = async (req, res, next) => {
+    
+    const {
+        body: {
+            videoID
+        }
+    } = req;
+
+    await Video.findOneAndDelete({ _id: videoID }, async (err, video) => {
+        if(err) next(new Error("DB 에러"));
+
+        if(!video)
+            next(new Error("Video is Not Exist"));
+        else{
+            const filePath = path.join(__dirname + "/../", video.fileUrl);
+
+            console.log(filePath);
+
+            await fs.unlink(filePath, (err) => {
+                if(err) next(new Error("File load Error"))
+
+                console.log("삭제됨?");
+            })
+            res.redirect(routes.myVideos(req.session.userName));
+        }
+    });
+}
 
 export const editVideo = (req, res) => {
     res.render("editVideo", {

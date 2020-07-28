@@ -6,9 +6,8 @@ import {
     userDetail,
     getMyVideos
 } from "../controllers/userController";
-import { uploadProfile } from "../middleware";
+import { uploadProfile , userLoader, loginChecker} from "../middleware";
 import {userEditValidationRules, validate} from "../mylib/validator";
-import {userLoader, loginChecker } from "../mylib/userChecker";
 
 const userRouter = express.Router();
 

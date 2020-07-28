@@ -18,8 +18,7 @@ import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
 import globalRouter from "./routers/globalRouter";
 
-import { localsMiddleware } from "./middleware";
-import { handleError } from "./mylib/errorHandler";
+import { localsMiddleware, handleError } from "./middleware";
 
 import routes from "./routes";
 

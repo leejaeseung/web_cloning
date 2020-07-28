@@ -10,7 +10,7 @@ export const getJoin = (req, res) => {
     })
 };
 
-export const postJoin = (req, res) => {
+export const postJoin = (req, res, next) => {
     const { body: { userName, email, password1 , password2, err_msg}} = req;
 
     if(err_msg){
@@ -19,7 +19,7 @@ export const postJoin = (req, res) => {
     }
 
     User.findOne( {"userName": userName}, function(err, user) {
-        if(err) return res.status(500).json({error: err});
+        if(err) next(new Error("DB 에러"));
         if(user) {
             //id가 이미 있으면
 
@@ -29,7 +29,7 @@ export const postJoin = (req, res) => {
         }
 
         User.findOne( {"email": email}, function(err, target){
-            if(err) return res.status(500).json({error: err});
+            if(err) next(new Error("DB 에러"));
             if(target){
                 //email이 이미 있으면
 
@@ -70,11 +70,12 @@ export const getLogin = (req, res) => {
     })
 };
 
-export const postLogin = (req, res) => {
+export const postLogin = (req, res, next) => {
 
     const { body: { userName, password}} = req;
 
     User.findOne( {"userName" : userName}, function(err, user) {
+        if(err) next(new Error("DB 에러"));
         if(!user || user.password !== password){
             //id가 존재하지 않거나 비밀번호 미일치
             
@@ -126,7 +127,7 @@ export const getEditProfile = (req, res) => {
     })
 };
 
-export const patchEditProfile = (req, res) => {
+export const patchEditProfile = (req, res, next) => {
 
     const {
         body: {
@@ -148,7 +149,7 @@ export const patchEditProfile = (req, res) => {
             if(userName){
 
                 User.findOne({"userName" : userName}, async function(err, target) {
-
+                    if(err) next(new Error("DB 에러"));
                     if(target){
                         await req.flash("userName", "이미 존재하는 아이디 입니다.");
                         
@@ -169,6 +170,7 @@ export const patchEditProfile = (req, res) => {
             else if(email){
 
                 User.findOne({"email" : email}, async function(err, target) {
+                    if(err) next(new Error("DB 에러"));
                     if(target){
                         await req.flash("email_warn", "이미 존재하는 e-mail 입니다.");
                     }
