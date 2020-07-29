@@ -28,8 +28,9 @@ const app = express();
 app.set("view engine", "pug");
 //뷰 엔진을 pug로 설정
 
-app.use("/uploads", express.static("uploads"));
+//app.use("/uploads", express.static("uploads"));
 app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/"));
 //정적 파일 경로 설정 -> uploads는 나중에 수정해야됨.
 
 app.use(cookieParser());

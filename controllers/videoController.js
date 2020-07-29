@@ -41,17 +41,22 @@ export const search = (req, res) => {
 
 export const videoDetail = async (req, res) => {
 
-    //console.log(req.params.id);
-
     const video = await Video.findOne( { _id: req.params.id });
 
-    await Video.update({  })
+    var isCreator;
+
+    if(video.creator.ownerID == req.session.userID){
+        isCreator = true;
+    }
+    else{
+        isCreator = false;
+    }
 
     res.render("videoDetail", {
         pageTitle: "Video's Detail",
-        video
+        video,
+        isCreator
     });
-
 };
 
 export const postView = async (req, res) => {
@@ -115,13 +120,11 @@ export const deleteVideo = async (req, res, next) => {
             next(new Error("Video is Not Exist"));
         else{
             const filePath = path.join(__dirname + "/../", video.fileUrl);
-
-            console.log(filePath);
+            //현재 경로의 상위 경로 = nodejs, + 비디오 url
 
             await fs.unlink(filePath, (err) => {
                 if(err) next(new Error("File load Error"))
 
-                console.log("삭제됨?");
             })
             res.redirect(routes.myVideos(req.session.userName));
         }

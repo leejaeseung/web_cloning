@@ -5,22 +5,24 @@ block content
     .myVideos
         h1 My Videos
         each item in videos
-            form(action=routes.videos + routes.deleteVideo + "?_method=DELETE", method="POST")
-                button(type="submit", name="videoID", value=item.id) Delete
-            +videoBlock({
-                id: item.id,
-                videoName: item.videoName,
-                description: item.description,
-                fileUrl: item.fileUrl,
-                views: item.views,
-            })
-        script.
-            var videos = document.getElementsByClassName("nowVideo");
+            .videos
+                form(action=routes.videos + routes.deleteVideo + "?_method=DELETE", method="POST")
+                    button(type="submit", name="videoID", value=item.id, id="deleteBt") Delete
+                button(type="button", onclick="location.href='routes.editVideo(video.id)'", class="editVideoBt", id="editBt") Edit
+                +videoBlock({
+                    id: item.id,
+                    videoName: item.videoName,
+                    description: item.description,
+                    fileUrl: item.fileUrl,
+                    views: item.views,
+                })
+            script.
+                var videos = document.getElementsByClassName("nowVideo");
 
-            for(var i = 0; i < videos.length; i++){
-                var video = videos[i];
+                for(var i = 0; i < videos.length; i++){
+                    var video = videos[i];
 
-                video.addEventListener("playing", () => {
-                    viewHome(video.id)
-                    });  
-            }
+                    video.addEventListener("playing", () => {
+                        viewHome(video.id)
+                        });  
+                }

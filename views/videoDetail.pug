@@ -3,7 +3,11 @@ include mixins/videoBlock
 
 block content
     .video_player
-        video(src=routes.home + video.fileUrl, width="1280px". height="720px", controls, id="nowVideo")
+        if isCreator
+            form(action=routes.videos + routes.deleteVideo + "?_method=DELETE", method="POST")
+                button(type="submit", name="videoID", value=video.id, id="deleteBt") Delete
+            button(type="button", onclick="location.href='routes.editVideo(video.id)'", class="editVideoBt", id="editBt") Edit
+        video(src=routes.home + video.fileUrl, controls, id="nowVideo")
         script.
             const video = document.getElementById("nowVideo");
 
@@ -11,10 +15,8 @@ block content
                 view(document.location.href);
             });
             //비디오 재생 시 이벤트 발생
-    .video_edit
         h2 #{video.videoName}
         p #{video.description}
         p 
             b Views 
             | : #{video.views}
-        a(href=routes.editVideo(video.id)) Edit

@@ -35,14 +35,57 @@
     height:500px;
 }
 
-.myVideos video {
-    width:400px; 
-    height:300px;
+
+
+.video_player {
+    width: 50%;
+    height:50%;
 }
 
-.video_player  video{
-    width:800px; 
-    height:400px;
+.video_player video{
+    width: 100%;
+    height:100%;
+}
+
+.video_player #deleteBt {
+    float: right;
+    width:15%;
+    height:100%;
+    margin-left: 10px;
+    box-sizing: border-box;
+}
+
+.video_player #editBt {
+    float: right;
+    width:15%;
+    height:100%;
+    box-sizing: border-box;
+}
+
+.myVideos video {
+    width:100%; 
+    height:100%;
+}
+
+.videos {
+    width: 20%;
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.videos #deleteBt {
+    float: right;
+    width:15%;
+    height:100%;
+    margin-left: 10px;
+    box-sizing: border-box;
+}
+
+.videos #editBt {
+    float: right;
+    width:15%;
+    height:100%;
+    box-sizing: border-box;
 }
 
 input[type="text"], input[type="password"], input[type="email"]  {
