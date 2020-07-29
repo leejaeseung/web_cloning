@@ -4,17 +4,17 @@ include mixins/videoBlock
 block content
     .myVideos
         h1 My Videos
-        each item in videos
+        each vd in videos
             .videos
                 form(action=routes.videos + routes.deleteVideo + "?_method=DELETE", method="POST")
-                    button(type="submit", name="videoID", value=item.id, id="deleteBt") Delete
-                button(type="button", onclick="location.href='routes.editVideo(video.id)'", class="editVideoBt", id="editBt") Edit
+                    button(type="submit", name="videoID", value=vd.id, id="deleteBt") Delete
+                button(type="button", onclick="location.href=\"" + routes.editVideo(vd.id) + "\"", class="editVideoBt", id="editBt") Edit
                 +videoBlock({
-                    id: item.id,
-                    videoName: item.videoName,
-                    description: item.description,
-                    fileUrl: item.fileUrl,
-                    views: item.views,
+                    id: vd.id,
+                    videoName: vd.videoName,
+                    description: vd.description,
+                    fileUrl: vd.fileUrl,
+                    views: vd.views,
                 })
             script.
                 var videos = document.getElementsByClassName("nowVideo");

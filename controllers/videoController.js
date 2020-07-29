@@ -132,6 +132,9 @@ export const deleteVideo = async (req, res, next) => {
 }
 
 export const editVideo = (req, res) => {
+
+    
+
     res.render("editVideo", {
         pageTitle: "Edit Video"
     });

@@ -21,7 +21,7 @@ const MYVIDEOS = "/:id/myvideos";
 const VIDEOS = "/videos";
 const UPLOAD = "/upload";
 const VIDEO_DETAIL = "/:id";
-const EDIT_VIDEO = "/edit";
+const EDIT_VIDEO = "/edit-video";
 const DELETE_VIDEO = "/:id/delete";
 const VIEW = "/:id/view";
 
