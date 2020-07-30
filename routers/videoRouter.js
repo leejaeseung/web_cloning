@@ -2,7 +2,8 @@ import express from "express";
 import routes from "../routes";
 import { 
     videoDetail,
-    editVideo,
+    getEditVideo,
+    patchEditVideo,
     getUpload,
     postUpload,
     postView,
@@ -13,10 +14,11 @@ import { videoUploader, loginChecker} from "../middleware";
 
 const videoRouter = express.Router();
 
-videoRouter.get(routes.upload, loginChecker,getUpload);
+videoRouter.get(routes.upload, loginChecker, getUpload);
 videoRouter.post(routes.upload, loginChecker, videoUploader, postUpload);
 
-videoRouter.get(routes.editVideo(), loginChecker, editVideo);
+videoRouter.get(routes.editVideo(), loginChecker, getEditVideo);
+videoRouter.patch(routes.editVideo(), loginChecker, patchEditVideo);
 videoRouter.get(routes.videoDetail(), videoDetail);
 
 videoRouter.delete(routes.deleteVideo, loginChecker, deleteVideo);

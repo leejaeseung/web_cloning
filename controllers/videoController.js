@@ -131,11 +131,46 @@ export const deleteVideo = async (req, res, next) => {
     });
 }
 
-export const editVideo = (req, res) => {
+export const getEditVideo = async (req, res, next) => {
+
+    const videoID = req.params.id;
+
+    await Video.findOne({ _id: videoID}, (err, video) => {
+        if(err) next(new Error("DB Error"))
+
+        if(video){
+
+            res.render("editVideo", {
+                pageTitle: "Edit Video",
+                video
+            });
+        }
+        else{
+            next(new Error("video is not Exist"))
+        }
+    });
 
     
+}
 
-    res.render("editVideo", {
-        pageTitle: "Edit Video"
+export const patchEditVideo = async (req, res, next) => {
+
+    const {
+        body: {
+            videoName,
+            description
+        }
+    } = req;
+
+    console.log(req.body);
+
+    console.log(req.params.id);
+
+    const videoID = req.params.id;
+
+    await Video.update({_id: videoID}, { $set: { videoName, description}}, (err) =>{
+        if(err) next(new Error("DB Error"));
     });
+
+    res.redirect(routes.myVideos(req.session.userName));
 }
