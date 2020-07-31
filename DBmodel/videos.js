@@ -5,9 +5,7 @@ const videoSchema = new mongoose.Schema({
     description: String,
     views: Number,
     fileUrl: String,
-    creator: {
-        ownerID: String,
-    }
+    creator: String,
 });
 
 export default mongoose.model("Video", videoSchema);

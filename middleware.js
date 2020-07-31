@@ -1,9 +1,6 @@
 import routes from "./routes";
 import multer from "multer";
 import User from "./DBmodel/users";
-import Video from "./DBmodel/users";
-import fs from "fs";
-import path from "path"
 
 
 const storage_VD = multer.diskStorage({destination: "uploads/videos/"})
@@ -31,6 +28,9 @@ export const userLoader = async (req, res, next) => {
 
     await User.findOne( {"userName" : req.params.id}, function(err, user){
         if(err) next(err);
+
+        //console.log(user);
+
         if(user){
             req.body.user = user;
             next();

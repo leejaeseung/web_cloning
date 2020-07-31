@@ -4,7 +4,7 @@ block content
     .editProfile
         h3 프로필 수정
         form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post", enctype="multipart/form-data")
-            img(id="img_section", src=defaultImg)
+            img(id="img_section", src=routes.home + imgUrl, style="width:300px; height:300px;")
             br
             input(type="file", id="imgFile", name="imgFile", accept="image/*", onchange="inputFileReturnImg(this, 200, 200);", required=true)
             script.

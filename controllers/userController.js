@@ -53,7 +53,8 @@ export const postJoin = (req, res, next) => {
             User.create({
                 userName: userName,
                 password: password1,
-                email: email
+                email: email,
+                imgUrl: "default.png"
             });
         
             return res.redirect(routes.home);
@@ -119,7 +120,7 @@ export const getEditProfile = (req, res) => {
 
     res.render("editProfile", {
         pageTitle: "Edit Your Profile",
-        defaultImg: routes.profile + "/" + user._id + ".png",
+        imgUrl: user.imgUrl,
         id_warn: req.flash("userName_warn"),
         email_warn: req.flash("email_warn"),
         pwori_warn: req.flash("password_ori_warn"),
@@ -127,7 +128,7 @@ export const getEditProfile = (req, res) => {
     })
 };
 
-export const patchEditProfile = (req, res, next) => {
+export const patchEditProfile = async (req, res, next) => {
 
     const {
         body: {
@@ -138,7 +139,7 @@ export const patchEditProfile = (req, res, next) => {
             password_new1,
             password_new2,
             err_msg
-        },
+        }
     } = req;
 
     if(err_msg){
@@ -213,7 +214,7 @@ export const patchEditProfile = (req, res, next) => {
                     else{
                         //비밀번호 변경 성공!
 
-                        User.update({ userName: user.userName },
+                        await User.update({ userName: user.userName },
                             {
                                 $set: {
                                     password: password_new1
@@ -225,7 +226,19 @@ export const patchEditProfile = (req, res, next) => {
                 }
             }
             else{
-                //사진 업데이트 시? -> 아무것도 안함
+                //사진 업데이트 시
+
+                const {
+                    file: {path}
+                } = req;
+
+                await User.update({ userName: req.session.userName },
+                    {
+                        $set: {
+                            imgUrl: path
+                            }
+                    });               
+
                 return res.redirect(routes.editProfile(req.session.userName));
             }
 }
@@ -238,7 +251,7 @@ export const getMyVideos = async (req, res) => {
 
     try{
 
-    const videos = await Video.find({ "creator.ownerID" : user.id});
+    const videos = await Video.find({ "creator" : user.id});
 
     res.render("myVideos", {
         pageTitle: "My Videos",
@@ -265,6 +278,7 @@ export const userDetail = (req, res) => {
         pageTitle: user.userName + "'s Detail",
         userID: user._id,
         userName: user.userName,
-        userEmail: user.email
+        userEmail: user.email,
+        imgUrl: user.imgUrl
     })
 };

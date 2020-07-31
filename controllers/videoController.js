@@ -1,5 +1,6 @@
 import express from "express";
 import Video from "../DBmodel/videos";
+import User from "../DBmodel/users";
 import routes from "../routes";
 import fs from "fs";
 import path from "path";
@@ -39,24 +40,43 @@ export const search = (req, res) => {
 });
 };
 
-export const videoDetail = async (req, res) => {
+export const videoDetail = async (req, res, next) => {
 
-    const video = await Video.findOne( { _id: req.params.id });
+    await Video.findOne( { _id: req.params.id }, async (err, video) => {
+        if(err) return next(new Error("DB Error"));
 
-    var isCreator;
+        if(video){
+            var isCreator;
 
-    if(video.creator.ownerID == req.session.userID){
-        isCreator = true;
-    }
-    else{
-        isCreator = false;
-    }
+            if(video.creator == req.session.userID){
+                isCreator = true;
+            }
+            else{
+                isCreator = false;
+            }
 
-    res.render("videoDetail", {
-        pageTitle: "Video's Detail",
-        video,
-        isCreator
+            await User.findOne({ _id: video.creator }, (err, user) => {
+                if(err) return next(new Error("DB Error"));
+
+                if(user){
+                    res.render("videoDetail", {
+                        pageTitle: "Video's Detail",
+                        video,
+                        isCreator,
+                        creator: user.userName
+                    });
+                }
+                else{
+                    return next(new Error("User is not Exist"));
+                }
+            })
+        }
+        else{
+            return next(new Error("Video is not Exist"));
+        }
     });
+
+    
 };
 
 export const postView = async (req, res) => {
@@ -95,9 +115,7 @@ export const postUpload = async (req, res) => {
         description,
         views: 0,
         fileUrl: path,
-        creator: {
-            ownerID: req.session.userID
-        }
+        creator: req.session.userID
     });
 
     //업로드 구현
