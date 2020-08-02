@@ -1,7 +1,7 @@
 import routes from "./routes";
 import multer from "multer";
 import User from "./DBmodel/users";
-
+import Video from "./DBmodel/videos"
 
 const storage_VD = multer.diskStorage({destination: "uploads/videos/"})
 const storage_PF = multer.diskStorage({destination: "uploads/profiles/", filename: function (req, file, cb) {
@@ -58,6 +58,31 @@ export const loginChecker = (req, res, next) => {
             next(new Error("user is not Logined"));
     }
     next();
+}
+
+export const videoChecker = async (req, res, next) => {
+
+    const videoID = req.params.id;
+
+    await Video.findOne({ _id: videoID}).populate("creator").exec((err, video) => {
+        if(err) next(new Error("DB Error"))
+
+        if(video){
+            req.body.video = video;
+
+            if(video.creator.userName == req.session.userName){
+                req.body.isCreator = true;
+            }
+            else{
+                req.body.isCreator = false;
+            }
+
+            next();
+        }
+        else{
+            next(new Error("video is not Exist"))
+        }
+    });
 }
 
 //에러 핸들러

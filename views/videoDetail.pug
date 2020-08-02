@@ -6,7 +6,7 @@ block content
         if isCreator
             form(action=routes.videos + routes.deleteVideo + "?_method=DELETE", method="POST")
                 button(type="submit", name="videoID", value=video.id, id="deleteBt") Delete
-            button(type="button", onclick="location.href='routes.editVideo(video.id)'", class="editVideoBt", id="editBt") Edit
+            button(type="button", onclick="location.href=\"" + routes.editVideo(video.id) + "\"", class="editVideoBt", id="editBt") Edit
         video(src=routes.home + video.fileUrl, controls, id="nowVideo")
         script.
             const video = document.getElementById("nowVideo");
@@ -15,9 +15,15 @@ block content
                 view(document.location.href);
             });
             //비디오 재생 시 이벤트 발생
-        a(href=routes.userDetail(creator)) #{creator}
+        p 
+            b Creator : 
+                a(href=routes.userDetail(creator)) #{creator}
         h2 #{video.videoName}
         p #{video.description}
         p 
             b Views 
             | : #{video.views}
+        
+        form(action=routes.videoDetail(video.id), method="POST")
+            input(type="text", placeholder="댓글 치셈", name="comment")
+            input(type="submit", value="입력")

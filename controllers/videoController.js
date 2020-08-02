@@ -1,6 +1,5 @@
-import express from "express";
 import Video from "../DBmodel/videos";
-import User from "../DBmodel/users";
+import Comment from "../DBmodel/comments";
 import routes from "../routes";
 import fs from "fs";
 import path from "path";
@@ -41,57 +40,68 @@ export const search = (req, res) => {
 };
 
 export const videoDetail = async (req, res, next) => {
+    const commentForm = req.flash("commentForm")[0] || {_id: null, form: {}};
+    const commentError = req.flash("commentError")[0] || {_id: null, error: {}};
 
-    await Video.findOne( { _id: req.params.id }, async (err, video) => {
+    const {
+        body: {
+            video,
+            isCreator
+        }
+    } = req;
+
+    await Comment.find({videoID: video.id}, (err, comments) => {
         if(err) return next(new Error("DB Error"));
 
-        if(video){
-            var isCreator;
+        console.log(comments);
 
-            if(video.creator == req.session.userID){
-                isCreator = true;
-            }
-            else{
-                isCreator = false;
-            }
-
-            await User.findOne({ _id: video.creator }, (err, user) => {
-                if(err) return next(new Error("DB Error"));
-
-                if(user){
-                    res.render("videoDetail", {
-                        pageTitle: "Video's Detail",
-                        video,
-                        isCreator,
-                        creator: user.userName
-                    });
-                }
-                else{
-                    return next(new Error("User is not Exist"));
-                }
-            })
-        }
-        else{
-            return next(new Error("Video is not Exist"));
-        }
+        res.render("videoDetail", {
+            pageTitle: "Video's Detail",
+            video,
+            isCreator,
+            creator: video.creator.userName
+        });
     });
-
-    
 };
+
+export const postComment = async (req, res) => {
+
+    const {
+        body: {
+            video,
+            comment,
+            isCreator
+        }
+    } = req;
+
+    await Comment.create({
+        videoID: video.id,
+        author: req.session.userID,
+        parentComment: null,
+        text: comment,
+        isDeleted: false,
+    }, (err, comment) => {
+        if(err){
+            req.flash("commentForm", {_id: null, form: {author: req.session.userID, video: video.id}});
+            req.flash("commentError", {_id: null, error: err});
+        }
+    })
+
+    res.redirect(routes.videoDetail(video.id));
+}
 
 export const postView = async (req, res) => {
     //조회수 증가
-    
-    await Video.findOne({_id: req.params.id}, (err, video) => {
-        if(!video)  return res.status(404).json({error : "없는 비디오"});
-        if(err) return res.status(400).json({error : "DB 에러"});
 
-        console.log(video.views);
+    const {
+        body: {
+            video
+        }
+    } = req;
 
-        video.views += 1;
-        video.save();
-        res.status(200);
-    });
+    video.views += 1;
+    video.save();
+    res.status(200);
 };
 
 export const getUpload = (req, res) => {
@@ -149,44 +159,33 @@ export const deleteVideo = async (req, res, next) => {
     });
 }
 
-export const getEditVideo = async (req, res, next) => {
+export const getEditVideo = async (req, res) => {
 
-    const videoID = req.params.id;
+    //const videoID = req.params.id;
 
-    await Video.findOne({ _id: videoID}, (err, video) => {
-        if(err) next(new Error("DB Error"))
-
-        if(video){
-
-            res.render("editVideo", {
-                pageTitle: "Edit Video",
-                video
-            });
+    const {
+        body: {
+            video
         }
-        else{
-            next(new Error("video is not Exist"))
-        }
+    } = req;
+
+    res.render("editVideo", {
+        pageTitle: "Edit Video",
+        video
     });
-
-    
 }
 
 export const patchEditVideo = async (req, res, next) => {
 
     const {
         body: {
+            video,
             videoName,
             description
         }
     } = req;
 
-    console.log(req.body);
-
-    console.log(req.params.id);
-
-    const videoID = req.params.id;
-
-    await Video.update({_id: videoID}, { $set: { videoName, description}}, (err) =>{
+    await Video.update({_id: video.id}, { $set: { videoName, description}}, (err) =>{
         if(err) next(new Error("DB Error"));
     });
 

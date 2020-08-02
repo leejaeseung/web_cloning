@@ -5,7 +5,7 @@ const videoSchema = new mongoose.Schema({
     description: String,
     views: Number,
     fileUrl: String,
-    creator: String,
+    creator: {type: mongoose.Schema.Types.ObjectId, ref: "User", required: true}
 });
 
 export default mongoose.model("Video", videoSchema);
