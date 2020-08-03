@@ -1,5 +1,6 @@
 extends layouts/main
 include mixins/videoBlock
+include mixins/commentBlock
 
 block content
     .video_player
@@ -24,6 +25,15 @@ block content
             b Views 
             | : #{video.views}
         
+        each item in comments
+            +commentBlock({
+                author: item.author,
+                text: item.text,
+                isDeleted: item.text,
+                createdAt: item.createdAt,
+                updatedAt: item.updatedAt
+            })
+
         form(action=routes.videoDetail(video.id), method="POST")
             input(type="text", placeholder="댓글 치셈", name="comment")
             input(type="submit", value="입력")

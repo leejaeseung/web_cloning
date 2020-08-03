@@ -59,7 +59,8 @@ export const videoDetail = async (req, res, next) => {
             pageTitle: "Video's Detail",
             video,
             isCreator,
-            creator: video.creator.userName
+            creator: video.creator.userName,
+            comments
         });
     });
 };
@@ -69,8 +70,7 @@ export const postComment = async (req, res) => {
     const {
         body: {
             video,
-            comment,
-            isCreator
+            comment
         }
     } = req;
 
