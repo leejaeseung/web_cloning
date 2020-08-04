@@ -4,6 +4,9 @@ import Video from "../DBmodel/videos";
 
 export const getJoin = (req, res) => {
 
+    /*if(!req.session.certificate)
+        req.session.certificate = null;*/
+
     res.render("join", {
         pageTitle: "Join"
     })
@@ -65,22 +68,24 @@ export const postJoin = (req, res, next) => {
 export const postCheckId = async (req, res, next) => {
     const { body: { userName, err_msg} } = req;
 
-    console.log(err_msg);
-
     if(err_msg){
         req.flash("userName_msg", err_msg.msg);
         return res.redirect(routes.join);
     }
 
-    await User.findOne({userName: userName}, (err, user) => {
+    await User.findOne({userName: userName}, async (err, user) => {
         if(err) next(new Error("DB Error"));
 
         if(user){
             req.flash("userName_msg", userName + "은 이미 존재하는 아이디입니다.")
+            
+            req.session.cert_ID = null;
+
             return res.redirect(routes.join);
         }
         else{
-            req.session.certificate = userName;
+            req.session.cert_ID = userName;
+           
             req.flash("userName_msg", userName + "은 사용 가능한 아이디입니다.")
 
             return res.redirect(routes.join);
@@ -88,8 +93,30 @@ export const postCheckId = async (req, res, next) => {
     })
 }
 
-export const postCheckEmail = (req, res) => {
+export const postCheckEmail = async (req, res, next) => {
+    const { body: { email, err_msg} } = req;
 
+    if(err_msg){
+        req.flash("email_msg", err_msg.msg);
+        return res.redirect(routes.join);
+    }
+
+    await User.findOne({email: email}, async (err, em) => {
+        if(err) next(new Error("DB Error"));
+
+        if(em){
+            req.flash("email_msg", email + "은 이미 등록된 이메일입니다.")
+            
+            req.session.cert_Email = null;
+
+            return res.redirect(routes.join);
+        }
+        else{
+            //이메일 인증 구현
+
+            return res.redirect(routes.join);
+        }
+    })
 }
 
 export const getLogin = (req, res) => {

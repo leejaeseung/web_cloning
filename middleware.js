@@ -26,7 +26,8 @@ export const localsMiddleware = (req, res, next) =>{
     res.locals.pwori_msg = req.flash("password_ori_msg");
     res.locals.pwnew_msg = req.flash("password_new_msg");
 
-    res.locals.cert = req.session.certificate
+    res.locals.cert_ID = req.session.cert_ID;
+    res.locals.cert_Email = req.session.cert_Email;
 
     next();
 };

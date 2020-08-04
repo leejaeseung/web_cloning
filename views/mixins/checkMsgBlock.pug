@@ -1,0 +1,6 @@
+mixin checkMsgBlock( msg = {})
+    .cehckMsgBlock
+        if !msg.cert
+            p(style="color:red;") #{msg.text}
+        else
+            p(style="color:green;") #{msg.text}

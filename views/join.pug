@@ -1,7 +1,10 @@
 extends layouts/main
+include mixins/checkMsgBlock
 
 block content
     .join
+        script.
+            clearStorage("#{cert_ID}" , "#{cert_Email}")
         p 회원가입 페이지입니다 
         form(action=routes.join, method="post", name="joinForm")
             #input_boxes
@@ -9,17 +12,13 @@ block content
                 #edit-input
                     input(type="text", id="userName", name="userName", placeholder="아이디를 입력하세요.", required=true, onkeyup="saveValue(this);")
                     input(type="button", value="중복 확인", onClick="checkSubmit(\"" + routes.checkId + "\")") 
-            if !cert
-                p(style="color:red;") #{userName_msg}
-            else
-                p(style="color:green;") #{userName_msg}
+            +checkMsgBlock({cert: cert_ID, text: userName_msg})
             #input_boxes
                 #edit-text E-mail
                 #edit-input
                     input(type="email", id="email", name="email", placeholder="이메일을 입력하세요.", required=true, onkeyup="saveValue(this);")
                     input(type="button", value="인증 요청", onClick="checkSubmit(\"" + routes.checkEmail + "\")")
-                //#edit-msg 
-            p #{email_msg}
+            +checkMsgBlock({cert: cert_Email, text: email_msg})
             #input_boxes
                 #edit-text Password
                 #edit-input
@@ -28,9 +27,9 @@ block content
                 #edit-text Confirm Password
                 #edit-input
                     input(type="password", id="password2", name="password2", placeholder="비밀번호를 한번 더 입력하세요.", required=true)
-                //#edit-msg 
             p #{pw_msg}
             input(type="submit", value="Join")
+            
             script.
                 document.getElementById("userName").value = getSavedValue("userName");
                 document.getElementById("email").value = getSavedValue("email");

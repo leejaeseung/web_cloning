@@ -28,3 +28,17 @@ const getSavedValue = function(id) {
 
     return localStorage.getItem(id);
 }
+
+const clearStorage = function(cert_ID, cert_Email) {
+    //인증이 완료된 애들은 지우지 않음
+
+    console.log(cert_ID);
+    console.log(cert_Email);
+    console.log(localStorage);
+
+    if(!cert_ID)
+        localStorage.removeItem("userName");
+    if(!cert_Email)
+        localStorage.removeItem("email");
+
+}
