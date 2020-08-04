@@ -13,3 +13,18 @@ const viewHome = (videoID) => {
         method: "POST"
     });
 }
+
+const saveValue = function(element) {
+    var id = element.id;
+    var val = element.value;
+
+    localStorage.setItem(id, val);
+}
+
+const getSavedValue = function(id) {
+    if(!localStorage.getItem(id)){
+        return ""
+    }
+
+    return localStorage.getItem(id);
+}

@@ -31,20 +31,20 @@ block content
                 form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
                     input(type="text", id="userName", name="userName", placeholder="변경할 이름을 입력하세요.", required=true)
                     input(type="submit", value="ID 변경")
-            #edit-warn #{id_warn}
+            #edit-msg #{userName_msg}
         #editPF
             #edit-text(align="right") E-mail : 
             #edit-input
                 form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
                     input(type="email", id="email", name="email", placeholder="변경할 이메일을 입력하세요.", required=true)
                     input(type="submit", value="email 변경")
-            #edit-warn #{email_warn}
+            #edit-msg #{email_msg}
         form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
             #editPF
                 #edit-text(align="right") Original Password : 
                 #edit-input
                     input(type="password", id="password_ori", name="password_ori", placeholder="기존 비밀번호를 입력하세요.", required=true)
-                #edit-warn #{pwori_warn}
+                #edit-msg #{pwori_msg}
             #editPF
                 #edit-text(align="right") New Password : 
                 #edit-input
@@ -54,4 +54,4 @@ block content
                 #edit-input
                     input(type="password", id="password2", name="password_new2", placeholder="비밀번호를 한번 더 입력하세요.", required=true)
                     input(type="submit", value="비밀번호 변경")
-                #edit-warn #{pwnew_warn}
+                #edit-msg #{pwnew_msg}

@@ -5,6 +5,8 @@ import {home, search} from "../controllers/videoController";
 import {
     getJoin,
     postJoin,
+    postCheckId,
+    postCheckEmail,
     getLogin,
     postLogin
 } from "../controllers/userController";
@@ -16,6 +18,9 @@ globalRouter.get(routes.home, home);
 
 globalRouter.get(routes.join, getJoin);
 globalRouter.post(routes.join, userValidationRules(), validate, postJoin);
+
+globalRouter.post(routes.checkId, userValidationRules(), validate, postCheckId);
+globalRouter.post(routes.checkEmail, postCheckEmail);
 
 globalRouter.get(routes.login, getLogin);
 globalRouter.post(routes.login, postLogin);

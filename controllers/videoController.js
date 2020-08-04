@@ -50,7 +50,7 @@ export const videoDetail = async (req, res, next) => {
         }
     } = req;
 
-    await Comment.find({videoID: video.id}, (err, comments) => {
+    await Comment.find({videoID: video.id}).populate("author").exec((err, comments) => {
         if(err) return next(new Error("DB Error"));
 
         console.log(comments);

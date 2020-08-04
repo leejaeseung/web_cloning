@@ -6,6 +6,8 @@ const JOIN = "/join";
 const LOGIN = "/login";
 const LOGOUT = "/logout";
 const SEARCH = "/search";
+const CHECK_ID = "/checkid";
+const CHECK_EMAIL = "/checkemail"
 
 // Users
 
@@ -33,6 +35,8 @@ const routes = {
     login: LOGIN,
     logout: LOGOUT,
     search: SEARCH,
+    checkId: CHECK_ID,
+    checkEmail: CHECK_EMAIL,
     users: USERS,
     userDetail: (id) => {
         if (id) {
