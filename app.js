@@ -13,10 +13,6 @@ import session from "express-session";
 //세션 미들웨어
 import flash from "connect-flash";
 //일회성 메세지 전용 미들웨어
-import nodemailer from "nodemailer";
-//메일 전송 모듈
-import smtpTransporter from "nodemailer-smtp-transport";
-//smtp 서버 모듈
 
 import userRouter from "./routers/userRouter";
 import videoRouter from "./routers/videoRouter";
@@ -36,21 +32,6 @@ app.set("view engine", "pug");
 app.use(express.static(__dirname + "/public"));
 app.use(express.static(__dirname + "/"));
 //정적 파일 경로 설정 -> uploads는 나중에 수정해야됨.
-
-let transporter = nodemailer.createTransport({
-    // 사용하고자 하는 서비스, gmail계정으로 전송할 예정이기에 'gmail'
-    service: 'gmail',
-    // host를 gmail로 설정
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
-    auth: {
-      // Gmail 주소 입력, 'testmail@gmail.com'
-      user: process.env.NODEMAILER_USER,
-      // Gmail 패스워드 입력
-      pass: process.env.NODEMAILER_PASS,
-    },
-  });
 
 app.use(cookieParser());
 app.use(methodOverride("_method"));

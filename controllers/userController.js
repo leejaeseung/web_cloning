@@ -1,6 +1,7 @@
 import routes from "../routes"
 import User from "../DBmodel/users";
 import Video from "../DBmodel/videos";
+import { mailSender} from "../middleware";
 
 export const getJoin = (req, res) => {
 
@@ -113,6 +114,8 @@ export const postCheckEmail = async (req, res, next) => {
         }
         else{
             //이메일 인증 구현
+
+            mailSender(email, "abcde");
 
             return res.redirect(routes.join);
         }

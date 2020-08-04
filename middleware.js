@@ -1,7 +1,11 @@
 import routes from "./routes";
 import multer from "multer";
 import User from "./DBmodel/users";
-import Video from "./DBmodel/videos"
+import Video from "./DBmodel/videos";
+import nodemailer from "nodemailer";
+//메일 전송 모듈
+import smtpTransporter from "nodemailer-smtp-transport";
+//smtp 서버 모듈
 
 const storage_VD = multer.diskStorage({destination: "uploads/videos/"})
 const storage_PF = multer.diskStorage({destination: "uploads/profiles/", filename: function (req, file, cb) {
@@ -92,6 +96,35 @@ export const videoChecker = async (req, res, next) => {
             next(new Error("video is not Exist"))
         }
     });
+}
+
+export const mailSender = async (dest, code) => {
+
+    let transporter = nodemailer.createTransport({
+        // 사용하고자 하는 서비스, gmail계정으로 전송할 예정이기에 'gmail'
+        service: 'gmail',
+        // host를 gmail로 설정
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: {
+          // Gmail 주소 입력, 'testmail@gmail.com'
+          user: process.env.NODEMAILER_USER,
+          // Gmail 패스워드 입력
+          pass: process.env.NODEMAILER_PASS,
+        },
+      });
+
+    await transporter.sendMail({
+        
+        from: "JTube" + process.env.NODEMAILER_USER,
+
+        to: dest,
+
+        subject: "JTube 가입 인증 메일",
+
+        text: code
+    })
 }
 
 //에러 핸들러
