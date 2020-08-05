@@ -29,6 +29,8 @@ export const userEditValidationRules = () => {
 export const validate = (req, res, next) => {
     const errors = validationResult(req).errors;
 
+    console.log(errors);
+
     for(var i = 0; i < errors.length; i++){
         if(errors[i].value){
             if(errors[i].param == "password_new1" || errors[i].param == "password_new2")

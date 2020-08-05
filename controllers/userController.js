@@ -1,12 +1,19 @@
 import routes from "../routes"
 import User from "../DBmodel/users";
 import Video from "../DBmodel/videos";
-import { mailSender} from "../middleware";
+import { mailSender, generateCode } from "../middleware";
 
-export const getJoin = (req, res) => {
+export const getJoin = (req, res, next) => {
 
     /*if(!req.session.certificate)
         req.session.certificate = null;*/
+
+        await req.session.destroy(function(err) {
+            req.session;
+            if(err) {
+                next(new Error("session Error"));
+            }
+        })
 
     res.render("join", {
         pageTitle: "Join"
@@ -69,27 +76,28 @@ export const postJoin = (req, res, next) => {
 export const postCheckId = async (req, res, next) => {
     const { body: { userName, err_msg} } = req;
 
+    res.set("Content-Type", "text/plain");
+
     if(err_msg){
-        req.flash("userName_msg", err_msg.msg);
-        return res.redirect(routes.join);
+        return res.json({msg: err_msg.msg,
+                            verify: false})
     }
 
     await User.findOne({userName: userName}, async (err, user) => {
         if(err) next(new Error("DB Error"));
 
         if(user){
-            req.flash("userName_msg", userName + "은 이미 존재하는 아이디입니다.")
-            
+        
             req.session.cert_ID = null;
 
-            return res.redirect(routes.join);
+            return res.json({msg: userName + "은 이미 존재하는 아이디입니다.",
+                            verify: false})
         }
         else{
             req.session.cert_ID = userName;
-           
-            req.flash("userName_msg", userName + "은 사용 가능한 아이디입니다.")
 
-            return res.redirect(routes.join);
+            return res.json({msg: userName + "은 사용 가능한 아이디입니다.",
+                            verify: true})
         }
     })
 }
@@ -98,28 +106,37 @@ export const postCheckEmail = async (req, res, next) => {
     const { body: { email, err_msg} } = req;
 
     if(err_msg){
-        req.flash("email_msg", err_msg.msg);
-        return res.redirect(routes.join);
+        return res.json({msg: err_msg.msg,
+            verify: false})
     }
 
     await User.findOne({email: email}, async (err, em) => {
         if(err) next(new Error("DB Error"));
 
         if(em){
-            req.flash("email_msg", email + "은 이미 등록된 이메일입니다.")
             
             req.session.cert_Email = null;
 
-            return res.redirect(routes.join);
+            return res.json({msg: email + "은 이미 등록된 이메일입니다.",
+                            verify: false})
         }
         else{
             //이메일 인증 구현
 
-            mailSender(email, "abcde");
+            req.session.code = generateCode();
+            const url = "http://" + req.get("host") + "/confirm-email?key=" + req.session.code;
+
+            //mailSender(email, url);
 
             return res.redirect(routes.join);
         }
     })
+}
+
+export const getConfirmEmail = (req, res) => {
+    console.log(" HI");
+    console.log(req.query.key);
+    console.log(req.session.code);
 }
 
 export const getLogin = (req, res) => {

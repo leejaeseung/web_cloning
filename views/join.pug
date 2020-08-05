@@ -3,22 +3,22 @@ include mixins/checkMsgBlock
 
 block content
     .join
-        script.
-            clearStorage("#{cert_ID}" , "#{cert_Email}")
         p 회원가입 페이지입니다 
         form(action=routes.join, method="post", name="joinForm")
             #input_boxes
                 #edit-text ID
                 #edit-input
-                    input(type="text", id="userName", name="userName", placeholder="아이디를 입력하세요.", required=true, onkeyup="saveValue(this);")
-                    input(type="button", value="중복 확인", onClick="checkSubmit(\"" + routes.checkId + "\")") 
-            +checkMsgBlock({cert: cert_ID, text: userName_msg})
+                    input(type="text", id="userName", name="userName", placeholder="아이디를 입력하세요.", required=true)
+                    input(type="button", value="중복 확인", onClick="verifySubmit(\'" + routes.checkId + "\', \'userName\')") 
+            //+checkMsgBlock({cert: cert_ID, text: userName_msg})
+            #userName-msg
             #input_boxes
                 #edit-text E-mail
                 #edit-input
-                    input(type="email", id="email", name="email", placeholder="이메일을 입력하세요.", required=true, onkeyup="saveValue(this);")
-                    input(type="button", value="인증 요청", onClick="checkSubmit(\"" + routes.checkEmail + "\")")
-            +checkMsgBlock({cert: cert_Email, text: email_msg})
+                    input(type="email", id="email", name="email", placeholder="이메일을 입력하세요.", required=true)
+                    input(type="button", value="인증 요청", onClick="verifySubmit(\'" + routes.checkEmail + "\', \'email\')")
+            //+checkMsgBlock({cert: cert_Email, text: email_msg})
+            #email-msg
             #input_boxes
                 #edit-text Password
                 #edit-input
@@ -31,12 +31,29 @@ block content
             input(type="submit", value="Join")
             
             script.
-                document.getElementById("userName").value = getSavedValue("userName");
-                document.getElementById("email").value = getSavedValue("email");
 
-                function checkSubmit(route){
-                    document.joinForm.action=route;
-                    document.joinForm.submit();
+                function verifySubmit(route, obj){
+                    var value = document.getElementById(obj).value;
+
+                    var object = {};
+                    object[obj] = value;
+
+                    fetch(route, { method: "POST" ,
+                    headers: {"Content-Type": "application/json"}, 
+                    body: JSON.stringify(object)
+                    }).then(response => response.json())
+                    .then(data => {
+                        var msg_tag = document.getElementById(obj + "-msg");
+
+                        msg_tag.textContent = data.msg
+                        if(data.verify){
+                            msg_tag.style.color = "green"
+                        }
+                        else{
+                            msg_tag.style.color = "red"
+                        }                         
+                    })
+
                 }
 
         

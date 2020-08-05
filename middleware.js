@@ -6,6 +6,7 @@ import nodemailer from "nodemailer";
 //메일 전송 모듈
 import smtpTransporter from "nodemailer-smtp-transport";
 //smtp 서버 모듈
+import crypto from "crypto";
 
 const storage_VD = multer.diskStorage({destination: "uploads/videos/"})
 const storage_PF = multer.diskStorage({destination: "uploads/profiles/", filename: function (req, file, cb) {
@@ -30,7 +31,7 @@ export const localsMiddleware = (req, res, next) =>{
     res.locals.pwori_msg = req.flash("password_ori_msg");
     res.locals.pwnew_msg = req.flash("password_new_msg");
 
-    res.locals.cert_ID = req.session.cert_ID;
+    //res.locals.cert_ID = req.session.cert_ID;
     res.locals.cert_Email = req.session.cert_Email;
 
     next();
@@ -98,7 +99,15 @@ export const videoChecker = async (req, res, next) => {
     });
 }
 
-export const mailSender = async (dest, code) => {
+export const generateCode = () => {
+    var key1 = crypto.randomBytes(256).toString('hex').substr(100, 5);
+    var key2 = crypto.randomBytes(256).toString('base64').substr(50, 5);
+    var key = key1 + key2;
+
+    return key;
+}
+
+export const mailSender = async (dest, url) => {
 
     let transporter = nodemailer.createTransport({
         // 사용하고자 하는 서비스, gmail계정으로 전송할 예정이기에 'gmail'
@@ -123,7 +132,7 @@ export const mailSender = async (dest, code) => {
 
         subject: "JTube 가입 인증 메일",
 
-        text: code
+        html: "<h1>url을 클릭하여 인증하세요</h1><br><a href=" + url + ">" + url
     })
 }
 
