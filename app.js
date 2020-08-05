@@ -49,6 +49,9 @@ app.use(session({
 app.use(flash());
 //여러 미들웨어 붙여주기
 
+app.locals.pretty = true;
+//개발자 모드 이쁘게 -> 이거 안하면 한줄로 나옴
+
 app.use(localsMiddleware);
 
 app.use(routes.home, globalRouter);

@@ -8,15 +8,15 @@ block content
             | #{video.description}
         br
         form(action=routes.editVideo(video._id) + "?_method=PATCH" , method="POST")
-            #editVD
-                #edit-text(align="right") Title : 
-                #edit-input
+            .editVD
+                .edit-text(align="right") Title : 
+                .edit-input
                     input(type="text", name="videoName", placeholder="제목을 입력하세요.")
-            #editVD(style="height:160px")
-                #edit-text(align="right") Description : 
-                #edit-input
+            .editVD(style="height:160px")
+                .edit-text(align="right") Description : 
+                .edit-input
                     textarea(name="description", placeholder="영상 설명", cols="50", rows="10")
-            #edit-input(style="width:5%; float:left")
+            .edit-input(style="width:5%; float:left")
                 input(type="submit", value="수정")
-        #edit-input
+        .edit-input
             button(type="button", onclick="location.href=\"" + routes.myVideos(nowUser.userName) + "\"") 취소

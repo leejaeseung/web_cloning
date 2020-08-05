@@ -32,7 +32,8 @@ export const validate = (req, res, next) => {
     console.log(errors);
 
     for(var i = 0; i < errors.length; i++){
-        if(errors[i].value){
+        //undefined가 아닌 경우에만 넣어줌
+        if(errors[i].value || errors[i].value === ""){
             if(errors[i].param == "password_new1" || errors[i].param == "password_new2")
                 errors[i].param = "password_new";
             req.body.err_msg = {tag: errors[i].param, msg: errors[i].msg};

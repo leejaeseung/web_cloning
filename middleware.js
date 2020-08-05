@@ -32,7 +32,7 @@ export const localsMiddleware = (req, res, next) =>{
     res.locals.pwnew_msg = req.flash("password_new_msg");
 
     //res.locals.cert_ID = req.session.cert_ID;
-    res.locals.cert_Email = req.session.cert_Email;
+    //res.locals.cert_Email = req.session.cert_Email;
 
     next();
 };
@@ -107,7 +107,7 @@ export const generateCode = () => {
     return key;
 }
 
-export const mailSender = async (dest, url) => {
+export const mailSender = async (dest, code) => {
 
     let transporter = nodemailer.createTransport({
         // 사용하고자 하는 서비스, gmail계정으로 전송할 예정이기에 'gmail'
@@ -132,7 +132,7 @@ export const mailSender = async (dest, url) => {
 
         subject: "JTube 가입 인증 메일",
 
-        html: "<h1>url을 클릭하여 인증하세요</h1><br><a href=" + url + ">" + url
+        html: "<h1>다음 코드를 입력하세요.</h1><br>" + code
     })
 }
 

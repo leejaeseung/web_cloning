@@ -1,59 +1,29 @@
 extends layouts/main
-include mixins/checkMsgBlock
 
 block content
     .join
         p 회원가입 페이지입니다 
-        form(action=routes.join, method="post", name="joinForm")
-            #input_boxes
-                #edit-text ID
-                #edit-input
+        form(action=routes.join, method="post", id="joinForm")
+            .input_boxes
+                .edit-text ID
+                .edit-input
                     input(type="text", id="userName", name="userName", placeholder="아이디를 입력하세요.", required=true)
                     input(type="button", value="중복 확인", onClick="verifySubmit(\'" + routes.checkId + "\', \'userName\')") 
-            //+checkMsgBlock({cert: cert_ID, text: userName_msg})
             #userName-msg
-            #input_boxes
-                #edit-text E-mail
-                #edit-input
+            .input_boxes
+                .edit-text E-mail
+                .edit-input
                     input(type="email", id="email", name="email", placeholder="이메일을 입력하세요.", required=true)
-                    input(type="button", value="인증 요청", onClick="verifySubmit(\'" + routes.checkEmail + "\', \'email\')")
-            //+checkMsgBlock({cert: cert_Email, text: email_msg})
+                    input(type="button", value="인증 요청", id="verifyBt", onClick="verifySubmit(\'" + routes.checkEmail + "\', \'email\')")
             #email-msg
-            #input_boxes
-                #edit-text Password
-                #edit-input
+            .input_boxes
+                .edit-text Password
+                .edit-input
                     input(type="password", id="password1", name="password1", placeholder="비밀번호를 입력하세요.", required=true) 
-            #input_boxes
-                #edit-text Confirm Password
-                #edit-input
+            .input_boxes
+                .edit-text Confirm Password
+                .edit-input
                     input(type="password", id="password2", name="password2", placeholder="비밀번호를 한번 더 입력하세요.", required=true)
-            p #{pw_msg}
-            input(type="submit", value="Join")
+            #pw-msg
+            input(type="button", value="Join", onClick="joinChecker(\'" + routes.join + "\', \'joinForm\')")
             
-            script.
-
-                function verifySubmit(route, obj){
-                    var value = document.getElementById(obj).value;
-
-                    var object = {};
-                    object[obj] = value;
-
-                    fetch(route, { method: "POST" ,
-                    headers: {"Content-Type": "application/json"}, 
-                    body: JSON.stringify(object)
-                    }).then(response => response.json())
-                    .then(data => {
-                        var msg_tag = document.getElementById(obj + "-msg");
-
-                        msg_tag.textContent = data.msg
-                        if(data.verify){
-                            msg_tag.style.color = "green"
-                        }
-                        else{
-                            msg_tag.style.color = "red"
-                        }                         
-                    })
-
-                }
-
-        

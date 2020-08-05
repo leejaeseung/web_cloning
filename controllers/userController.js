@@ -3,7 +3,7 @@ import User from "../DBmodel/users";
 import Video from "../DBmodel/videos";
 import { mailSender, generateCode } from "../middleware";
 
-export const getJoin = (req, res, next) => {
+export const getJoin = async (req, res, next) => {
 
     /*if(!req.session.certificate)
         req.session.certificate = null;*/
@@ -20,57 +20,75 @@ export const getJoin = (req, res, next) => {
     })
 };
 
-export const postJoin = (req, res, next) => {
+export const postJoin = async (req, res, next) => {
     const { body: { userName, email, password1 , password2, err_msg}} = req;
 
-    if(err_msg){
-        req.flash("tryMsg", err_msg.msg);
-        return res.redirect(routes.join);
+    res.set("Content-Type", "text/plain");
+
+    console.log(req.session.cert_ID);
+    console.log(req.session.cert_Email)
+    
+
+    if(!req.session.cert_ID || req.session.cert_ID != userName){
+        /*result.push({
+            msg: "아이디 중복 체크를 해 주세요.",
+            color: "red",
+            tag: "userName-msg"
+        })*/
+        return res.json({msg: "아이디 중복 체크를 해 주세요.",
+                            color: "red",
+                            tag: "userName-msg"})
     }
 
-    User.findOne( {"userName": userName}, function(err, user) {
-        if(err) next(new Error("DB 에러"));
-        if(user) {
-            //id가 이미 있으면
+    if(!req.session.cert_Email || req.session.cert_Email != email){
+        /*result.push({
+            msg: "이메일 인증을 해 주세요.",
+            color: "red",
+            tag: "email-msg"
+        })*/
 
-            req.flash("tryMsg", "이미 존재하는 ID입니다. 다시 입력해 주세요.");
+        return res.json({msg: "이메일 인증을 해 주세요.",
+                            color: "red",
+                            tag: "email-msg"})
+    }
 
-            return res.redirect(routes.join);
-        }
+    console.log(err_msg);
 
-        User.findOne( {"email": email}, function(err, target){
-            if(err) next(new Error("DB 에러"));
-            if(target){
-                //email이 이미 있으면
+    if(err_msg){
+        return res.json({msg: err_msg.msg,
+                        color: "red",
+                        tag: "pw-msg"})
+    }
 
-                req.flash("tryMsg", "이미 등록된 email입니다. 다시 입력해 주세요.");
-
-                return res.redirect(routes.join);
-            }
-            else if(password1 !== password2){
-                //비밀번호 미 일치시
-                
-                req.flash("tryMsg", "비밀번호가 일치하지 않습니다. 다시 입력해 주세요.");
+    if(password1 !== password2){
+        //비밀번호 미 일치시
     
-                return res.redirect(routes.join);
-            }
-            else{
+        return res.json({msg: "비밀번호가 일치하지 않습니다. 다시 입력해 주세요.",
+                color: "red",
+                tag: "pw-msg"})
+    }
+    else{
     
-            //성공 시
-            console.log("회원가입 성공~");
-            //새 user Create
+    //성공 시
+    console.log("회원가입 성공~");
+    //새 user Create
     
-            User.create({
-                userName: userName,
-                password: password1,
-                email: email,
-                imgUrl: "images/default.png"
-            });
-        
-            return res.redirect(routes.home);
-        }
-        })
+    User.create({
+        userName: userName,
+        password: password1,
+        email: email,
+        imgUrl: "images/default.png"
     });
+
+    await req.session.destroy(function(err) {
+        req.session;
+        if(err) {
+            next(new Error("session Error"));
+        }
+    })
+        
+    return res.json(null)
+    }
 };
 
 export const postCheckId = async (req, res, next) => {
@@ -80,7 +98,8 @@ export const postCheckId = async (req, res, next) => {
 
     if(err_msg){
         return res.json({msg: err_msg.msg,
-                            verify: false})
+                        color: "red",
+                        tag: "userName-msg"})
     }
 
     await User.findOne({userName: userName}, async (err, user) => {
@@ -91,13 +110,15 @@ export const postCheckId = async (req, res, next) => {
             req.session.cert_ID = null;
 
             return res.json({msg: userName + "은 이미 존재하는 아이디입니다.",
-                            verify: false})
+                                color: "red",
+                                tag: "userName-msg"})
         }
         else{
             req.session.cert_ID = userName;
 
             return res.json({msg: userName + "은 사용 가능한 아이디입니다.",
-                            verify: true})
+                                color: "green",
+                                tag: "userName-msg"})
         }
     })
 }
@@ -105,9 +126,12 @@ export const postCheckId = async (req, res, next) => {
 export const postCheckEmail = async (req, res, next) => {
     const { body: { email, err_msg} } = req;
 
+    res.set("Content-Type", "text/plain");
+
     if(err_msg){
         return res.json({msg: err_msg.msg,
-            verify: false})
+                            color: "red",
+                            tag: "email-msg"})
     }
 
     await User.findOne({email: email}, async (err, em) => {
@@ -118,25 +142,45 @@ export const postCheckEmail = async (req, res, next) => {
             req.session.cert_Email = null;
 
             return res.json({msg: email + "은 이미 등록된 이메일입니다.",
-                            verify: false})
+                                color: "red",
+                                tag: "email-msg"})
         }
         else{
             //이메일 인증 구현
 
             req.session.code = generateCode();
-            const url = "http://" + req.get("host") + "/confirm-email?key=" + req.session.code;
+            req.session.nowEmail = email;
+            const code = req.session.code;
 
-            //mailSender(email, url);
+            mailSender(email, code);
 
-            return res.redirect(routes.join);
+            return res.json({msg: email + "로 인증 메일이 전송되었습니다.",
+                                color: "green",
+                                tag: "email-msg"})
         }
     })
 }
 
-export const getConfirmEmail = (req, res) => {
-    console.log(" HI");
-    console.log(req.query.key);
-    console.log(req.session.code);
+export const postConfirmEmail = (req, res) => {
+    const { body: { code} } = req;
+
+    console.log(code);
+
+    res.set("Content-Type", "text/plain");
+    
+    if(req.session.code == code){
+
+        req.session.cert_Email = req.session.nowEmail;
+
+        return res.json({msg: "인증 성공!",
+                            color: "green",
+                            tag: "email-msg"})
+    }
+    else{
+        return res.json({msg: "인증 실패...",
+                            color: "red",
+                            tag: "email-msg"})
+    }
 }
 
 export const getLogin = (req, res) => {

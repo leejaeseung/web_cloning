@@ -7,7 +7,7 @@ import {
     postJoin,
     postCheckId,
     postCheckEmail,
-    getConfirmEmail,
+    postConfirmEmail,
     getLogin,
     postLogin
 } from "../controllers/userController";
@@ -22,7 +22,7 @@ globalRouter.post(routes.join, userValidationRules(), validate, postJoin);
 
 globalRouter.post(routes.checkId, userValidationRules(), validate, postCheckId);
 globalRouter.post(routes.checkEmail, userValidationRules(), validate, postCheckEmail);
-globalRouter.get(routes.confirmEmail, getConfirmEmail);
+globalRouter.post(routes.confirmEmail, postConfirmEmail);
 
 globalRouter.get(routes.login, getLogin);
 globalRouter.post(routes.login, postLogin);
