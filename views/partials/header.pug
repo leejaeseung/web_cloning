@@ -1,20 +1,21 @@
 header
-    div.search
-        form(action=routes.search, method="get")
-            input(type="text", placeholder="검색", name="search", value=searchTerm)
-    ul
-        if !nowUser.isLogin
-            li
-                a(href=routes.login) Login
-            li
-                a(href=routes.join) Join
-        else
-            li
-                a(href=routes.videos + routes.upload) Upload
-            li
-                a(href=routes.userDetail(nowUser.userName)) Profile
-            li
-                a(href=routes.myVideos(nowUser.userName)) MyVideos
-            li
-                a(href=routes.logout) Logout
-    hr
+    .nav
+        div.search
+            form(action=routes.search, method="get")
+                input(type="text", placeholder="검색", name="search", value=searchTerm)
+        ul.menu
+            if !nowUser.isLogin
+                li
+                    a(href=routes.login) Login
+                li
+                    a(href=routes.join) Join
+            else
+                li
+                    a(href=routes.videos + routes.upload) Upload
+                li
+                    a(href=routes.userDetail(nowUser.userName)) Profile
+                li
+                    a(href=routes.myVideos(nowUser.userName)) MyVideos
+                li
+                    a(href=routes.logout) Logout
+        hr

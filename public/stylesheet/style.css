@@ -1,11 +1,4 @@
-/** {
-    border : solid 1px black;
-}*/
 
-a:link a:visited{
-    text-decoration: none;
-    color: blue;
-}
 
 .editProfile {
     width:1500px; 

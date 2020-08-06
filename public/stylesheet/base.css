@@ -1,0 +1,26 @@
+* {
+    margin: 0;
+    padding: 0;
+    color: #000;
+    box-sizing: border-box;
+
+    /*border : solid 1px black;*/
+}
+
+.container {
+    width: 1875px;
+    margin: 0 auto;
+}
+
+.fn-font {
+
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    outline: none;
+}
