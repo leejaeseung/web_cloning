@@ -51,6 +51,7 @@ function verifySubmit(route, obj){
     var object = {};
     object[obj] = value;
 
+
     fetch(route, { method: "POST" ,
     headers: {"Content-Type": "application/json"}, 
     body: JSON.stringify(object)
@@ -61,27 +62,44 @@ function verifySubmit(route, obj){
         msg_tag.textContent = data.msg
         msg_tag.style.color = data.color
         if(data.color == "green" && obj == "email"){
-                createCodeForm(box);
+            if(!document.getElementById("code"))
+                createCodeForm();
         }        
     })
 }
 
-async function createCodeForm(box){
+async function createCodeForm(){
+    const newBoxes = document.createElement("div");
+    newBoxes.className = "edit-input";
+
     const codeInput = document.createElement("input");
+    //Code 입력 창
 
     codeInput.type = "text";
     codeInput.placeholder = "Code를 입력하세요.";
-    codeInput.className = "edit-input";
     codeInput.id = "code";
     codeInput.required = true;
 
-    box.after(codeInput);
-    //email input 박스 뒤에 삽입
+    const verifyBt = await document.createElement("input");
+    //인증 확인 버튼
 
-    var verifyBt = await document.getElementById("verifyBt");
-
-    verifyBt.setAttribute("onclick", "verifySubmit('/confirm-email', 'code')");
+    verifyBt.type = "button";
+    verifyBt.id = "codeBt";
+    verifyBt.setAttribute("style", "margin-left: 11px;");
     verifyBt.value = "인증 확인";
+
+    verifyBt.addEventListener("click", () => {
+        verifySubmit( "/confirm-email" , 'code');
+    })
+
+    newBoxes.appendChild(codeInput);
+    newBoxes.appendChild(verifyBt);
+
+    const target = document.getElementById("email-box");
+    //이메일 폼
+
+    target.setAttribute("style", "height: 75px;")
+    target.appendChild(newBoxes);
 }
 
 function joinChecker(route, obj){
@@ -106,6 +124,7 @@ function joinChecker(route, obj){
             msg_tag.style.color = data.color
         }
         else{
+            //홈으로 이동
             window.location.href = "/";
         }
     })
