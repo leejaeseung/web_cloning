@@ -8,13 +8,18 @@
 }
 
 .container {
+    display: flex;
+    flex-direction: column;
     width: 1875px;
+    height: 960px;
     margin: 0 auto;
+    
+    /*border : solid 1px black;*/
 }
 
-.fn-font {
+/*.fn-font {
 
-}
+}*/
 
 ul {
     list-style: none;

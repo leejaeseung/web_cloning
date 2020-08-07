@@ -7,9 +7,7 @@ html
         link(rel="stylesheet" type="text/css" href="/stylesheet/styles.css")
     body
         .container
-            header
-                h1.title
-                    a(href=routes.home) #{siteName}
+            include ../partials/header
             main
                 block content
             include ../partials/footer

@@ -1,3 +1,5 @@
 @Import url("header.css");
 @Import url("style.css");
 @import url("base.css");
+@import url("join.css");
+@import url("footer.css");

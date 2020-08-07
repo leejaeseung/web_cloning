@@ -30,7 +30,7 @@ export const search = (req, res) => {
         query: {search: searchTerm}
     } = req;
 
-    Video.find( {title: searchTerm}, (err, videos) => {
+    Video.find( {videoName: searchTerm}, (err, videos) => {
     res.render("search", {
         pageTitle: "Search",
         searchTerm,

@@ -1,8 +1,10 @@
 header
+    h1.title
+        a(href=routes.home) #{siteName}
+    .search
+        form(action=routes.search, method="get")
+            input(type="text", placeholder="검색", id="searchBox", name="search", value=searchTerm)
     .nav
-        div.search
-            form(action=routes.search, method="get")
-                input(type="text", placeholder="검색", name="search", value=searchTerm)
         ul.menu
             if !nowUser.isLogin
                 li

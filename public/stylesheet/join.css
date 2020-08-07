@@ -1,0 +1,78 @@
+main {
+    display: flex;
+    margin-left: 55px;
+}
+
+.join {
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+
+}
+
+.join > p.title {
+    text-align: center;
+    font-size: x-large;
+}
+
+.join * {
+    font-weight: bold;
+    /*border: solid 1px black;*/
+}
+
+
+
+.editProfile {
+    width:1500px; 
+    height:60%;
+
+}
+
+.editPF {
+    margin-bottom: 10px;
+
+}
+
+.editVD {
+    margin-bottom: 10px;
+
+}
+
+.input_boxes {
+    width: 400px;
+    height: 50px;
+    margin-bottom: 5px;
+
+}
+
+.edit-text {
+    display: inline-block;
+    width: 35%;
+    height: 30%;
+    
+}
+
+.edit-input input[type="email"] , .edit-input input[type="text"], .edit-input input[type="password"] {
+    display: inline-block;
+    width: 70%;
+    height: 25px;
+    vertical-align: bottom;
+    margin-right: 5px;
+    margin-top: 3px;
+
+}
+
+.edit-input input[type="submit"], .edit-input input[type="button"] {
+    display: inline-block;
+    width: 80px;
+    height: 24px;
+    vertical-align: bottom;
+    margin-left: 5px;
+
+}
+
+#joinBt {
+    margin-top: 15px;
+    font-size: 20px;
+    width: 100%;
+}

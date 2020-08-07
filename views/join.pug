@@ -2,7 +2,7 @@ extends layouts/main
 
 block content
     .join
-        p 회원가입 페이지입니다 
+        p.title 회원 가입
         form(action=routes.join, method="post", id="joinForm")
             .input_boxes
                 .edit-text ID
@@ -26,7 +26,7 @@ block content
                     input(type="password", id="password2", name="password2", placeholder="비밀번호를 한번 더 입력하세요.", required=true)
             #pw-msg
             input(type="button", value="Join", id="joinBt")
-            
+                
         script.
             const userNameBt = document.getElementById("userNameBt");
             const emailBt = document.getElementById("emailBt");
