@@ -52,7 +52,7 @@ export const postJoin = async (req, res, next) => {
                             tag: "email-msg"})
     }
 
-    console.log(err_msg);
+    //console.log(err_msg);
 
     if(err_msg){
         return res.json({msg: err_msg.msg,
@@ -70,7 +70,7 @@ export const postJoin = async (req, res, next) => {
     else{
     
     //성공 시
-    console.log("회원가입 성공~");
+    //console.log("회원가입 성공~");
     //새 user Create
     
     User.create({
@@ -187,7 +187,7 @@ export const getLogin = (req, res) => {
 
     res.render("login", {
         pageTitle: "Login",
-        tryMsg: req.flash("tryMsg")
+        login_msg: req.flash("login-msg")
     })
 };
 
@@ -195,12 +195,12 @@ export const postLogin = (req, res, next) => {
 
     const { body: { userName, password}} = req;
 
-    User.findOne( {"userName" : userName}, function(err, user) {
+    User.findOne( {"userName" : userName}, (err, user) => {
         if(err) next(new Error("DB 에러"));
         if(!user || user.password !== password){
             //id가 존재하지 않거나 비밀번호 미일치
             
-            req.flash("tryMsg", "잘못된 정보입니다. 다시 입력해 주세요.");
+            req.flash("login-msg", "잘못된 정보입니다. 다시 입력해 주세요.");
             res.redirect(routes.login);
         }
         else{

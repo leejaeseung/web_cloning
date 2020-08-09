@@ -1,25 +1,21 @@
-main {
-    display: flex;
-    margin-left: 55px;
-}
-
-.join {
-    display: flex;
-    flex-direction: column;
-    margin-top: 30px;
-
-}
-
-.join > p.title {
-    text-align: center;
-    font-size: x-large;
-}
-
 .join * {
     font-weight: bold;
     /*border: solid 1px black;*/
 }
 
+.join {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 50px;
+    /*margin-top: 30px;*/
+}
+
+.join > p.title {
+    text-align: center;
+    font-size: x-large;
+    margin-bottom: 50px;
+}
 
 
 .editProfile {
@@ -38,21 +34,21 @@ main {
 
 }
 
-.input_boxes {
+.join .input_boxes {
     width: 400px;
-    height: 50px;
-    margin-bottom: 5px;
+    height: 70px;
+    margin-bottom: 15px;
 
 }
 
-.edit-text {
+.join .edit-text {
     display: inline-block;
     width: 35%;
     height: 30%;
     
 }
 
-.edit-input input[type="email"] , .edit-input input[type="text"], .edit-input input[type="password"] {
+.join .edit-input input[type="email"] , .join .edit-input input[type="text"], .join .edit-input input[type="password"] {
     display: inline-block;
     width: 70%;
     height: 25px;
@@ -62,17 +58,16 @@ main {
 
 }
 
-.edit-input input[type="submit"], .edit-input input[type="button"] {
-    display: inline-block;
+.join .edit-input input[type="submit"], .join .edit-input input[type="button"] {
+    display: block;
     width: 80px;
     height: 24px;
-    vertical-align: bottom;
-    margin-left: 5px;
+    margin-top: 3px;
+    float: right;
 
 }
 
 #joinBt {
-    margin-top: 15px;
     font-size: 20px;
     width: 100%;
 }

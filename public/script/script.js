@@ -72,6 +72,8 @@ async function createCodeForm(){
     const newBoxes = document.createElement("div");
     newBoxes.className = "edit-input";
 
+    newBoxes.setAttribute("style", "margin-top: 5px;");
+
     const codeInput = document.createElement("input");
     //Code 입력 창
 
@@ -85,7 +87,7 @@ async function createCodeForm(){
 
     verifyBt.type = "button";
     verifyBt.id = "codeBt";
-    verifyBt.setAttribute("style", "margin-left: 11px;");
+    
     verifyBt.value = "인증 확인";
 
     verifyBt.addEventListener("click", () => {

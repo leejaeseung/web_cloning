@@ -1,0 +1,40 @@
+.login * {
+    font-weight: bold;
+    /*border: solid 1px black;*/
+}
+
+.login {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 50px;
+}
+
+.login > p.title {
+    text-align: center;
+    font-size: x-large;
+    margin-bottom: 15px;
+}
+
+.login .input-boxes {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: 70px;
+    margin-bottom: 15px;
+}
+
+.login input {
+    width: 100%;
+    height: 50%;
+    margin-top: 5px;
+}
+
+.login input[type= "submit"] {
+    height: 30px;
+    margin-top: 20px;
+}
+
+.login .msg {
+    color: red;
+}
