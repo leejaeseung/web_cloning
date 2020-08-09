@@ -37,3 +37,19 @@ a {
     text-decoration: none;
     outline: none;
 }
+
+.linkBt {
+    text-decoration: none;
+    font-size: 20px;
+    color: black;
+    padding: 2px 4px 2px 4px;
+    margin: 20px;
+    border-radius: 5px;
+    transition: all 0.1s;
+
+    background-color: rgb(200, 211, 221);
+}
+
+.linkBt:active {
+    transform: translateY(2px);
+}

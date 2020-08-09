@@ -97,10 +97,10 @@ async function createCodeForm(){
     newBoxes.appendChild(codeInput);
     newBoxes.appendChild(verifyBt);
 
-    const target = document.getElementById("email-box");
+    document.getElementById("email-box").setAttribute("style", "height: 100px;")
+    const target = document.getElementById("email-input");
     //이메일 폼
 
-    target.setAttribute("style", "height: 75px;")
     target.appendChild(newBoxes);
 }
 

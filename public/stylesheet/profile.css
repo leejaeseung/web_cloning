@@ -1,0 +1,17 @@
+.profile {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile .info {
+    display: flex;
+}
+
+#title {
+    
+}
+
+#edit-button {
+    margin-left: 10px;
+    margin: auto;
+}
