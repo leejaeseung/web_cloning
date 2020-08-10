@@ -1,0 +1,17 @@
+form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post", enctype="multipart/form-data")
+    img#img_section(src=routes.home + imgUrl)
+    br
+    input#upload_img(type="file", name="imgFile", accept="image/*", required=true)
+    script.
+        const reader = new FileReader();
+
+        reader.onload = (readerEvent) => {
+            document.querySelector("#img_section").setAttribute("src", readerEvent.target.result);
+        };
+
+        document.querySelector("#upload_img").addEventListener("change", (changeEvent) => {
+            const imgFile = changeEvent.target.files[0];
+            reader.readAsDataURL(imgFile);
+        })
+        
+    input(type="submit", value="프로필 이미지 변경")

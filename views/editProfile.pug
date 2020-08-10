@@ -3,37 +3,19 @@ extends layouts/main
 block content
     .editProfile
         h3 프로필 수정
-        form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post", enctype="multipart/form-data")
-            img(id="img_section", src=routes.home + imgUrl, style="width:300px; height:300px;")
-            br
-            input(type="file", id="imgFile", name="imgFile", accept="image/*", onchange="inputFileReturnImg(this, 200, 200);", required=true)
-            script.
-                function inputFileReturnImg (input, width, height) {
-                    if (input.files && input.files[0]){
-                        var reader = new FileReader();
-
-                        reader.onload = function(e) {
-                        $('#img_section').attr('src', e.target.result)
-                        .width(width)
-                        .height(height);
-                    };
-
-                    reader.readAsDataURL(input.files[0]);
-                    }
-                }
-            input(type="submit", value="프로필 이미지 변경")
+        include ./partials/changeImageForm
             br
             br
             br
         .editPF
-            .edit-text(align="right") ID : 
+            .edit-text ID : 
             .edit-input
                 form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
                     input(type="text", id="userName", name="userName", placeholder="변경할 이름을 입력하세요.", required=true)
                     input(type="submit", value="ID 변경")
             .edit-msg #{userName_msg}
         .editPF
-            .edit-text(align="right") E-mail : 
+            .edit-text E-mail : 
             .edit-input
                 form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
                     input(type="email", id="email", name="email", placeholder="변경할 이메일을 입력하세요.", required=true)
@@ -41,16 +23,16 @@ block content
             .edit-msg #{email_msg}
         form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
             .editPF
-                .edit-text(align="right") Original Password : 
+                .edit-text Original Password : 
                 .edit-input
                     input(type="password", id="password_ori", name="password_ori", placeholder="기존 비밀번호를 입력하세요.", required=true)
                 .edit-msg #{pwori_msg}
             .editPF
-                .edit-text(align="right") New Password : 
+                .edit-text New Password : 
                 .edit-input
                     input(type="password", id="password1", name="password_new1", placeholder="바꿀 비밀번호를 입력하세요.", required=true) 
             .editPF
-                .edit-text(align="right") Retry New Password : 
+                .edit-text Retry New Password : 
                 .edit-input
                     input(type="password", id="password2", name="password_new2", placeholder="비밀번호를 한번 더 입력하세요.", required=true)
                     input(type="submit", value="비밀번호 변경")

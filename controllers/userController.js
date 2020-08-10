@@ -25,27 +25,14 @@ export const postJoin = async (req, res, next) => {
 
     res.set("Content-Type", "text/plain");
 
-    console.log(req.session.cert_ID);
-    console.log(req.session.cert_Email)
-    
-
     if(!req.session.cert_ID || req.session.cert_ID != userName){
-        /*result.push({
-            msg: "아이디 중복 체크를 해 주세요.",
-            color: "red",
-            tag: "userName-msg"
-        })*/
+        
         return res.json({msg: "아이디 중복 체크를 해 주세요.",
                             color: "red",
                             tag: "userName-msg"})
     }
 
     if(!req.session.cert_Email || req.session.cert_Email != email){
-        /*result.push({
-            msg: "이메일 인증을 해 주세요.",
-            color: "red",
-            tag: "email-msg"
-        })*/
 
         return res.json({msg: "이메일 인증을 해 주세요.",
                             color: "red",
