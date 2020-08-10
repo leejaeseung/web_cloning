@@ -38,18 +38,26 @@ a {
     outline: none;
 }
 
-.linkBt {
-    text-decoration: none;
-    font-size: 20px;
-    color: black;
-    padding: 2px 4px 2px 4px;
-    margin: 20px;
-    border-radius: 5px;
-    transition: all 0.1s;
-
-    background-color: rgb(200, 211, 221);
+.profile-img {
+    border-radius: 50%;
+    width: 75px;
+    height: 75px;
 }
 
-.linkBt:active {
-    transform: translateY(2px);
+input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
+
+#uploadBt {
+    display: inline-block;
+    padding: .5em .9em;
+    vertical-align: bottom;
+    
 }

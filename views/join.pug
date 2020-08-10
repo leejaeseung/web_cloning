@@ -8,13 +8,13 @@ block content
                 .edit-text ID
                 .edit-input
                     input(type="text", id="userName", name="userName", placeholder="아이디를 입력하세요.", required=true)
-                    input(type="button", id="userNameBt", value="중복 확인")  
+                    input.button.white(type="button", id="userNameBt", value="중복 확인")  
                 #userName-msg
             .input_boxes#email-box
                 .edit-text E-mail
                 .edit-input#email-input
                     input(type="email", id="email", name="email", placeholder="이메일을 입력하세요.", required=true)
-                    input(type="button", id="emailBt", value="인증 요청")
+                    input.button.white(type="button", id="emailBt", value="인증 요청")
                 #email-msg
             .input_boxes
                 .edit-text Password
@@ -25,7 +25,7 @@ block content
                 .edit-input
                     input(type="password", id="password2", name="password2", placeholder="비밀번호를 한번 더 입력하세요.", required=true)
                 #pw-msg
-            input(type="button", value="Join", id="joinBt")
+            input.button.white(type="button", value="Join", id="joinBt")
                 
         script.
             const userNameBt = document.getElementById("userNameBt");

@@ -4,22 +4,19 @@ block content
     .editProfile
         h3 프로필 수정
         include ./partials/changeImageForm
-            br
-            br
-            br
         .editPF
             .edit-text ID : 
             .edit-input
                 form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
                     input(type="text", id="userName", name="userName", placeholder="변경할 이름을 입력하세요.", required=true)
-                    input(type="submit", value="ID 변경")
+                    input.button.white(type="submit", value="ID 변경")
             .edit-msg #{userName_msg}
         .editPF
             .edit-text E-mail : 
             .edit-input
                 form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
                     input(type="email", id="email", name="email", placeholder="변경할 이메일을 입력하세요.", required=true)
-                    input(type="submit", value="email 변경")
+                    input.button.white(type="submit", value="email 변경")
             .edit-msg #{email_msg}
         form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
             .editPF
@@ -35,5 +32,5 @@ block content
                 .edit-text Retry New Password : 
                 .edit-input
                     input(type="password", id="password2", name="password_new2", placeholder="비밀번호를 한번 더 입력하세요.", required=true)
-                    input(type="submit", value="비밀번호 변경")
+                    input.button.white(type="submit", value="비밀번호 변경")
                 .edit-msg #{pwnew_msg}

@@ -29,7 +29,7 @@
 
 }
 
-.editProfile .edit-input input[type="submit"], .editProfile .edit-input input[type="button"] {
+.editProfile input[type="submit"], .editProfile input[type="button"] {
     display: block;
     width: 25%;
     height: 24px;
@@ -41,4 +41,18 @@
 #img_section {
     width: 300px;
     height: 300px;
+}
+
+#img-form {
+    display: flex;
+    flex-direction: column;
+    width: 370px;
+    height: 350px;
+    margin-bottom: 20px;
+}
+
+.uploadBox {
+    display: flex;
+    margin-top: auto;
+    justify-content: space-around;
 }

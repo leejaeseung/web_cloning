@@ -1,17 +1,18 @@
-form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post", enctype="multipart/form-data")
-    img#img_section(src=routes.home + imgUrl)
-    br
-    input#upload_img(type="file", name="imgFile", accept="image/*", required=true)
-    script.
-        const reader = new FileReader();
+form#img-form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post", enctype="multipart/form-data")
+    img.profile-img#img_section(src=routes.home + imgUrl)
+    .uploadBox
+        input#file_route(type="text", readonly="readonly")
+        label#uploadBt.button.white(for="upload_file") 업로드
+            input#upload_file(type="file", name="imgFile", accept="image/*", required=true)
+        script.
+            const reader = new FileReader();
 
-        reader.onload = (readerEvent) => {
-            document.querySelector("#img_section").setAttribute("src", readerEvent.target.result);
-        };
+            reader.onload = (readerEvent) => {
+                document.querySelector("#img_section").setAttribute("src", readerEvent.target.result);
+            };
 
-        document.querySelector("#upload_img").addEventListener("change", (changeEvent) => {
-            const imgFile = changeEvent.target.files[0];
-            reader.readAsDataURL(imgFile);
-        })
-        
-    input(type="submit", value="프로필 이미지 변경")
+            document.querySelector("#upload_file").addEventListener("change", (changeEvent) => {
+                const imgFile = changeEvent.target.files[0];
+                reader.readAsDataURL(imgFile);
+            })
+        input.button.white(type="submit", value="이미지 변경")
