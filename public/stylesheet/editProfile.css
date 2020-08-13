@@ -1,6 +1,6 @@
 .editProfile * {
     font-weight: bold;
-    /*border: solid 1px black;*/
+    /* border: solid 1px black; */
 }
 
 .editPF {
@@ -11,6 +11,8 @@
 }
 
 .editProfile .edit-text {
+    text-align: right;
+    padding-right: 15px;
     width: 20%;
 }
 
@@ -23,7 +25,7 @@
     display: inline-block;
     width: 60%;
     height: 25px;
-    vertical-align: bottom;
+    vertical-align: center;
     margin-right: 5px;
     margin-top: 3px;
 

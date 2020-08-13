@@ -25,11 +25,13 @@ export const localsMiddleware = (req, res, next) =>{
         email: req.session.email
     };
 
-    res.locals.userName_msg = req.flash("userName_msg");
-    res.locals.email_msg = req.flash("email_msg");
-    res.locals.pw_msg = req.flash("pw_msg");
-    res.locals.pwori_msg = req.flash("password_ori_msg");
-    res.locals.pwnew_msg = req.flash("password_new_msg");
+    res.locals.message = req.flash("msg");
+
+    //res.locals.userName_msg = req.flash("userName_msg");
+    //res.locals.email_msg = req.flash("email_msg");
+    //res.locals.pw_msg = req.flash("pw_msg");
+    //res.locals.pwori_msg = req.flash("password_ori_msg");
+    //res.locals.pwnew_msg = req.flash("password_new_msg");
 
     //res.locals.cert_ID = req.session.cert_ID;
     //res.locals.cert_Email = req.session.cert_Email;

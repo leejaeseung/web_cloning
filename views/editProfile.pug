@@ -8,29 +8,39 @@ block content
             .edit-text ID : 
             .edit-input
                 form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
-                    input(type="text", id="userName", name="userName", placeholder="변경할 이름을 입력하세요.", required=true)
+                    input(type="text", name="userName", placeholder="변경할 이름을 입력하세요.", required=true)
                     input.button.white(type="submit", value="ID 변경")
-            .edit-msg #{userName_msg}
+            #userName_msg
         .editPF
             .edit-text E-mail : 
             .edit-input
                 form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
-                    input(type="email", id="email", name="email", placeholder="변경할 이메일을 입력하세요.", required=true)
+                    input(type="email", name="email", placeholder="변경할 이메일을 입력하세요.", required=true)
                     input.button.white(type="submit", value="email 변경")
-            .edit-msg #{email_msg}
+            #email_msg
         form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
             .editPF
                 .edit-text Original Password : 
                 .edit-input
-                    input(type="password", id="password_ori", name="password_ori", placeholder="기존 비밀번호를 입력하세요.", required=true)
-                .edit-msg #{pwori_msg}
+                    input(type="password", name="password_ori", placeholder="기존 비밀번호를 입력하세요.", required=true)
+                #password_ori_msg
             .editPF
                 .edit-text New Password : 
                 .edit-input
-                    input(type="password", id="password1", name="password_new1", placeholder="바꿀 비밀번호를 입력하세요.", required=true) 
+                    input(type="password", name="password_new1", placeholder="바꿀 비밀번호를 입력하세요.", required=true) 
             .editPF
                 .edit-text Retry New Password : 
                 .edit-input
-                    input(type="password", id="password2", name="password_new2", placeholder="비밀번호를 한번 더 입력하세요.", required=true)
+                    input(type="password", name="password_new2", placeholder="비밀번호를 한번 더 입력하세요.", required=true)
                     input.button.white(type="submit", value="비밀번호 변경")
-                .edit-msg #{pwnew_msg}
+                #password_new_msg
+
+        script.
+            const msg_obj = !{JSON.stringify(message)}[0]
+
+            if(msg_obj){
+                const msg_form = document.getElementById(msg_obj.tag);
+
+                msg_form.style.color = msg_obj.clr;
+                msg_form.innerHTML = msg_obj.text;
+            }

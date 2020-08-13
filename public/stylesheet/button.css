@@ -3,7 +3,7 @@
 	zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
 	*display: inline;
 	vertical-align: baseline;
-	margin: 0 2px;
+	margin: 0 5px;
 	outline: none;
 	cursor: pointer;
 	text-align: center;

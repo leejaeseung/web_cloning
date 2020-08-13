@@ -247,7 +247,7 @@ export const patchEditProfile = async (req, res, next) => {
     } = req;
 
     if(err_msg){
-        req.flash(err_msg.tag + "_msg", err_msg.msg);
+        req.flash("msg", {tag: err_msg.tag + "_msg", text: err_msg.msg, clr: "red" });
         return res.redirect(routes.editProfile(req.session.userName));
     }
             
@@ -256,7 +256,7 @@ export const patchEditProfile = async (req, res, next) => {
                 User.findOne({"userName" : userName}, async function(err, target) {
                     if(err) next(new Error("DB 에러"));
                     if(target){
-                        await req.flash("userName_msg", "이미 존재하는 아이디 입니다.");
+                        await req.flash("msg", {tag: "userName_msg", text: "이미 존재하는 아이디 입니다.", clr: "red" });
                         
                     }
                     else{
@@ -277,7 +277,7 @@ export const patchEditProfile = async (req, res, next) => {
                 User.findOne({"email" : email}, async function(err, target) {
                     if(err) next(new Error("DB 에러"));
                     if(target){
-                        await req.flash("email_msg", "이미 존재하는 e-mail 입니다.");
+                        await req.flash("msg", {tag: "email_msg", text: "이미 존재하는 e-mail 입니다.", clr: "red" });
                     }
                     else{
                         await User.update({ userName: user.userName },
@@ -296,7 +296,7 @@ export const patchEditProfile = async (req, res, next) => {
                 //비밀번호 체크 업데이트하자!
 
                 if(password_ori !== user.password){
-                    req.flash("password_ori_msg", "기존 비밀번호가 일치하지 않습니다.");
+                    req.flash("msg", {tag: "password_ori_msg", text: "기존 비밀번호가 일치하지 않습니다.", clr: "red" });
 
                     return res.redirect(routes.editProfile(req.session.userName));
                 }
@@ -304,14 +304,14 @@ export const patchEditProfile = async (req, res, next) => {
                     if(password_new1 !== password_new2){
                         //비밀번호 중복 확인
 
-                        req.flash("password_new_msg", "두 비밀번호가 일치하지 않습니다.");
+                        req.flash("msg", {tag: "password_new_msg", text: "두 비밀번호가 일치하지 않습니다.", clr: "red" });
 
                         return res.redirect(routes.editProfile(req.session.userName));
                     }
                     else if(password_new1 == password_ori){
                         //기존 비밀번호와 일치 여부
 
-                        req.flash("password_new_msg", "기존 비밀번호와 동일한 비밀번호 입니다.");
+                        req.flash("msg", {tag: "password_new_msg", text: "기존 비밀번호와 동일한 비밀번호 입니다.", clr: "red" });
 
                         return res.redirect(routes.editProfile(req.session.userName));
                     }
