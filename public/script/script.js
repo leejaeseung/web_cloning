@@ -51,8 +51,7 @@ function verifySubmit(route, obj){
     var object = {};
     object[obj] = value;
 
-
-    fetch(route, { method: "POST" ,
+    return new Promise(resolve => {fetch(route, { method: "POST" ,
     headers: {"Content-Type": "application/json"}, 
     body: JSON.stringify(object)
     }).then(response => response.json())
@@ -62,10 +61,13 @@ function verifySubmit(route, obj){
         msg_tag.textContent = data.msg
         msg_tag.style.color = data.color
         if(data.color == "green" && obj == "email"){
-            if(!document.getElementById("code"))
-                createCodeForm();
+            if(!document.getElementById("code")){
+                console.log("리턴됨")
+                resolve(createCodeForm())
+            }
         }        
     })
+})
 }
 
 async function createCodeForm(){
@@ -97,11 +99,13 @@ async function createCodeForm(){
     newBoxes.appendChild(codeInput);
     newBoxes.appendChild(verifyBt);
 
-    document.getElementById("email-box").setAttribute("style", "height: 100px;")
+    document.getElementById("email-box").setAttribute("style", "height: 50%;")
     const target = document.getElementById("email-input");
     //이메일 폼
 
     target.appendChild(newBoxes);
+
+    return verifyBt;
 }
 
 function joinChecker(route, obj){

@@ -1,0 +1,4 @@
+.edit-input
+                form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
+                    input(type="email", name="email", placeholder="변경할 이메일을 입력하세요.", required=true)
+                    input.button.white(type="submit", value="email 변경")

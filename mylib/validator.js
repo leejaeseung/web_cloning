@@ -29,7 +29,7 @@ export const userEditValidationRules = () => {
 export const validate = (req, res, next) => {
     const errors = validationResult(req).errors;
 
-    console.log(errors);
+    //console.log(errors);
 
     for(var i = 0; i < errors.length; i++){
         //undefined가 아닌 경우에만 넣어줌

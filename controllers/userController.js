@@ -29,14 +29,14 @@ export const postJoin = async (req, res, next) => {
         
         return res.json({msg: "아이디 중복 체크를 해 주세요.",
                             color: "red",
-                            tag: "userName-msg"})
+                            tag: "userName_msg"})
     }
 
     if(!req.session.cert_Email || req.session.cert_Email != email){
 
         return res.json({msg: "이메일 인증을 해 주세요.",
                             color: "red",
-                            tag: "email-msg"})
+                            tag: "email_msg"})
     }
 
     //console.log(err_msg);
@@ -44,7 +44,7 @@ export const postJoin = async (req, res, next) => {
     if(err_msg){
         return res.json({msg: err_msg.msg,
                         color: "red",
-                        tag: "pw-msg"})
+                        tag: "pw_msg"})
     }
 
     if(password1 !== password2){
@@ -52,7 +52,7 @@ export const postJoin = async (req, res, next) => {
     
         return res.json({msg: "비밀번호가 일치하지 않습니다. 다시 입력해 주세요.",
                 color: "red",
-                tag: "pw-msg"})
+                tag: "pw_msg"})
     }
     else{
     
@@ -86,7 +86,7 @@ export const postCheckId = async (req, res, next) => {
     if(err_msg){
         return res.json({msg: err_msg.msg,
                         color: "red",
-                        tag: "userName-msg"})
+                        tag: "userName_msg"})
     }
 
     await User.findOne({userName: userName}, async (err, user) => {
@@ -98,14 +98,14 @@ export const postCheckId = async (req, res, next) => {
 
             return res.json({msg: userName + "은 이미 존재하는 아이디입니다.",
                                 color: "red",
-                                tag: "userName-msg"})
+                                tag: "userName_msg"})
         }
         else{
             req.session.cert_ID = userName;
 
             return res.json({msg: userName + "은 사용 가능한 아이디입니다.",
                                 color: "green",
-                                tag: "userName-msg"})
+                                tag: "userName_msg"})
         }
     })
 }
@@ -118,7 +118,7 @@ export const postCheckEmail = async (req, res, next) => {
     if(err_msg){
         return res.json({msg: err_msg.msg,
                             color: "red",
-                            tag: "email-msg"})
+                            tag: "email_msg"})
     }
 
     await User.findOne({email: email}, async (err, em) => {
@@ -130,7 +130,7 @@ export const postCheckEmail = async (req, res, next) => {
 
             return res.json({msg: email + "은 이미 등록된 이메일입니다.",
                                 color: "red",
-                                tag: "email-msg"})
+                                tag: "email_msg"})
         }
         else{
             //이메일 인증 구현
@@ -143,7 +143,7 @@ export const postCheckEmail = async (req, res, next) => {
 
             return res.json({msg: email + "로 인증 메일이 전송되었습니다.",
                                 color: "green",
-                                tag: "email-msg"})
+                                tag: "email_msg"})
         }
     })
 }
@@ -161,12 +161,12 @@ export const postConfirmEmail = (req, res) => {
 
         return res.json({msg: "인증 성공!",
                             color: "green",
-                            tag: "email-msg"})
+                            tag: "email_msg"})
     }
     else{
         return res.json({msg: "인증 실패...",
                             color: "red",
-                            tag: "email-msg"})
+                            tag: "email_msg"})
     }
 }
 
@@ -234,6 +234,8 @@ export const getEditProfile = (req, res) => {
 
 export const patchEditProfile = async (req, res, next) => {
 
+    try{
+
     const {
         body: {
             user,
@@ -245,6 +247,10 @@ export const patchEditProfile = async (req, res, next) => {
             err_msg
         }
     } = req;
+
+    res.set("Content-Type", "text/plain");
+
+    //console.log(req.body);
 
     if(err_msg){
         req.flash("msg", {tag: err_msg.tag + "_msg", text: err_msg.msg, clr: "red" });
@@ -267,12 +273,19 @@ export const patchEditProfile = async (req, res, next) => {
                                 }
                             });
 
+                        await req.flash("msg", {tag: "userName_msg", text: "아이디가 변경되었습니다.", clr: "green" });
+
                         req.session.userName = userName;
                     }
                     return res.redirect(routes.editProfile(req.session.userName));
                 });
             }
             else if(email){
+
+                console.log("하위")
+
+                if(req.session.cert_Email !== req.session.nowEmail)
+                    return next();
 
                 User.findOne({"email" : email}, async function(err, target) {
                     if(err) next(new Error("DB 에러"));
@@ -286,10 +299,13 @@ export const patchEditProfile = async (req, res, next) => {
                                     email
                                     }
                             });
-                        
+                        await req.flash("msg", {tag: "email_msg", text: "e-mail이 변경되었습니다.", clr: "green" });
+
                         req.session.email = email;  
                     }
-                    return res.redirect(routes.editProfile(req.session.userName));
+
+                    return res.json({tag: "email_msg", text: "e-mail이 변경되었습니다.", clr: "green" })
+                    //return res.redirect(routes.editProfile(req.session.userName));
                 });
             }
             else if(password_ori){
@@ -345,6 +361,10 @@ export const patchEditProfile = async (req, res, next) => {
 
                 return res.redirect(routes.editProfile(req.session.userName));
             }
+        }
+        catch(err){
+            console.log(err);
+        }
 }
 
 export const getMyVideos = async (req, res) => {

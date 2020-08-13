@@ -1,6 +1,6 @@
 .join * {
     font-weight: bold;
-    /*border: solid 1px black;*/
+    /* border: solid 1px black; */
 }
 
 .join {
@@ -17,25 +17,13 @@
     margin-bottom: 50px;
 }
 
-
-.editProfile {
-    width:1500px; 
-    height:60%;
-
-}
-
-.editPF {
-    margin-bottom: 10px;
-
-}
-
 .editVD {
     margin-bottom: 10px;
 
 }
 
 .join .input_boxes {
-    width: 400px;
+    width: 420px;
     height: 70px;
     margin-bottom: 15px;
 }
@@ -49,7 +37,7 @@
 
 .join .edit-input input[type="email"] , .join .edit-input input[type="text"], .join .edit-input input[type="password"] {
     display: inline-block;
-    width: 70%;
+    width: 280px;
     height: 25px;
     vertical-align: bottom;
     margin-right: 5px;

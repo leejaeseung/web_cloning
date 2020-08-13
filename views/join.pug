@@ -9,13 +9,13 @@ block content
                 .edit-input
                     input(type="text", id="userName", name="userName", placeholder="아이디를 입력하세요.", required=true)
                     input.button.white(type="button", id="userNameBt", value="중복 확인")  
-                #userName-msg
+                #userName_msg
             .input_boxes#email-box
                 .edit-text E-mail
                 .edit-input#email-input
                     input(type="email", id="email", name="email", placeholder="이메일을 입력하세요.", required=true)
                     input.button.white(type="button", id="emailBt", value="인증 요청")
-                #email-msg
+                #email_msg
             .input_boxes
                 .edit-text Password
                 .edit-input
@@ -24,7 +24,7 @@ block content
                 .edit-text Confirm Password
                 .edit-input
                     input(type="password", id="password2", name="password2", placeholder="비밀번호를 한번 더 입력하세요.", required=true)
-                #pw-msg
+                #pw_msg
             input.button.white(type="button", value="Join", id="joinBt")
                 
         script.
