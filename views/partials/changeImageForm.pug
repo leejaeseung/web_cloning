@@ -1,18 +1,26 @@
 form#img-form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post", enctype="multipart/form-data")
     img.profile-img#img_section(src=routes.home + imgUrl)
     .uploadBox
-        input#file_route(type="text", readonly="readonly")
+        input#file_route(type="text", disabled="disabled", value="파일 선택")
         label#uploadBt.button.white(for="upload_file") 업로드
-            input#upload_file(type="file", name="imgFile", accept="image/*", required=true)
+        input#upload_file(type="file", name="imgFile", accept="image/*", required=true)
         script.
             const reader = new FileReader();
 
             reader.onload = (readerEvent) => {
                 document.querySelector("#img_section").setAttribute("src", readerEvent.target.result);
+                //파일을 읽는 이벤트가 발생하면 img_section의 src 속성을 readerEvent의 결과물로 대체함
             };
 
             document.querySelector("#upload_file").addEventListener("change", (changeEvent) => {
+                //upload_file 에 이벤트리스너를 장착
+
                 const imgFile = changeEvent.target.files[0];
                 reader.readAsDataURL(imgFile);
+                //업로드한 이미지의 URL을 reader에 등록
+
+                const fileName = document.getElementById("file_route");
+                fileName.value = imgFile.name;
+                //파일 이름을 띄워줌
             })
         input.button.white(type="submit", value="이미지 변경")

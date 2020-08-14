@@ -2,32 +2,34 @@ extends layouts/main
 
 block content
     .editProfile
-        h3 프로필 수정
+        .editBox
+            h3#title 프로필 수정
+            a.button.white#exit(href=routes.userDetail(nowUser.userName)) 나가기
         include ./partials/changeImageForm
-        .editPF
+        .editBox
             .edit-text ID : 
             .edit-input
                 form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
                     input(type="text", name="userName", placeholder="변경할 이름을 입력하세요.", required=true)
                     input.button.white(type="submit", value="ID 변경")
             .edit-msg#userName_msg
-        .editPF#email-box
+        .editBox#email-box
             .edit-text E-mail : 
             .edit-input#email-input
                 input(type="email", id="email", name="email", placeholder="변경할 이메일을 입력하세요.", required=true)
                 input.button.white(type="button", id="emailBt", value="인증 요청")
             .edit-msg#email_msg
         form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
-            .editPF
+            .editBox
                 .edit-text Original Password : 
                 .edit-input
                     input(type="password", name="password_ori", placeholder="기존 비밀번호를 입력하세요.", required=true)
                 .edit-msg#password_ori_msg
-            .editPF
+            .editBox
                 .edit-text New Password : 
                 .edit-input
                     input(type="password", name="password_new1", placeholder="바꿀 비밀번호를 입력하세요.", required=true) 
-            .editPF
+            .editBox
                 .edit-text Retry New Password : 
                 .edit-input
                     input(type="password", name="password_new2", placeholder="비밀번호를 한번 더 입력하세요.", required=true)

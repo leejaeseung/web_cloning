@@ -1,6 +1,6 @@
 .editProfile * {
     font-weight: bold;
-       /* border: solid 1px black;    */
+        /* border: solid 1px black;     */
 }
 
 .editProfile {
@@ -11,9 +11,19 @@
 
     /* border: solid 1px black;  */
 }
+.editBox #title {
+    width: 46%;
+}
 
+.editBox #exit {
+    width: 100px;
+    height: 25px;
+    padding-top: 6px;
+    margin-top: 4px;
+    float: left;
+}
 
-.editPF {
+.editBox {
     display: flex;
     width: 80%;
     margin-bottom: 10px;
