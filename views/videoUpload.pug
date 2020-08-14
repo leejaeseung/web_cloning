@@ -8,6 +8,21 @@ block content
             br
             input(type="text", placeholder="설명", name="description", required=true)
             br
-            input(type="file", name="videoFile", id="file", required=true, accept="video/*")
+            input#file_route(type="text", disabled="disabled", value="파일 선택")
+            label#uploadBt.button.white(for="upload_file") 업로드
+            input#upload_file(type="file", name="videoFile", accept="video/*", required=true)
             br
-            input(type="submit", value="업로드")
+            input.button.white(type="submit", value="확인")
+
+            script.
+                const reader = new FileReader();
+
+                document.querySelector("#upload_file").addEventListener("change", (changeEvent) => {
+                    //upload_file 에 이벤트리스너를 장착
+
+                    const File = changeEvent.target.files[0];
+
+                    const fileName = document.getElementById("file_route");
+                    fileName.value = File.name;
+                    //파일  띄워줌
+                })
