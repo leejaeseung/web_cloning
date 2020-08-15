@@ -1,0 +1,36 @@
+.video_player * {
+    /*border: solid 1px black;*/
+}
+
+.video_player {
+    display: flex;
+    flex-direction: column;
+    width: 780px;
+    height: 50%;
+}
+
+.video_player video{
+    height:420px;
+}
+
+.video_buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 25px;
+}
+
+.video_buttons #deleteBt {
+    width:100px;
+    height:100%;
+    margin-left: 10px;
+    vertical-align: top;
+}
+
+.video_buttons #editBt {
+   
+    line-height: 25px;
+    width:100px;
+    height:100%;
+}

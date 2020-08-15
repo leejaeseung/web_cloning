@@ -4,10 +4,11 @@ include mixins/commentBlock
 
 block content
     .video_player
-        if isCreator
-            form(action=routes.videos + routes.deleteVideo + "?_method=DELETE", method="POST")
-                button(type="submit", name="videoID", value=video.id, id="deleteBt") Delete
-            button(type="button", onclick="location.href=\"" + routes.editVideo(video.id) + "\"", class="editVideoBt", id="editBt") Edit
+        .video_buttons
+            if isCreator
+                a.button.white#editBt(href=routes.editVideo(video.id)) Edit
+                form(action=routes.videos + routes.deleteVideo + "?_method=DELETE", method="POST")
+                    button.button.white#deleteBt(type="submit", name="videoID", value=video.id) Delete
         video(src=routes.home + video.fileUrl, controls, id="nowVideo")
         script.
             const video = document.getElementById("nowVideo");
@@ -36,4 +37,4 @@ block content
 
         form(action=routes.videoDetail(video.id), method="POST")
             input(type="text", placeholder="댓글 치셈", name="comment")
-            input(type="submit", value="입력")
+            input.button.white(type="submit", value="입력")

@@ -44,6 +44,11 @@ a {
     height: 75px;
 }
 
+.videoBlock video {
+    width:780px; 
+    height:420px;
+}
+
 input[type="file"] {
     position: absolute;
     /*width: 1px;
