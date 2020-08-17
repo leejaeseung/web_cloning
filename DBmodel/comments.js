@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import "./users";
 
 const commentSchema = new mongoose.Schema({
     videoID: {type: mongoose.Schema.Types.ObjectId, ref: "Video", required: true},
@@ -6,8 +7,8 @@ const commentSchema = new mongoose.Schema({
     parentComment: {type: String, ref: "Comment"},
     text: {type: String, required:[true, "text is required!"]},
     isDeleted: Boolean,
-    createdAt: {type: Date, default:Date.now},
-    updatedAt: Date
+    createdAt: String,
+    updatedAt: String
 }, {toObject:{ virtuals: true}});
 //Object 형으로 내보낼 때, 가상 프로퍼티도 같이 내보내지게 허용
 

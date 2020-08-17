@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import "./users";
 
 const videoSchema = new mongoose.Schema({
     videoName: String,

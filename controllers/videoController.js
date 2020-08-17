@@ -3,6 +3,7 @@ import Comment from "../DBmodel/comments";
 import routes from "../routes";
 import fs from "fs";
 import path from "path";
+import moment from "moment-timezone";
 
 export const home = async (req, res) => {
     //async , await로 비디오 목록을 db에서 가져 온 뒤 렌더링
@@ -53,8 +54,6 @@ export const videoDetail = async (req, res, next) => {
     await Comment.find({videoID: video.id}).populate("author").exec((err, comments) => {
         if(err) return next(new Error("DB Error"));
 
-        console.log(comments);
-
         res.render("videoDetail", {
             pageTitle: "Video's Detail",
             video,
@@ -74,12 +73,16 @@ export const postComment = async (req, res) => {
         }
     } = req;
 
+    console.log(Date.now());
+    console.log(moment(Date.now()).format("YYYY-MM-DD HH:mm"));
+
     await Comment.create({
         videoID: video.id,
         author: req.session.userID,
         parentComment: null,
         text: comment,
         isDeleted: false,
+        createdAt: moment(Date.now()).format("YYYY-MM-DD HH:mm")
     }, (err, comment) => {
         if(err){
             req.flash("commentForm", {_id: null, form: {author: req.session.userID, video: video.id}});

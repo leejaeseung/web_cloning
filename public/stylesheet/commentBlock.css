@@ -1,0 +1,38 @@
+.commentBlock * {
+     /* border: solid 1px black;  */
+}
+
+.commentBlock {
+    display: flex;
+    flex-direction: column;
+    width: 780px;
+    margin-bottom: 15px;
+
+    border: solid 1px black;
+}
+
+.commentBlock .activeForm {
+    display: flex;
+    width: 90%;
+    justify-content: flex-end;
+}
+
+.commentBlock .activeForm * {
+    margin-left: 15px;
+    color: green;
+}
+
+.commentBlock .commentTitle {
+    display: flex;
+    width: 90%;
+}
+
+.commentBlock #author {
+    font-weight: bold;
+    margin-right: auto;
+    margin-left: 5px;
+}
+
+.commentBlock #text {
+    margin-left: 5px;
+}
