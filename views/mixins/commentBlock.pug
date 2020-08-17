@@ -12,8 +12,9 @@ mixin commentBlock( comment = {})
             p.text= comment.text
         .activeForm    
             a.reply(href="#") reply
-            a.edit(href="#") edit
-            form.deleteForm(action=routes.videos + "/" + comment.videoID + "/" + comment.id + "/delete" + "?_method=DELETE", method="POST")
-                a.delete(href="#") delete
+            if nowUser.userName == comment.author.userName
+                a.edit(href="#") edit
+                form.deleteForm(action=routes.videos + "/" + comment.videoID + "/" + comment.id + "/delete" + "?_method=DELETE", method="POST")
+                    a.delete(href="#") delete
 
     
