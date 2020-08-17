@@ -1,13 +1,19 @@
 mixin commentBlock( comment = {})
     .commentBlock
         .commentTitle
-            #author #{comment.author.userName} 님의 댓글
+            .author #{comment.author.userName} 님의 댓글
             if comment.updatedAt
-                #updated #{comment.updatedAt} 수정됨
+                .updated #{comment.updatedAt} 수정됨
             else
-                #created #{comment.createdAt} 생성됨
-        p#text= comment.text
+                .created #{comment.createdAt} 생성됨
+        if comment.isDeleted
+            p.text 삭제된 댓글입니다
+        else
+            p.text= comment.text
         .activeForm    
-            a#reply(href="#") reply
-            a#edit(href="#") edit
-            a#delete(href="#") delete
+            a.reply(href="#") reply
+            a.edit(href="#") edit
+            form.deleteForm(action=routes.videos + "/" + comment.videoID + "/" + comment.id + "/delete" + "?_method=DELETE", method="POST")
+                a.delete(href="#") delete
+
+    

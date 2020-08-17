@@ -27,6 +27,8 @@ const VIDEO_DETAIL = "/:id";
 const EDIT_VIDEO = "/edit-video";
 const DELETE_VIDEO = "/:id/delete";
 const VIEW = "/:id/view";
+//const EDIT_COMMENT = "/:vid/:cid/edit";
+const DELETE_COMMENT = "/:vid/:cid/delete";
 
 // Object
 
@@ -85,7 +87,9 @@ const routes = {
         }
     },
     deleteVideo: DELETE_VIDEO,
-    view: VIEW
+    view: VIEW,
+    deleteComment: DELETE_COMMENT
+
 };
 
 export default routes;

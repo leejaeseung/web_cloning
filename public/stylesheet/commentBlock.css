@@ -27,12 +27,12 @@
     width: 90%;
 }
 
-.commentBlock #author {
+.commentBlock .author {
     font-weight: bold;
     margin-right: auto;
     margin-left: 5px;
 }
 
-.commentBlock #text {
+.commentBlock .text {
     margin-left: 5px;
 }

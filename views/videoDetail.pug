@@ -28,13 +28,34 @@ block content
         
         each item in comments
             +commentBlock({
+                id: item.id,
                 author: item.author,
                 text: item.text,
-                isDeleted: item.text,
+                isDeleted: item.isDeleted,
                 createdAt: item.createdAt,
-                updatedAt: item.updatedAt
+                updatedAt: item.updatedAt,
+                videoID: video.id
             })
-
         form(action=routes.videoDetail(video.id), method="POST")
             input(type="text", placeholder="댓글 치셈", name="comment")
+            input(type="hidden", name="parent")
             input.button.white(type="submit", value="입력")
+
+        script.
+            const replytag = document.getElementsByClassName("reply");
+            const edittag = document.getElementsByClassName("edit");
+            const deletetag = document.getElementsByClassName("delete");
+
+            const deleteForm = document.getElementsByClassName("deleteForm");
+            
+            const link = (idx) => {
+                console.log(idx);
+                deletetag[idx].addEventListener("click", () => {
+                
+                deleteForm[idx].submit();
+                })
+            }
+
+            for(var i = 0; i < replytag.length; i++){
+                link(i);
+            }

@@ -69,28 +69,57 @@ export const postComment = async (req, res) => {
     const {
         body: {
             video,
-            comment
+            comment,
+            parent
         }
     } = req;
 
     console.log(Date.now());
     console.log(moment(Date.now()).format("YYYY-MM-DD HH:mm"));
 
-    await Comment.create({
-        videoID: video.id,
-        author: req.session.userID,
-        parentComment: null,
-        text: comment,
-        isDeleted: false,
-        createdAt: moment(Date.now()).format("YYYY-MM-DD HH:mm")
-    }, (err, comment) => {
-        if(err){
-            req.flash("commentForm", {_id: null, form: {author: req.session.userID, video: video.id}});
-            req.flash("commentError", {_id: null, error: err});
-        }
-    })
+
+    if(!parent){
+        //일반 댓글인 경우
+        await Comment.create({
+            videoID: video.id,
+            author: req.session.userID,
+            parentComment: null,
+            text: comment,
+            isDeleted: false,
+            createdAt: moment(Date.now()).format("YYYY-MM-DD HH:mm")
+        }, (err, comment) => {
+            if(err){
+                req.flash("commentForm", {_id: null, form: {author: req.session.userID, video: video.id}});
+                req.flash("commentError", {_id: null, error: err});
+            }
+        })
+
+       
+    }
+    else{
+        //대댓글인 경우
+        
+    }
 
     res.redirect(routes.videoDetail(video.id));
+}
+
+export const deleteComment = async (req, res, next) => {
+    
+    const videoID = req.params.vid;
+    const commentID = req.params.cid;
+
+    console.log("비디오 : " + videoID);
+    console.log("댓글 : " + commentID);
+
+    await Comment.update({_id: commentID}, {
+        $set: {
+            isDeleted: true
+        }}, (err) => {
+            if(err) return next(new Error("DB Error"));
+        })
+
+    res.redirect(routes.videoDetail(videoID));
 }
 
 export const postView = async (req, res) => {
