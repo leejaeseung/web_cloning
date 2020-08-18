@@ -20,10 +20,10 @@ block content
         p 
             b Creator : 
                 a(href=routes.userDetail(creator)) #{creator}
-        h2 #{video.videoName}
-        p #{video.description}
+        h2 제목 : #{video.videoName}
+        p 설명: #{video.description}
         p 
-            b Views 
+            b 조회 수 
             | : #{video.views}
         
         each item in comments
@@ -36,26 +36,22 @@ block content
                 updatedAt: item.updatedAt,
                 videoID: video.id
             })
-        form(action=routes.videoDetail(video.id), method="POST")
-            input(type="text", placeholder="댓글 치셈", name="comment")
-            input(type="hidden", name="parent")
-            input.button.white(type="submit", value="입력")
+        include ./partials/commentInputForm
 
         script.
             const replytag = document.getElementsByClassName("reply");
             const edittag = document.getElementsByClassName("edit");
             const deletetag = document.getElementsByClassName("delete");
 
-            const deleteForm = document.getElementsByClassName("deleteForm");
-            
-            const link = (idx) => {
-                console.log(idx);
-                deletetag[idx].addEventListener("click", () => {
-                
-                deleteForm[idx].submit();
-                })
-            }
+            const commentBlock = document.getElementsByClassName("commentBlock");
 
-            for(var i = 0; i < deletetag.length; i++){
-                link(i);
-            }
+            //const replyForm = document.getElementsByClassName("replyForm");
+            const editForm = document.getElementsByClassName("editForm");
+            const deleteForm = document.getElementsByClassName("deleteForm");
+
+            addCommentReplyEvent(replytag, commentBlock, "click", "#{routes.comment(video.id)}", !{JSON.stringify(comments)});
+            addCommentDeleteEvent(deletetag, deleteForm, "click");
+            //linkTagWithForm(edittag, editForm, "click");
+            
+
+            

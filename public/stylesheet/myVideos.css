@@ -1,0 +1,37 @@
+.myVideos * {
+    /* border: solid 1px black; */
+}
+
+.myVideos .videos {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height:320px;
+}
+
+.myVideos video{
+    width: 100%;
+    height:70%;
+}
+
+.myVideos .video_buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 25px;
+}
+
+.myVideos .video_buttons #deleteBt {
+    width:100px;
+    height:100%;
+    margin-left: 10px;
+    vertical-align: top;
+}
+
+.myVideos .video_buttons #editBt {
+   
+    line-height: 25px;
+    width:100px;
+    height:100%;
+}

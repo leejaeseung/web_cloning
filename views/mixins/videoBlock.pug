@@ -3,6 +3,6 @@ mixin videoBlock(video = {})
     .videoBlock
         a(href=routes.videoDetail(video.id))
             video(src=routes.home + video.fileUrl, controls, class="nowVideo", id=video.id)
-            h2=video.videoName
-            p=video.description
-            p=video.views
+            h2 제목 : #{video.videoName}
+            p 설명 : #{video.description}
+            p 조회 수 : #{video.views}

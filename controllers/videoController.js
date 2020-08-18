@@ -74,8 +74,7 @@ export const postComment = async (req, res) => {
         }
     } = req;
 
-    console.log(Date.now());
-    console.log(moment(Date.now()).format("YYYY-MM-DD HH:mm"));
+    console.log(parent);
 
 
     if(!parent){
@@ -104,7 +103,7 @@ export const postComment = async (req, res) => {
     res.redirect(routes.videoDetail(video.id));
 }
 
-export const deleteComment = async (req, res, next) => {
+export const deleteComment = (req, res, next) => {
     
     const videoID = req.params.vid;
     const commentID = req.params.cid;
@@ -112,14 +111,22 @@ export const deleteComment = async (req, res, next) => {
     console.log("비디오 : " + videoID);
     console.log("댓글 : " + commentID);
 
-    await Comment.update({_id: commentID}, {
+    Comment.update({_id: commentID}, {
         $set: {
             isDeleted: true
         }}, (err) => {
             if(err) return next(new Error("DB Error"));
-        })
 
-    res.redirect(routes.videoDetail(videoID));
+            res.redirect(routes.videoDetail(videoID));
+    })
+}
+
+export const putComment = async (req, res, next) => {
+    
+    const videoID = req.params.vid;
+    const commentID = req.params.cid;
+
+
 }
 
 export const postView = async (req, res) => {

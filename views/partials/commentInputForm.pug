@@ -1,0 +1,44 @@
+.comment-input
+    form.comment-form#comment-form-original(action=routes.comment(video.id), method="POST")
+        input.comment-box#comment-box-original(type="text", placeholder="댓글 입력", name="comment")
+        input(type="hidden", name="parent", value="")
+
+script.
+
+    window.onload = () => {
+        const commentBox = document.getElementById("comment-box-original");
+
+        const createButtons = () => {
+                const commentForm = document.getElementById("comment-form-original");
+
+                const buttons = document.createElement("div");
+                buttons.className = "buttons";
+
+                const applyBt = document.createElement("input");
+                const cancelBt = document.createElement("input");
+
+                applyBt.className = "button white applyBt";
+                applyBt.type = "submit";
+                applyBt.value = "확인";
+
+
+                cancelBt.className = "button white cancelBt";
+                cancelBt.type = "button";
+                cancelBt.value = "취소";
+
+                cancelBt.addEventListener("click", () => {
+                    commentBox.addEventListener("click", createButtons, {once: true})
+                    commentForm.removeChild(buttons);
+
+                    commentBox.value = "";
+                    commentBox.placeholder = "댓글 입력";
+                })
+
+                buttons.appendChild(applyBt);
+                buttons.appendChild(cancelBt);
+
+                commentForm.appendChild(buttons);
+        }
+
+        commentBox.addEventListener("click", createButtons, {once: true})
+    }

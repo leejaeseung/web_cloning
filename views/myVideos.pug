@@ -6,9 +6,10 @@ block content
         h1 My Videos
         each vd in videos
             .videos
-                form(action=routes.deleteVideo(vd.id) + "?_method=DELETE", method="POST")
-                    button.button.white#deleteBt(type="submit") Delete
-                button.button.white(type="button", onclick="location.href=\"" + routes.editVideo(vd.id) + "\"", class="editVideoBt", id="editBt") Edit
+                .video_buttons
+                    a.button.white#editBt(href=routes.editVideo(vd.id)) Edit
+                    form(action=routes.deleteVideo(vd.id) + "?_method=DELETE", method="POST")
+                        button.button.white#deleteBt(type="submit") Delete
                 +videoBlock({
                     id: vd.id,
                     videoName: vd.videoName,

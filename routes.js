@@ -13,7 +13,7 @@ const CONFIRM_EMAIL = "/confirm-email"
 // Users
 
 const USERS = "/users";
-const USERS_DETAIL = "/:id";
+const USER_ID = "/:id";
 const EDIT_PROFILE = "/:id/edit-profile";
 const MYVIDEOS = "/:id/myvideos";
 
@@ -21,12 +21,14 @@ const MYVIDEOS = "/:id/myvideos";
 
 const VIDEOS = "/videos";
 const UPLOAD = "/upload";
-const VIDEO_DETAIL = "/:id";
+const VIDEO_ID = "/:id";
 const EDIT_VIDEO = "/:id/edit-video";
-const DELETE_VIDEO = "/:id";
+//const DELETE_VIDEO = "/:id";
 const VIEW = "/:id/view";
+const COMMENT = "/:id/comment";
 //const EDIT_COMMENT = "/:vid/:cid/edit";
-const DELETE_COMMENT = "/:vid/:cid";
+//const DELETE_COMMENT = "/:vid/:cid";
+const COMMENT_ID = "/:vid/:cid";
 
 // Object
 
@@ -45,7 +47,7 @@ const routes = {
             return USERS + "/" + id;
         }
         else{
-            return USERS_DETAIL;
+            return USER_ID;
         }
     },
     myVideos: (id) => {
@@ -71,7 +73,7 @@ const routes = {
             return VIDEOS  + "/" + id;
         }
         else{
-            return VIDEO_DETAIL;
+            return VIDEO_ID;
         }
     },
     editVideo: (id) => {
@@ -87,16 +89,29 @@ const routes = {
             return VIDEOS  + "/" + id;
         }
         else{
-            return DELETE_VIDEO;
+            return VIDEO_ID;
         }
     },
     view: VIEW,
+    comment: (id) => {
+        if(id)
+            return VIDEOS + "/" + id + "/comment";
+        else
+            return COMMENT;
+    },
     deleteComment: (vid, cid) => {
         if(vid && cid)
             return VIDEOS + "/" + vid + "/" + cid;
         else    
-            return DELETE_COMMENT; 
-    }
+            return COMMENT_ID; 
+    },
+    putComment: (vid, cid) => {
+        if(vid && cid)
+            return VIDEOS + "/" + vid + "/" + cid;
+        else    
+            return COMMENT_ID; 
+    },
+
 
 };
 

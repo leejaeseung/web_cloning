@@ -9,7 +9,8 @@ import {
     postUpload,
     postView,
     deleteVideo,
-    deleteComment
+    deleteComment,
+    putComment
 } from "../controllers/videoController";
 import { videoUploader, loginChecker, videoChecker} from "../middleware";
 
@@ -23,9 +24,10 @@ videoRouter.get(routes.editVideo(), videoChecker,loginChecker, getEditVideo);
 videoRouter.patch(routes.editVideo(), videoChecker,loginChecker, patchEditVideo);
 videoRouter.get(routes.videoDetail(), videoChecker, videoDetail);
 
-videoRouter.post(routes.videoDetail(), videoChecker, loginChecker, postComment);
-
 videoRouter.delete(routes.deleteVideo(), loginChecker, deleteVideo);
+
+videoRouter.post(routes.comment(), videoChecker, loginChecker, postComment);
+videoRouter.put(routes.putComment(), loginChecker, putComment);
 videoRouter.delete(routes.deleteComment(), loginChecker, deleteComment);
 
 videoRouter.post(routes.view, videoChecker, postView);
