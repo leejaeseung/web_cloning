@@ -14,7 +14,7 @@ mixin commentBlock( comment = {})
             a.reply(href="#") reply
             if nowUser.userName == comment.author.userName
                 a.edit(href="#") edit
-                form.deleteForm(action=routes.videos + "/" + comment.videoID + "/" + comment.id + "/delete" + "?_method=DELETE", method="POST")
+                form.deleteForm(action=routes.deleteComment(comment.videoID, comment.id) + "?_method=DELETE", method="POST")
                     a.delete(href="#") delete
 
     

@@ -167,11 +167,7 @@ export const postUpload = async (req, res) => {
 
 export const deleteVideo = async (req, res, next) => {
     
-    const {
-        body: {
-            videoID
-        }
-    } = req;
+    const videoID = req.params.id;
 
     await Video.findOneAndDelete({ _id: videoID }, async (err, video) => {
         if(err) next(new Error("DB 에러"));

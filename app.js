@@ -28,6 +28,9 @@ const app = express();
 app.set("view engine", "pug");
 //뷰 엔진을 pug로 설정
 
+app.disable("x-powered-by");
+//
+
 //app.use("/uploads", express.static("uploads"));
 app.use(express.static(__dirname + "/public"));
 app.use(express.static(__dirname + "/"));

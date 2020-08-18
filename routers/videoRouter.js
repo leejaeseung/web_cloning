@@ -25,8 +25,8 @@ videoRouter.get(routes.videoDetail(), videoChecker, videoDetail);
 
 videoRouter.post(routes.videoDetail(), videoChecker, loginChecker, postComment);
 
-videoRouter.delete(routes.deleteVideo, loginChecker, deleteVideo);
-videoRouter.delete(routes.deleteComment, loginChecker, deleteComment);
+videoRouter.delete(routes.deleteVideo(), loginChecker, deleteVideo);
+videoRouter.delete(routes.deleteComment(), loginChecker, deleteComment);
 
 videoRouter.post(routes.view, videoChecker, postView);
 

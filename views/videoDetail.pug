@@ -7,8 +7,8 @@ block content
         .video_buttons
             if isCreator
                 a.button.white#editBt(href=routes.editVideo(video.id)) Edit
-                form(action=routes.videos + routes.deleteVideo + "?_method=DELETE", method="POST")
-                    button.button.white#deleteBt(type="submit", name="videoID", value=video.id) Delete
+                form(action=routes.deleteVideo(video.id) + "?_method=DELETE", method="POST")
+                    button.button.white#deleteBt(type="submit") Delete
         video(src=routes.home + video.fileUrl, controls, id="nowVideo")
         script.
             const video = document.getElementById("nowVideo");
