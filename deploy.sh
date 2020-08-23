@@ -3,4 +3,8 @@
 REPO=/server
 cd $REPOcd ..
 
-npm -v
+npm install
+
+npm install pm2
+
+npm start
