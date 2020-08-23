@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 REPO=/server
-cd $REPOcd ..
+cd $REPO
 
 sudo npm install
 
