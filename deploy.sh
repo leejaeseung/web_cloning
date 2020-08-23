@@ -3,7 +3,7 @@
 REPO=/server
 cd $REPO
 
-sudo apt-get install npm
+sudo yum install npm
 
 npm install
 
