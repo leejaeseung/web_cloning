@@ -17,7 +17,7 @@ then
     npm start
 else
     echo "> kill -9 ${CURRENT_PID}"
-    kill -15 ${CURRENT_PID}
+    sudo kill -15 ${CURRENT_PID}
     sleep 5
     npm restart
 fi
