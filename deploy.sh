@@ -3,8 +3,8 @@
 REPO=/server
 cd $REPOcd ..
 
-npm install
+sudo npm install
 
-npm install pm2
+sudo npm install pm2
 
-npm start
+sudo npm start
