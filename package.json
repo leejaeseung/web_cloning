@@ -5,7 +5,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "pm2 start --interpreter babel-node init.js --name myServer --watch",
-    "restart": "pm2 restart myServer"
   },
   "author": "",
   "license": "ISC",
