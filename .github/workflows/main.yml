@@ -34,6 +34,9 @@ jobs:
     - name: Npm install
       run: npm install
 
+    - name: Pm2 install
+      run: npm install pm2 -g
+
     # Runs a set of commands using the runners shell
     - name: Start
       run: npm start
