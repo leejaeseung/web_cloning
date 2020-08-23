@@ -23,6 +23,10 @@ jobs:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
 
+    - name: Make zip file
+      run: zip -qq -r ./$GITHUB_SHA.zip .
+      shell: bash
+
     - name: Transfer to EC2
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -31,12 +35,8 @@ jobs:
         aws-region: ap-northeast-2
   
     # Runs a single command using the runners shell
-    - name: Npm install
-      run: npm install
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://jtube-deploy/$PROJECT_NAME/$GITHUB_SHA.zip
 
-    - name: Pm2 install
-      run: npm install pm2
-
-    # Runs a set of commands using the runners shell
-    - name: Start
-      run: npm start
+    - name: Code Deploy
+      run: aws deploy create-deployment --application-name Jtube-deploy-app --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name Jtubes-deploy-app --s3-location bucket=jtube-deploy,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
