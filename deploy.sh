@@ -5,8 +5,6 @@ cd ${REPO}
 
 sudo npm install
 
-sudo npm install pm2
-
 APP_NAME=myServer
 
 CURRENT_PID=$(pgrep -f ${APP_NAME})
