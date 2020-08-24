@@ -6,5 +6,3 @@ cd ${REPO}
 sudo npm install
 
 npm run-script dev
-
-pm2 delete all
