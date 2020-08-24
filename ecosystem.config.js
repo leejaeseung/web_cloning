@@ -4,7 +4,7 @@ module.exports ={
             name: "Jtube",
             script: "./init.js",
             watch: true,
-            ignore_watch: ["node_modules"],     //모듈 수정 되도 재시작x
+            ignore_watch: ["node_modules", "uploads"],     //모듈 수정 되도 재시작x
             interpreter: "./node_modules/.bin/babel-node",      //babel 사용하여 시작
             env: {
                 "PORT": 8000,

@@ -22,7 +22,6 @@ import { localsMiddleware, handleError } from "./middleware";
 
 import routes from "./routes";
 
-
 const app = express();
 
 app.set("view engine", "pug");
