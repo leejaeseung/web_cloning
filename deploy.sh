@@ -5,6 +5,6 @@ cd ${REPO}
 
 sudo npm install
 
-sudo pm2 delete all
+pm2 delete all
 
 npm run-script dev
