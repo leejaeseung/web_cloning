@@ -1,6 +1,6 @@
 import routes from "./routes";
 import multer from "multer";
-import multerS3 from "multer-3";
+import multerS3 from "multer-s3";
 import User from "./DBmodel/users";
 import Video from "./DBmodel/videos";
 import nodemailer from "nodemailer";
