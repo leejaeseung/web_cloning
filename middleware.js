@@ -24,12 +24,12 @@ const storage_PF_local = multer.diskStorage({destination: "uploads/profiles/", f
 //외부 정적 저장 경로
 const storage_VD_cloud = multerS3({
     s3: s3,
-    bucket: process.env.S3_BUCKET_NAME + "/uploads/videos/",
+    bucket: process.env.S3_BUCKET_NAME + "/uploads/videos",
     acl: "public-read-write",
 })
 const storage_PF_cloud = multerS3({
     s3: s3,
-    bucket: process.env.S3_BUCKET_NAME + "/uploads/profiles/",
+    bucket: process.env.S3_BUCKET_NAME + "/uploads/profiles",
     key: function (req, file, cb) {
         cb(null, req.session.userID + ".png");
     },
