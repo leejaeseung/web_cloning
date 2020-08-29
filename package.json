@@ -5,11 +5,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "pm2 start ecosystem.config.js",
-    "start": "pm2 start ecosystem.config.js --env production"
+    "pro": "pm2 start ecosystem.config.js --env production"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.742.0",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.5",
@@ -24,6 +25,7 @@
     "mongoose": "^5.9.22",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
+    "multer-s3": "^2.9.0",
     "nodemailer": "^6.4.11",
     "nodemailer-smtp-transport": "^2.7.4",
     "pm2": "^4.4.1",

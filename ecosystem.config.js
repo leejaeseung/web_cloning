@@ -18,6 +18,7 @@ module.exports ={
                 "MONGO_URL": "mongodb://localhost:27017/mydb",
                 "NODEMAILER_USER": process.env.NODEMAILER_USER,
                 "NODEMAILER_PASS": process.env.NODEMAILER_PASS,
+                "S3_BUCKET_NAME": "samplebk1234",
                 "NODE_ENV": "production"
             }
         }

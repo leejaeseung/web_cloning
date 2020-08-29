@@ -8,11 +8,41 @@ import smtpTransporter from "nodemailer-smtp-transport";
 //smtp 서버 모듈
 import crypto from "crypto";
 
-const storage_VD = multer.diskStorage({destination: "uploads/videos/"})
-const storage_PF = multer.diskStorage({destination: "uploads/profiles/", filename: function (req, file, cb) {
+import AWS  from "aws-sdk";
+//아마존 sdk
+
+const s3 = new AWS.S3();
+
+//로컬 정적 저장 경로
+const storage_VD_local = multer.diskStorage({destination: "uploads/videos/"})
+const storage_PF_local = multer.diskStorage({destination: "uploads/profiles/", filename: function (req, file, cb) {
 
     cb(null, req.session.userID + ".png");
 }})
+
+//외부 정적 저장 경로
+const storage_VD_cloud = multerS3({
+    s3: s3,
+    bucket: process.env.S3_BUCKET_NAME + "/uploads/videos/",
+    acl: "public-read-write",
+})
+const storage_PF_cloud = multerS3({
+    s3: s3,
+    bucket: process.env.S3_BUCKET_NAME + "/uploads/profiles/",
+    key: function (req, file, cb) {
+        cb(null, req.session.userID + ".png");
+    },
+    acl: "public-read-write",
+})
+
+if(process.env.NODE_ENV == "development"){
+    export const videoUploader = multer({storage: storage_VD}).single("videoFile");
+    export const uploadProfile = multer({storage: storage_PF}).single("imgFile");
+}
+else if(process.env.NODE_ENV == "production"){
+    export const videoUploader = multer({storage: storage_VD_cloud}).single("videoFile");
+    export const uploadProfile = multer({storage: storage_PF_cloud}).single("imgFile");
+}
 
 // pug에서 사용될 지역 변수들을 관리해주는 미들웨어
 export const localsMiddleware = (req, res, next) =>{
@@ -142,6 +172,3 @@ export const mailSender = async (dest, code) => {
 export const handleError = (err, req, res, next) => {
     res.send(err.message);
 }
-
-export const videoUploader = multer({storage: storage_VD}).single("videoFile");
-export const uploadProfile = multer({storage: storage_PF}).single("imgFile");

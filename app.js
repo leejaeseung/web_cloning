@@ -22,6 +22,10 @@ import { localsMiddleware, handleError } from "./middleware";
 
 import routes from "./routes";
 
+import AWS  from "aws-sdk";
+
+const s3 = new AWS.S3();
+
 const app = express();
 
 app.set("view engine", "pug");
@@ -30,10 +34,16 @@ app.set("view engine", "pug");
 app.disable("x-powered-by");
 //
 
-//app.use("/uploads", express.static("uploads"));
-app.use(express.static(__dirname + "/public"));
-app.use(express.static(__dirname + "/"));
-//정적 파일 경로 설정 -> uploads는 나중에 수정해야됨.
+
+if(process.env.NODE_ENV == "development") {
+    //app.use("/uploads", express.static("uploads"));
+    app.use(express.static(__dirname + "/public"));
+    app.use(express.static(__dirname + "/"));
+    //정적 파일 경로 설정 -> uploads는 나중에 수정해야됨.
+}
+else if(process.env.NODE_ENV == "production") {
+    
+}
 
 app.use(cookieParser());
 app.use(methodOverride("_method"));
