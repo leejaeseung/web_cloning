@@ -5,4 +5,4 @@ cd ${REPO}
 
 sudo npm install
 
-npm run-script dev
+npm run-script pro
