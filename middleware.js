@@ -35,13 +35,16 @@ const storage_PF_cloud = multerS3({
     acl: "public-read-write",
 })
 
+export var videoUploader;
+export var uploadProfile;
+
 if(process.env.NODE_ENV == "development"){
-    export const videoUploader = multer({storage: storage_VD}).single("videoFile");
-    export const uploadProfile = multer({storage: storage_PF}).single("imgFile");
+    videoUploader = multer({storage: storage_VD}).single("videoFile");
+    uploadProfile = multer({storage: storage_PF}).single("imgFile");
 }
-else if(process.env.NODE_ENV == "production"){
-    export const videoUploader = multer({storage: storage_VD_cloud}).single("videoFile");
-    export const uploadProfile = multer({storage: storage_PF_cloud}).single("imgFile");
+else if (process.env.NODE_ENV == "production"){
+    videoUploader = multer({storage: storage_VD_cloud}).single("videoFile");
+    uploadProfile = multer({storage: storage_PF_cloud}).single("imgFile");
 }
 
 // pug에서 사용될 지역 변수들을 관리해주는 미들웨어
