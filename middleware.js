@@ -40,8 +40,8 @@ export var videoUploader;
 export var uploadProfile;
 
 if(process.env.NODE_ENV == "development"){
-    videoUploader = multer({storage: storage_VD}).single("videoFile");
-    uploadProfile = multer({storage: storage_PF}).single("imgFile");
+    videoUploader = multer({storage: storage_VD_local}).single("videoFile");
+    uploadProfile = multer({storage: storage_PF_local}).single("imgFile");
 }
 else if (process.env.NODE_ENV == "production"){
     videoUploader = multer({storage: storage_VD_cloud}).single("videoFile");
