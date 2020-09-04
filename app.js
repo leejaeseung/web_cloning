@@ -9,7 +9,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 //쿠키 데이터 미들웨어
 import methodOverride from "method-override";
-import session from "express-session";
+import session from "cookie-session";
 //세션 미들웨어
 import flash from "connect-flash";
 //일회성 메세지 전용 미들웨어
