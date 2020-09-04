@@ -155,11 +155,17 @@ export const postUpload = async (req, res) => {
         body: {
             videoName,
             description
-        },
-        file: { path }
+        }
     } = req;
 
-    console.log(path);
+    var path
+
+    if(process.env.NODE_ENV == "development") {
+        path = req.file.path
+    }
+    else if(process.env.NODE_ENV == "production") {
+        path = req.file.location
+    }
 
     const newVideo = await Video.create({
         videoName,
