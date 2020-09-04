@@ -18,17 +18,8 @@ const s3 = new AWS.S3();
 var storage_VD;
 var storage_PF;
 
-if(process.env.NODE_ENV == "development"){
 
-    //로컬 정적 저장 경로
-    storage_VD = multer.diskStorage({destination: "uploads/videos/"})
-    storage_PF = multer.diskStorage({destination: "uploads/profiles/", filename: function (req, file, cb) {
-
-        cb(null, req.session.userID + ".png");
-    }})
-
-}
-else if (process.env.NODE_ENV == "production"){
+if(process.env.NODE_ENV == "production"){
 
     //외부 정적 저장 경로
     storage_VD = multerS3({
@@ -44,6 +35,16 @@ else if (process.env.NODE_ENV == "production"){
         },
         acl: "public-read-write",
     })
+
+}
+else{
+
+    //로컬 정적 저장 경로
+    storage_VD = multer.diskStorage({destination: "uploads/videos/"})
+    storage_PF = multer.diskStorage({destination: "uploads/profiles/", filename: function (req, file, cb) {
+
+        cb(null, req.session.userID + ".png");
+    }})
 
 }
 

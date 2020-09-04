@@ -160,12 +160,13 @@ export const postUpload = async (req, res) => {
 
     var path
 
-    if(process.env.NODE_ENV == "development") {
-        path = req.file.path
-    }
-    else if(process.env.NODE_ENV == "production") {
+    
+    if(process.env.NODE_ENV == "production") {
         path = req.file.location
         //multer-S3 의 파일 URL 은 location에 저장됨.
+    }
+    else {
+        path = "/" + req.file.path
     }
 
     const newVideo = await Video.create({

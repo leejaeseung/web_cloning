@@ -32,15 +32,16 @@ app.disable("x-powered-by");
 //
 
 
-if(process.env.NODE_ENV == "development") {
+
+if(process.env.NODE_ENV == "production") {
+    app.use(express.static(__dirname + "/public"));
+    app.use(express.static(__dirname + "/"));
+}
+else{
     //app.use("/uploads", express.static("uploads"));
     app.use(express.static(__dirname + "/public"));
     app.use(express.static(__dirname + "/"));
     //정적 파일 경로 설정 -> uploads는 나중에 수정해야됨.
-}
-else if(process.env.NODE_ENV == "production") {
-    app.use(express.static(__dirname + "/public"));
-    app.use(express.static(__dirname + "/"));
 }
 
 app.use(cookieParser());

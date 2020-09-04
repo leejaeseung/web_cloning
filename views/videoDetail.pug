@@ -9,7 +9,7 @@ block content
                 a.button.white#editBt(href=routes.editVideo(video.id)) Edit
                 form(action=routes.deleteVideo(video.id) + "?_method=DELETE", method="POST")
                     button.button.white#deleteBt(type="submit") Delete
-        video(src=routes.home + video.fileUrl, controls, id="nowVideo")
+        video(src=video.fileUrl, controls, id="nowVideo")
         script.
             const video = document.getElementById("nowVideo");
 
