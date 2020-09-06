@@ -4,6 +4,9 @@ import routes from "../routes";
 import fs from "fs";
 import path from "path";
 import moment from "moment-timezone";
+import AWS from "aws-sdk";
+
+const s3 = new AWS.S3();
 
 export const home = async (req, res) => {
     //async , await로 비디오 목록을 db에서 가져 온 뒤 렌더링
@@ -187,28 +190,35 @@ export const deleteVideo = async (req, res, next) => {
     const videoID = req.params.id;
 
     await Video.findOneAndDelete({ _id: videoID }, async (err, video) => {
-        if(err) next(new Error("DB 에러"));
+        if(err) next(new Error("DB Error"));
 
         if(!video)
             next(new Error("Video is Not Exist"));
         else{
-            const filePath = path.join(__dirname + "/../", video.fileUrl);
-            //현재 경로의 상위 경로 = nodejs, + 비디오 url
 
-            console.log(filepath)
+            if(process.env.NODE_ENV == "production") {
+                const splitUrl = video.fileUrl.split('/');
+                const fileName = splitUrl[splitUrl.length - 1]
 
-            /*if(process.env.NODE_ENV == "production") {
-                path = req.file.location
-                //multer-S3 의 파일 URL 은 location에 저장됨.
+                const params = {
+                    Bucket: process.env.S3_BUCKET_NAME + "/uploads/profiles",
+                    Key: fileName
+                }
+
+                s3.deleteObject(params, (err) => {
+                    if(err) next(new Error("S3 Delete Error"))
+                })
             }
             else {
-                path = "/" + req.file.path
-            }*/
+                const filePath = path.join(__dirname + "/../", video.fileUrl);
+                //현재 경로(현재 경로 = 컨트롤러)의 상위 경로 = nodejs, + 비디오 url
 
-            await fs.unlink(filePath, (err) => {
-                if(err) next(new Error("File load Error"))
+                await fs.unlink(filePath, (err) => {
+                    if(err) next(new Error("File load Error"))
 
-            })
+                })
+            }
+            
             res.redirect(routes.myVideos(req.session.userName));
         }
     });
