@@ -195,6 +195,16 @@ export const deleteVideo = async (req, res, next) => {
             const filePath = path.join(__dirname + "/../", video.fileUrl);
             //현재 경로의 상위 경로 = nodejs, + 비디오 url
 
+            console.log(filepath)
+
+            /*if(process.env.NODE_ENV == "production") {
+                path = req.file.location
+                //multer-S3 의 파일 URL 은 location에 저장됨.
+            }
+            else {
+                path = "/" + req.file.path
+            }*/
+
             await fs.unlink(filePath, (err) => {
                 if(err) next(new Error("File load Error"))
 
