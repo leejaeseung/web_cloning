@@ -201,13 +201,13 @@ export const deleteVideo = async (req, res, next) => {
                 const fileName = splitUrl[splitUrl.length - 1]
 
                 const params = {
-                    Bucket: process.env.S3_BUCKET_NAME + "/uploads/videos/",
-                    Key: fileName
+                    Bucket: process.env.S3_BUCKET_NAME ,
+                    Key: "uploads/videos/" + fileName
                 }
 
                 console.log(fileName);
 
-                s3.deleteObject(params, (err) => {
+                await s3.deleteObject(params, (err, data) => {
                     if(err) next(new Error("S3 Delete Error"))
                     else{
                         console.log("delete success" + data)
