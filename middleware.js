@@ -14,7 +14,6 @@ import AWS  from "aws-sdk";
 
 const s3 = new AWS.S3();
 
-
 var storage_VD;
 var storage_PF;
 
