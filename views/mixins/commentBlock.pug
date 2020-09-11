@@ -11,11 +11,14 @@ mixin commentBlock( comment = {})
         else
             p.text= comment.text
         .activeForm    
+            p #{comment.childs}
+            if comment.childs !== 0
+                a.openReply(href="javascript:;") #{comment.childs}개의 답글 보기
             a.reply(href="javascript:;") reply
             if nowUser.userName == comment.author.userName
                 form.editForm(action=routes.putComment(comment.videoID, comment.id) + "?_method=PUT", method="POST")
-                    a.edit(href="#") edit
+                    a.edit(href="javascript:;") edit
                 form.deleteForm(action=routes.deleteComment(comment.videoID, comment.id) + "?_method=DELETE", method="POST")
-                    a.delete(href="#") delete
+                    a.delete(href="javascript:;") delete
 
     

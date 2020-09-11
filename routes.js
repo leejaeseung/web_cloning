@@ -25,10 +25,10 @@ const VIDEO_ID = "/:id";
 const EDIT_VIDEO = "/:id/edit-video";
 //const DELETE_VIDEO = "/:id";
 const VIEW = "/:id/view";
-const COMMENT = "/:id/comment";
+const COMMENTS = "/:id/comments";
 //const EDIT_COMMENT = "/:vid/:cid/edit";
 //const DELETE_COMMENT = "/:vid/:cid";
-const COMMENT_ID = "/:vid/:cid";
+const COMMENT_ID = "/:vid/comments/:cid";
 
 // Object
 
@@ -93,21 +93,21 @@ const routes = {
         }
     },
     view: VIEW,
-    comment: (id) => {
+    comments: (id) => {
         if(id)
-            return VIDEOS + "/" + id + "/comment";
+            return VIDEOS + "/" + id + "/comments";
         else
-            return COMMENT;
+            return COMMENTS;
     },
     deleteComment: (vid, cid) => {
         if(vid && cid)
-            return VIDEOS + "/" + vid + "/" + cid;
+            return VIDEOS + "/" + vid + "/comments/" + cid;
         else    
             return COMMENT_ID; 
     },
     putComment: (vid, cid) => {
         if(vid && cid)
-            return VIDEOS + "/" + vid + "/" + cid;
+            return VIDEOS + "/" + vid + "/comments/" + cid;
         else    
             return COMMENT_ID; 
     },

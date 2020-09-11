@@ -1,0 +1,20 @@
+mixin replyCommentBlock( comment = {})
+    .replyCommentBlock
+        .commentTitle
+            .author #{comment.author.userName} 님의 답글
+            if comment.updatedAt
+                .updated #{comment.updatedAt} 수정됨
+            else
+                .created #{comment.createdAt} 생성됨
+        if comment.isDeleted
+            p.text 삭제된 댓글입니다
+        else
+            p.text= comment.text
+        .activeForm    
+            if nowUser.userName == comment.author.userName
+                form.editForm(action=routes.putComment(comment.videoID, comment.id) + "?_method=PUT", method="POST")
+                    a.edit(href="javascript:;") edit
+                form.deleteForm(action=routes.deleteComment(comment.videoID, comment.id) + "?_method=DELETE", method="POST")
+                    a.delete(href="javascript:;") delete
+
+    

@@ -54,7 +54,7 @@ export const videoDetail = async (req, res, next) => {
         }
     } = req;
 
-    await Comment.find({videoID: video.id}).populate("author").exec((err, comments) => {
+    await Comment.find({"videoID": video.id, "parentComment": null}).populate("author").exec((err, comments) => {
         if(err) return next(new Error("DB Error"));
 
         res.render("videoDetail", {
@@ -82,28 +82,93 @@ export const postComment = async (req, res) => {
 
     if(!parent){
         //일반 댓글인 경우
-        await Comment.create({
-            videoID: video.id,
-            author: req.session.userID,
-            parentComment: null,
-            text: comment,
-            isDeleted: false,
-            createdAt: moment(Date.now()).format("YYYY-MM-DD HH:mm")
-        }, (err, comment) => {
-            if(err){
-                req.flash("commentForm", {_id: null, form: {author: req.session.userID, video: video.id}});
-                req.flash("commentError", {_id: null, error: err});
-            }
-        })
-
-       
+        try{
+            await Comment.create({
+                videoID: video.id,
+                author: req.session.userID,
+                parentComment: null,
+                text: comment,
+                isDeleted: false,
+                createdAt: moment(Date.now()).format("YYYY-MM-DD HH:mm")
+            })
+        }
+        catch(err) {
+            req.flash("commentForm", {_id: null, form: {author: req.session.userID, video: video.id}});
+            req.flash("commentError", {_id: null, error: err});
+        }
     }
     else{
+        await Comment.update({_id: parent}, {$inc: {childCount: 1}})
+
         //대댓글인 경우
-        
+        try{
+            await Comment.create({
+                videoID: video.id,
+                author: req.session.userID,
+                parentComment: parent,
+                text: comment,
+                isDeleted: false,
+                createdAt: moment(Date.now()).format("YYYY-MM-DD HH:mm")
+            })
+        }
+        catch(err) {
+            req.flash("commentForm", {_id: null, form: {author: req.session.userID, video: video.id}});
+            req.flash("commentError", {_id: null, error: err});
+        }
+
     }
 
     res.redirect(routes.videoDetail(video.id));
+}
+
+export const getComments = (req, res, next) => {
+    
+    const videoID = req.params.id;
+
+    const {
+        query: {
+            comment,
+            reply
+        }
+    } = req;
+
+    res.set("Content-Type", "text/plain");
+
+    Comment.find({"videoID": videoID}).populate("author").exec(async (err, comments) => {
+        if(err) return next(new Error("DB Error"));
+
+        if(comment == "ALL"){
+            return res.json(comments)
+        }
+        else{
+            if(reply == "True"){
+                var replyList = []
+
+                for(var i = 0; i < comments.length; i++){
+                    if(comments[i].parentComment == comment){
+                        replyList.push(comments[i]);
+                    }
+                }
+
+                await replyList.sort((a, b) => {
+                    return a.createdAt < b.createdAt ? -1 : 1;
+                })
+
+                return res.json(replyList);
+            }
+            else if(reply == "False"){
+                for(var i = 0; i < comments.length; i++){
+                    if(comments[i]._id == comment){
+                        return res.json(comments[i]);
+                    }
+                }
+            }
+        }
+    })
+
+    
+
+
 }
 
 export const deleteComment = (req, res, next) => {
@@ -185,11 +250,11 @@ export const postUpload = async (req, res) => {
     res.redirect(routes.videoDetail(newVideo.id));
 };
 
-export const deleteVideo = async (req, res, next) => {
+export const deleteVideo = (req, res, next) => {
     
     const videoID = req.params.id;
 
-    await Video.findOneAndDelete({ _id: videoID }, async (err, video) => {
+    Video.findOneAndDelete({ _id: videoID }, async (err, video) => {
         if(err) next(new Error("DB Error"));
 
         if(!video)
@@ -255,9 +320,12 @@ export const patchEditVideo = async (req, res, next) => {
         }
     } = req;
 
-    await Video.update({_id: video.id}, { $set: { videoName, description}}, (err) =>{
-        if(err) next(new Error("DB Error"));
-    });
+    try{
+        await Video.update({_id: video.id}, { $set: { videoName, description}});
+    }
+    catch(err){
+        next(new Error("DB Error"));
+    }
 
     res.redirect(routes.myVideos(req.session.userName));
 }

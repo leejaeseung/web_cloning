@@ -5,6 +5,7 @@ const commentSchema = new mongoose.Schema({
     videoID: {type: mongoose.Schema.Types.ObjectId, ref: "Video", required: true},
     author: {type: mongoose.Schema.Types.ObjectId, ref: "User", required: true},
     parentComment: {type: String, ref: "Comment"},
+    childCount: {type: Number, default: 0},
     text: {type: String, required:[true, "text is required!"]},
     isDeleted: Boolean,
     createdAt: String,

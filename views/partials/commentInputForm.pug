@@ -1,5 +1,5 @@
 .comment-input
-    form.comment-form#comment-form-original(action=routes.comment(video.id), method="POST")
+    form.comment-form#comment-form-original(action=routes.comments(video.id), method="POST")
         input.comment-box#comment-box-original(type="text", placeholder="댓글 입력", name="comment")
         input(type="hidden", name="parent", value="")
 

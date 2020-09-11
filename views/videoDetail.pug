@@ -30,6 +30,8 @@ block content
             +commentBlock({
                 id: item.id,
                 author: item.author,
+                childs: item.childCount,
+                parent: item.parentComment,
                 text: item.text,
                 isDeleted: item.isDeleted,
                 createdAt: item.createdAt,
@@ -39,6 +41,7 @@ block content
         include ./partials/commentInputForm
 
         script.
+            const openReplytag = document.getElementsByClassName("openReply");
             const replytag = document.getElementsByClassName("reply");
             const edittag = document.getElementsByClassName("edit");
             const deletetag = document.getElementsByClassName("delete");
@@ -49,7 +52,8 @@ block content
             const editForm = document.getElementsByClassName("editForm");
             const deleteForm = document.getElementsByClassName("deleteForm");
 
-            addCommentReplyEvent(replytag, commentBlock, "click", "#{routes.comment(video.id)}", !{JSON.stringify(comments)});
+            addShowReplyEvent(openReplytag, commentBlock, "click", "#{routes.comments(video.id)}", !{JSON.stringify(comments)}, "#{nowUser.userName}")
+            addCommentReplyEvent(replytag, commentBlock, "click", "#{routes.comments(video.id)}", !{JSON.stringify(comments)});
             addCommentDeleteEvent(deletetag, deleteForm, "click");
             //linkTagWithForm(edittag, editForm, "click");
             

@@ -9,6 +9,7 @@ import {
     postUpload,
     postView,
     deleteVideo,
+    getComments,
     deleteComment,
     putComment
 } from "../controllers/videoController";
@@ -26,7 +27,9 @@ videoRouter.get(routes.videoDetail(), videoChecker, videoDetail);
 
 videoRouter.delete(routes.deleteVideo(), loginChecker, deleteVideo);
 
-videoRouter.post(routes.comment(), videoChecker, loginChecker, postComment);
+videoRouter.post(routes.comments(), videoChecker, loginChecker, postComment);
+
+videoRouter.get(routes.comments(), getComments);
 videoRouter.put(routes.putComment(), loginChecker, putComment);
 videoRouter.delete(routes.deleteComment(), loginChecker, deleteComment);
 
