@@ -125,6 +125,8 @@ export const getComments = (req, res, next) => {
     
     const videoID = req.params.id;
 
+    console.log("???")
+
     const {
         query: {
             comment,

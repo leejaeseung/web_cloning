@@ -47,12 +47,13 @@ block content
             const deletetag = document.getElementsByClassName("delete");
 
             const commentBlock = document.getElementsByClassName("commentBlock");
+            const replyBlock = document.getElementsByClassName("replyBlock");
 
             //const replyForm = document.getElementsByClassName("replyForm");
             const editForm = document.getElementsByClassName("editForm");
             const deleteForm = document.getElementsByClassName("deleteForm");
 
-            addShowReplyEvent(openReplytag, commentBlock, "click", "#{routes.comments(video.id)}", !{JSON.stringify(comments)}, "#{nowUser.userName}")
+            addShowReplyEvent(openReplytag, replyBlock, "click", "#{routes.comments(video.id)}", !{JSON.stringify(comments)}, "#{nowUser.userName}")
             addCommentReplyEvent(replytag, commentBlock, "click", "#{routes.comments(video.id)}", !{JSON.stringify(comments)});
             addCommentDeleteEvent(deletetag, deleteForm, "click");
             //linkTagWithForm(edittag, editForm, "click");

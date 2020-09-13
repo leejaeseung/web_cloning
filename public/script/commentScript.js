@@ -11,6 +11,7 @@ const addCommentDeleteEvent = (tag, form, type) => {
     }
 }
 
+//답글 입력 박스를 추가하는 함수
 const addCommentReplyEvent = (tag, block, type, route, comments) => {
     //comments = 각 댓글들의 정보, parent를 얻기 위해
 
@@ -75,6 +76,7 @@ const addCommentReplyEvent = (tag, block, type, route, comments) => {
     }
 }
 
+//답글 form을 만들어 return
 const makeReplyForm = (commentOwner, comment) => {
     const replyCommentBlock = document.createElement("div");
     replyCommentBlock.className = "replyCommentBlock";
@@ -111,7 +113,7 @@ const makeReplyForm = (commentOwner, comment) => {
     replyCommentBlock.appendChild(commentTitle)
     replyCommentBlock.appendChild(textBlock)
 
-    console.log(comment)
+    //console.log(comment)
 
     if(commentOwner == comment.author.userName && !comment.isDeleted){
         //댓쓴이이고, 아직 지워지지 않았을 때
@@ -157,30 +159,44 @@ const makeReplyForm = (commentOwner, comment) => {
     return replyCommentBlock
 }
 
+//답글을 불러오는 event를 commentBlock마다 붙여줌
 const addShowReplyEvent = (tag, parentBlock, type, route, comments, commentOwner) => {
 
     const eventAdder = (idx) => {
-        
+
         const showReply = () => {
             const parentId = comments[idx]._id;
+            const openReply = tag[idx]
+            const replyBlock = parentBlock[idx].parentNode.children[3]
+            const childCount = comments[idx].childCount
 
-            route += "?comment=" + parentId + "&reply=True";
+            openReply.textContent = "답글 " + childCount + "개 숨기기"
 
-            fetch(route, {method: "GET"}).
+            const query = route + "?comment=" + parentId + "&reply=True";
+
+            fetch(query, {method: "GET"}).
             then(res => res.json()).
             then(data => {
-                console.log(data)
-
-                console.log(parentBlock)
 
                 for(var i = 0; i < data.length; i ++ ){
                     parentBlock[idx].appendChild(makeReplyForm(commentOwner, data[i]))
                 }
             })
+            
+            openReply.addEventListener(type, () => {
 
+                if(replyBlock.style.display == ""){
+                    replyBlock.style.display = "none"
+                    openReply.textContent = "답글 " + childCount + "개 보기"
+                }
+                else{
+                    replyBlock.style.display = ""
+                    openReply.textContent = "답글 " + childCount + "개 숨기기"
+                }
+            })
         }
 
-        tag[idx].addEventListener(type, showReply, {onde: true})
+        tag[idx].addEventListener(type, showReply, {once: true})
     }
 
     //openReply 태그의 개수만큼 이벤트 리스너를 붙여줌.
