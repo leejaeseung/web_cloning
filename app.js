@@ -22,6 +22,8 @@ import { localsMiddleware, handleError } from "./middleware";
 
 import routes from "./routes";
 
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
@@ -29,9 +31,6 @@ app.set("view engine", "pug");
 //뷰 엔진을 pug로 설정
 
 app.disable("x-powered-by");
-//
-
-
 
 if(process.env.NODE_ENV == "production") {
     app.use(express.static(__dirname + "/public"));
@@ -44,7 +43,9 @@ else{
     //정적 파일 경로 설정 -> uploads는 나중에 수정해야됨.
 }
 
-app.use(cookieParser());
+//console.log(process.env.NODE_ENV)
+
+app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(methodOverride("_method"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));

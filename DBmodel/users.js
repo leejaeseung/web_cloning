@@ -7,4 +7,14 @@ const userSchema = new mongoose.Schema({
     imgUrl: String
 });
 
+userSchema.statics.findOneByUserName = function(userName){
+    return this.findOne({
+        "userName": userName
+    }).exec()
+}
+
+userSchema.methods.verify = function(password){
+    return this.password === password
+}
+
 export default mongoose.model("User", userSchema);

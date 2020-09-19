@@ -11,6 +11,7 @@ import crypto from "crypto";
 
 import AWS  from "aws-sdk";
 //아마존 sdk
+import jwt from "jsonwebtoken";
 
 const s3 = new AWS.S3();
 
@@ -19,6 +20,8 @@ var storage_PF;
 
 
 if(process.env.NODE_ENV == "production"){
+
+    
 
     //외부 정적 저장 경로
     storage_VD = multerS3({
@@ -37,7 +40,7 @@ if(process.env.NODE_ENV == "production"){
 
 }
 else{
-
+    
     //로컬 정적 저장 경로
     storage_VD = multer.diskStorage({destination: "uploads/videos/"})
     storage_PF = multer.diskStorage({destination: "uploads/profiles/", filename: function (req, file, cb) {
@@ -102,7 +105,7 @@ export const userLoader = async (req, res, next) => {
 }
 
 //현재 로그인되어 있는지 체크
-export const loginChecker = (req, res, next) => {
+/*export const loginChecker = (req, res, next) => {
 
     const {
         body: {
@@ -119,6 +122,39 @@ export const loginChecker = (req, res, next) => {
             next(new Error("user is not Logined"));
     }
     next();
+}*/
+
+export const loginChecker = (req, res, next) => {
+    
+    const token = req.signedCookies.token
+    const secretKey = process.env.JWT_SECRET
+
+    req.success = false
+
+    if(!token){
+        return next()
+        //next(new Error('user is not Logined'));
+    }
+    
+    const p = new Promise(
+        (resolve, reject) => {
+            jwt.verify(token, secretKey, (err, decoded) => {
+                if(err) reject(err)
+                resolve(decoded)
+            })
+        }
+    )
+
+    const fail = () => {
+        next()
+    }
+
+    p.then((decoded) => {
+        req.success = true
+        req.userInfo = decoded
+        next()
+    }).catch(fail)
+
 }
 
 export const videoChecker = async (req, res, next) => {

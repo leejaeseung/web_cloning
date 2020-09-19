@@ -6,7 +6,7 @@ header
             input(type="text", placeholder="검색", id="searchBox", name="search", value=searchTerm)
     .nav
         ul.menu
-            if !nowUser.isLogin
+            if !isLogin
                 li
                     a(href=routes.login) Login
                 li

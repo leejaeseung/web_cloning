@@ -11,11 +11,13 @@ import {
     getLogin,
     postLogin
 } from "../controllers/userController";
+import {loginChecker} from '../middleware'
 import {userValidationRules, validate} from "../mylib/validator";
+
 
 const globalRouter = express.Router();
 
-globalRouter.get(routes.home, home);
+globalRouter.get(routes.home, loginChecker, home);
 
 globalRouter.get(routes.join, getJoin);
 globalRouter.post(routes.join, userValidationRules(), validate, postJoin);

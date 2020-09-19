@@ -9,4 +9,8 @@ const videoSchema = new mongoose.Schema({
     creator: {type: mongoose.Schema.Types.ObjectId, ref: "User", required: true}
 });
 
+videoSchema.statics.findAll = function(){
+    return this.find({}).exec()
+}
+
 export default mongoose.model("Video", videoSchema);

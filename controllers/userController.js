@@ -2,6 +2,7 @@ import routes from "../routes"
 import User from "../DBmodel/users";
 import Video from "../DBmodel/videos";
 import { mailSender, generateCode } from "../middleware";
+import jwt from "jsonwebtoken";
 
 export const getJoin = async (req, res, next) => {
 
@@ -181,17 +182,25 @@ export const getLogin = (req, res) => {
 export const postLogin = (req, res, next) => {
 
     const { body: { userName, password}} = req;
+    const secretKey = process.env.JWT_SECRET
 
-    User.findOne( {"userName" : userName}, (err, user) => {
+    res.set("Content-Type", "text/plain");
+
+    /*User.findOne( {"userName" : userName}, (err, user) => {
         if(err) next(new Error("DB 에러"));
         if(!user || user.password !== password){
             //id가 존재하지 않거나 비밀번호 미일치
             
             req.flash("login-msg", "잘못된 정보입니다. 다시 입력해 주세요.");
-            res.redirect(routes.login);
+            //res.redirect(routes.login);
+            res.json({
+                success: false
+            })
         }
         else{
             console.log("로그인 성공~");
+
+            
 
             req.session.isLogin = true;
             req.session.userID = user._id;
@@ -200,22 +209,85 @@ export const postLogin = (req, res, next) => {
 
             //세션에 로그인한 유저 등록
 
-            res.redirect(routes.home);
+            //res.redirect(routes.home);
+            res.json({
+                success: true,
+                
+            })
         }
-    });
+    });*/
+
+    const checkUser = (user) => {
+        if(!user || !user.verify(password)){
+            //id가 존재하지 않거나 비밀번호 미일치
+
+            throw new Error("잘못된 정보입니다. 다시 입력해 주세요.")
+        }
+        else{
+            
+            //토큰 생성
+            const p = new Promise((resolve, reject) => {
+                jwt.sign(
+                    {
+                        _id: user._id,
+                        userName: user.userName,
+                        email: user.email
+                    },
+                    secretKey,
+                    {
+                        expiresIn: '3d',
+                        issuer: "Jtube.com",
+                        subject: "userInfo"
+                    }, (err, token) => {
+                        if(err) reject(err)
+                        resolve(token)
+                    })
+
+            })
+
+            return p
+        }
+    }
+
+    const respond = (token) => {
+
+        var exDate = new Date(Date.now() + 60 * 60 * 1000 * 24 * 3)
+        
+        res.cookie('token', token, {expires: exDate, httpOnly: true, signed: true})
+
+        res.json({
+            success: true,
+            message: "로그인 성공"
+        })
+    }
+
+    const error = (err) => {
+
+        res.json({
+            success: false,
+            message: err.message
+        })
+    }
+
+    User.findOneByUserName(userName)
+    .then(checkUser)
+    .then(respond)
+    .catch(error)
 };
 
 export const logout = async (req, res, next) => {
     
+    res.clearCookie("token")
+
     //로그아웃 기능 구현!
-    if(req.session.isLogin){
+    /*if(req.session.isLogin){
         await req.session.destroy(function(err) {
             req.session;
             if(err) {
                 next(new Error("session Error"));
             }
         })
-    }
+    }*/
 
     res.redirect(routes.home);
 };

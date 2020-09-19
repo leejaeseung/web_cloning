@@ -8,25 +8,44 @@ import AWS from "aws-sdk";
 
 const s3 = new AWS.S3();
 
-export const home = async (req, res) => {
+export const home = async(req, res) => {
     //async , await로 비디오 목록을 db에서 가져 온 뒤 렌더링
 
+    /*Video.find({}, (err, v) => {
+        if(err) next(new Error("DB Error"))
+        res.render("home", {
+            pageTitle: "Main",
+            videos: v,
+            isLogin: req.success
+        });
+    })*/
+
+    Video.findAll()
+    .then(videos => {
+        res.render("home", {
+            pageTitle: "Main",
+            videos,
+            isLogin: req.success
+        });
+    })
+
     //find 조건이 없기 때문에 저장된 모든 동영상을 뿌려줌
-    try{
+    /*try{
         const videos = await Video.find({});
 
         res.render("home", {
             pageTitle: "Main",
-            videos
+            videos,
+            isLogin: req.success
         });
     } catch (error) {
-        console.log(error);
 
         res.render("home", {
             pageTitle: "Main",
-            videos: []
+            videos: [],
+            isLogin: req.success
         });
-    }
+    }*/
 };
 
 export const search = (req, res) => {
@@ -124,8 +143,6 @@ export const postComment = async (req, res) => {
 export const getComments = (req, res, next) => {
     
     const videoID = req.params.id;
-
-    console.log("???")
 
     const {
         query: {

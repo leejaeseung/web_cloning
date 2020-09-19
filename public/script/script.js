@@ -136,3 +136,37 @@ function joinChecker(route, obj){
     })
 
 }
+
+function formDataToJSON(form){
+
+    var retJSON = {}
+
+    for(var i = 0; i < form.elements.length; i++){
+        if(form.elements[i].tagName == "INPUT")
+            retJSON[form.elements[i].name] = form.elements[i].value
+    }
+
+    return retJSON
+}
+
+/*function setCookie(ck_name, value, limit){
+    var exdate = new Date()
+    exdate.setDate(exdate.getDate() + limit)
+
+    var cookie_value = escape(value) + ((limit == null) ? '' : "; expires=" + exdate.toUTCString())
+    document.cookie = ck_name + "=" + cookie_value
+}
+
+function getCookie(ck_name){
+
+    var k, v
+    var str = document.cookie.split(';')
+
+    for(var i = 0; i < str.length; i++){
+        k = str[i].substr(0, str[i].indexOf('='))
+        v = str[i].substr(str[i].indexOf('=') + 1)
+        k = k.trim()
+        if(k == ck_name)
+            return unescape(v)
+    }
+}*/

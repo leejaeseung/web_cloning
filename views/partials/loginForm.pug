@@ -1,7 +1,37 @@
-form(action=routes.login, method="post")
+form#loginForm(action=routes.login, method="post")
     .input-boxes
         input(type="text", placeholder="아이디를 입력하세요.", name="userName")
         input(type="password", placeholder="패스워드를 입력하세요.", name="password")
+    p#login_msg.msg
     a(href="http://") ID / PW 찾기
-    p.msg #{login_msg}
-    input.button.white(type="submit", value="Login")
+    button#submiBt.button.white(type="button") Login
+
+script.
+    const loginForm = document.getElementById('loginForm')
+    const submitBt = document.getElementById('submiBt')
+    const loginMsg = document.getElementById('login_msg')
+
+    submitBt.addEventListener('click', () => {
+        const inputJson = formDataToJSON(loginForm)
+
+        fetch("#{routes.login}", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"}, 
+            body: JSON.stringify(inputJson)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success){
+                    //setCookie("token", data.token, 3)
+                    alert(data.message)
+                    
+                    location.href = "#{routes.home}"
+                    //fetch("#{routes.home}", {method: "GET"})
+                    //나중엔 로그인 창 이전으로 돌아가게
+                }
+                else{
+                    login_msg.textContent = data.message
+                }
+            })        
+    })
+    
