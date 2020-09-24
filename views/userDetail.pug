@@ -5,7 +5,7 @@ block content
         .title
             img.profile-img(src=routes.home + imgUrl, alt="프로필을 적용해 주세요.")
             h1#title #{userName}'s Profile
-            if nowUser.userName == userName
+            if isOwner
                 #edit-button.button.white
                     a(href=routes.editProfile(userName)) 프로필 수정
         hr

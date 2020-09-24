@@ -467,14 +467,36 @@ export const getMyVideos = async (req, res) => {
 export const userDetail = (req, res) => {
 
     const {
-        body: {user}
+        body: {user},
+        userInfo: nowUser
     } = req;
+
+    const isOwner = user.userName == nowUser.userName ? true : false
 
     res.render("userDetail", {
         pageTitle: user.userName + "'s Detail",
         userID: user._id,
         userName: user.userName,
         userEmail: user.email,
-        imgUrl: user.imgUrl
+        imgUrl: user.imgUrl,
+        isLogin: req.success,
+        isOwner
     })
 };
+
+export const getLoginedUser = (req, res) => {
+    
+    const isLogin = req.success
+
+    if(isLogin){
+        console.log(req.userInfo)
+
+        res.json({
+            userName: req.userInfo.userName,
+            email: req.userInfo.email
+        })
+    }
+    else{
+        next(new Error("User is not Logined"))
+    }
+}

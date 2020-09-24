@@ -149,6 +149,20 @@ function formDataToJSON(form){
     return retJSON
 }
 
+function getUserInfo(){
+    return new Promise((resolve, reject) => {
+        fetch("/users/check", {method: "GET"})
+        .then(res => res.json())
+        .then((data, err) => {
+
+            if(data)
+                resolve(data)
+            else
+                reject(err)
+        })
+    })
+}
+
 /*function setCookie(ck_name, value, limit){
     var exdate = new Date()
     exdate.setDate(exdate.getDate() + limit)

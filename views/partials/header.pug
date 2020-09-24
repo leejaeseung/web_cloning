@@ -15,9 +15,18 @@ header
                 li
                     a(href=routes.videos + routes.upload) Upload
                 li
-                    a(href=routes.userDetail(nowUser.userName)) Profile
+                    a#profile(href="javascript:;") Profile
                 li
                     a(href=routes.myVideos(nowUser.userName)) MyVideos
                 li
                     a(href=routes.logout) Logout
 hr
+
+script.
+    const PFLink = document.getElementById('profile')
+
+    PFLink.addEventListener('click', async () => {
+        const userInfo = await getUserInfo()
+
+        location.href = `#{routes.userDetail('${userInfo.userName}')}`
+    })

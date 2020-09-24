@@ -8,17 +8,8 @@ import AWS from "aws-sdk";
 
 const s3 = new AWS.S3();
 
-export const home = async(req, res) => {
+export const home = (req, res) => {
     //async , await로 비디오 목록을 db에서 가져 온 뒤 렌더링
-
-    /*Video.find({}, (err, v) => {
-        if(err) next(new Error("DB Error"))
-        res.render("home", {
-            pageTitle: "Main",
-            videos: v,
-            isLogin: req.success
-        });
-    })*/
 
     Video.findAll()
     .then(videos => {

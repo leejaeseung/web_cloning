@@ -14,6 +14,7 @@ const CONFIRM_EMAIL = "/confirm-email"
 
 const USERS = "/users";
 const USER_ID = "/:id";
+const USER_CHECK = "/check"
 const EDIT_PROFILE = "/:id/edit-profile";
 const MYVIDEOS = "/:id/myvideos";
 
@@ -42,6 +43,7 @@ const routes = {
     checkEmail: CHECK_EMAIL,
     confirmEmail: CONFIRM_EMAIL,
     users: USERS,
+    userCheck: USER_CHECK,
     userDetail: (id) => {
         if (id) {
             return USERS + "/" + id;
