@@ -4,12 +4,12 @@ block content
     .editProfile
         .editBox
             h3#title 프로필 수정
-            a.button.white#exit(href=routes.userDetail(nowUser.userName)) 나가기
+            a.button.white#exit(href=routes.userDetail(userName)) 나가기
         include ./partials/changeImageForm
         .editBox
             .edit-text ID : 
             .edit-input
-                form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
+                form(action=routes.editProfile(userName) + "?_method=PATCH", method="post")
                     input(type="text", name="userName", placeholder="변경할 이름을 입력하세요.", required=true)
                     input.button.white(type="submit", value="ID 변경")
             .edit-msg#userName_msg
@@ -19,7 +19,7 @@ block content
                 input(type="email", id="email", name="email", placeholder="변경할 이메일을 입력하세요.", required=true)
                 input.button.white(type="button", id="emailBt", value="인증 요청")
             .edit-msg#email_msg
-        form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post")
+        form(action=routes.editProfile(userName) + "?_method=PATCH", method="post")
             .editBox
                 .edit-text Original Password : 
                 .edit-input
@@ -44,13 +44,13 @@ block content
 
                     codeBt.addEventListener("click", async ()=> {
 
-                        await fetch("#{routes.editProfile(nowUser.userName)}", { method: "PATCH" ,
+                        await fetch("#{routes.editProfile(userName)}", { method: "PATCH" ,
                         headers: {
                                     'Accept': 'application/json',
                                     'Content-Type': 'application/json'
                                 }, 
                         body: JSON.stringify({email: document.getElementById("email").value})
-                    }).then(data => {window.location.href = "#{routes.editProfile(nowUser.userName)}";})
+                    }).then(data => {window.location.href = "#{routes.editProfile(userName)}";})
                     //이메일 변경 완료시 초기화
                 })
                 }).catch(err => console.log(err))

@@ -1,4 +1,4 @@
-form#img-form(action=routes.editProfile(nowUser.userName) + "?_method=PATCH", method="post", enctype="multipart/form-data")
+form#img-form(action=routes.editProfile(userName) + "?_method=PATCH", method="post", enctype="multipart/form-data")
     img.profile-img#img_section(src=routes.home + imgUrl)
     .uploadBox
         input#file_route(type="text", disabled="disabled", value="파일 선택")

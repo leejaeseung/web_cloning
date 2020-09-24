@@ -1,7 +1,7 @@
 import routes from "../routes"
 import User from "../DBmodel/users";
 import Video from "../DBmodel/videos";
-import { mailSender, generateCode } from "../middleware";
+import { mailSender, generateCode, createToken } from "../middleware";
 import jwt from "jsonwebtoken";
 
 export const getJoin = async (req, res, next) => {
@@ -217,7 +217,7 @@ export const postLogin = (req, res, next) => {
         }
     });*/
 
-    const checkUser = (user) => {
+    const checkUser = async (user) => {
         if(!user || !user.verify(password)){
             //id가 존재하지 않거나 비밀번호 미일치
 
@@ -226,7 +226,8 @@ export const postLogin = (req, res, next) => {
         else{
             
             //토큰 생성
-            const p = new Promise((resolve, reject) => {
+            const token = await createToken(user.userName, user.email, '2h', 'Jtube.com', 'userInfo')
+            /*new Promise((resolve, reject) => {
                 jwt.sign(
                     {
                         _id: user._id,
@@ -235,7 +236,7 @@ export const postLogin = (req, res, next) => {
                     },
                     secretKey,
                     {
-                        expiresIn: '3d',
+                        expiresIn: '2h',
                         issuer: "Jtube.com",
                         subject: "userInfo"
                     }, (err, token) => {
@@ -243,9 +244,9 @@ export const postLogin = (req, res, next) => {
                         resolve(token)
                     })
 
-            })
+            })*/
 
-            return p
+            return token
         }
     }
 
@@ -292,15 +293,26 @@ export const logout = async (req, res, next) => {
     res.redirect(routes.home);
 };
 
-export const getEditProfile = (req, res) => {
+export const getEditProfile = (req, res, next) => {
 
     const {
-        body: {user}
+        body: {user},
+        isOwner,
+        success
     } = req;
+
+    
+    if(!isOwner)
+        next(new Error("User is Not Logined"))
+
 
     res.render("editProfile", {
         pageTitle: "Edit Your Profile",
-        imgUrl: user.imgUrl
+        imgUrl: user.imgUrl,
+        userName: user.userName,
+        userEmail: user.email,
+        isLogin: success,
+        isOwner
     })
 };
 
@@ -317,12 +329,13 @@ export const patchEditProfile = async (req, res, next) => {
             password_new1,
             password_new2,
             err_msg
-        }
+        },
+        userInfo: nowUser
     } = req;
 
-    res.set("Content-Type", "text/plain");
+    var exDate = new Date(Date.now() + 60 * 60 * 1000 * 24 * 3)
 
-    //console.log(req.body);
+    res.set("Content-Type", "text/plain");
 
     if(err_msg){
         req.flash("msg", {tag: err_msg.tag + "_msg", text: err_msg.msg, clr: "red" });
@@ -347,9 +360,16 @@ export const patchEditProfile = async (req, res, next) => {
 
                         await req.flash("msg", {tag: "userName_msg", text: "아이디가 변경되었습니다.", clr: "green" });
 
-                        req.session.userName = userName;
+                        //현재 이름으로 토큰 생성
+                        const token = await createToken(userName, nowUser.email, '2h', 'Jtube.com', 'userInfo')
+
+                        //기존 토큰 삭제
+                        res.clearCookie("token")
+
+                        //새로운 토큰을 쿠키에 등록
+                        res.cookie('token', token, {expires: exDate, httpOnly: true, signed: true})
                     }
-                    return res.redirect(routes.editProfile(req.session.userName));
+                    return res.redirect(routes.editProfile(userName));
                 });
             }
             else if(email){
@@ -373,7 +393,14 @@ export const patchEditProfile = async (req, res, next) => {
                             });
                         await req.flash("msg", {tag: "email_msg", text: "e-mail이 변경되었습니다.", clr: "green" });
 
-                        req.session.email = email;  
+                        //현재 이름으로 토큰 생성
+                        const token = await createToken(nowUser.userName, email, '2h', 'Jtube.com', 'userInfo')
+
+                        //기존 토큰 삭제
+                        res.clearCookie("token")
+
+                        //새로운 토큰을 쿠키에 등록
+                        res.cookie('token', token, {expires: exDate, httpOnly: true, signed: true})
                     }
 
                     return res.json({tag: "email_msg", text: "e-mail이 변경되었습니다.", clr: "green" })
@@ -386,7 +413,7 @@ export const patchEditProfile = async (req, res, next) => {
                 if(password_ori !== user.password){
                     req.flash("msg", {tag: "password_ori_msg", text: "기존 비밀번호가 일치하지 않습니다.", clr: "red" });
 
-                    return res.redirect(routes.editProfile(req.session.userName));
+                    return res.redirect(routes.editProfile(nowUser.userName));
                 }
                 else{
                     if(password_new1 !== password_new2){
@@ -394,14 +421,14 @@ export const patchEditProfile = async (req, res, next) => {
 
                         req.flash("msg", {tag: "password_new_msg", text: "두 비밀번호가 일치하지 않습니다.", clr: "red" });
 
-                        return res.redirect(routes.editProfile(req.session.userName));
+                        return res.redirect(routes.editProfile(nowUser.userName));
                     }
                     else if(password_new1 == password_ori){
                         //기존 비밀번호와 일치 여부
 
                         req.flash("msg", {tag: "password_new_msg", text: "기존 비밀번호와 동일한 비밀번호 입니다.", clr: "red" });
 
-                        return res.redirect(routes.editProfile(req.session.userName));
+                        return res.redirect(routes.editProfile(nowUser.userName));
                     }
                     else{
                         //비밀번호 변경 성공!
@@ -413,7 +440,7 @@ export const patchEditProfile = async (req, res, next) => {
                                     }
                             });
 
-                        return res.redirect(routes.editProfile(req.session.userName));
+                        return res.redirect(routes.editProfile(nowUser.userName));
                     }
                 }
             }
@@ -424,14 +451,14 @@ export const patchEditProfile = async (req, res, next) => {
                     file: {path}
                 } = req;
 
-                await User.update({ userName: req.session.userName },
+                await User.update({ userName: nowUser.userName },
                     {
                         $set: {
                             imgUrl: path
                             }
                     });               
 
-                return res.redirect(routes.editProfile(req.session.userName));
+                return res.redirect(routes.editProfile(nowUser.userName));
             }
         }
         catch(err){
@@ -468,28 +495,28 @@ export const userDetail = (req, res) => {
 
     const {
         body: {user},
-        userInfo: nowUser
+        isOwner,
+        success
     } = req;
 
-    const isOwner = user.userName == nowUser.userName ? true : false
 
     res.render("userDetail", {
         pageTitle: user.userName + "'s Detail",
-        userID: user._id,
         userName: user.userName,
         userEmail: user.email,
         imgUrl: user.imgUrl,
-        isLogin: req.success,
+        isLogin: success,
         isOwner
     })
 };
 
 export const getLoginedUser = (req, res) => {
     
-    const isLogin = req.success
+    const {
+        success
+    } = req
 
-    if(isLogin){
-        console.log(req.userInfo)
+    if(success){
 
         res.json({
             userName: req.userInfo.userName,

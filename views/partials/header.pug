@@ -17,16 +17,25 @@ header
                 li
                     a#profile(href="javascript:;") Profile
                 li
-                    a(href=routes.myVideos(nowUser.userName)) MyVideos
+                    a#myvideos(href="javascript:;") MyVideos
                 li
                     a(href=routes.logout) Logout
 hr
 
 script.
     const PFLink = document.getElementById('profile')
+    const MVLink = document.getElementById('myvideos')
 
     PFLink.addEventListener('click', async () => {
         const userInfo = await getUserInfo()
 
         location.href = `#{routes.userDetail('${userInfo.userName}')}`
+    })
+
+    
+
+    MVLink.addEventListener('click', async () => {
+        const userInfo = await getUserInfo()
+
+        location.href = `#{routes.myVideos('${userInfo.userName}')}`
     })

@@ -11,12 +11,16 @@ const s3 = new AWS.S3();
 export const home = (req, res) => {
     //async , await로 비디오 목록을 db에서 가져 온 뒤 렌더링
 
+    const {
+        success
+    } = req
+
     Video.findAll()
     .then(videos => {
         res.render("home", {
             pageTitle: "Main",
             videos,
-            isLogin: req.success
+            isLogin: success
         });
     })
 

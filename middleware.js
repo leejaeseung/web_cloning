@@ -67,11 +67,11 @@ export const localsMiddleware = (req, res, next) =>{
     res.locals.siteName = "JTube";
     res.locals.routes = routes;
 
-    res.locals.nowUser = {
+    /*res.locals.nowUser = {
         isLogin: req.session.isLogin,
         userName: req.session.userName,
         email: req.session.email
-    };
+    };*/
 
     res.locals.message = req.flash("msg");
 
@@ -96,6 +96,7 @@ export const userLoader = async (req, res, next) => {
         //console.log(user);
 
         if(user){
+            req.isOwner = user.userName == req.userInfo.userName ? true : false
             req.body.user = user;
             next();
         }
@@ -216,6 +217,29 @@ export const mailSender = async (dest, code) => {
         subject: "JTube 가입 인증 메일",
 
         html: "<h1>다음 코드를 입력하세요.</h1><br>" + code
+    })
+}
+
+export const createToken = (userName, email, exp, issuer, sub) => {
+
+    const secretKey = process.env.JWT_SECRET
+
+    return new Promise((resolve, reject) => {
+        jwt.sign(
+            {
+                userName: userName,
+                email: email
+            },
+            secretKey,
+            {
+                expiresIn: exp,
+                issuer: issuer,
+                subject: sub
+            }, (err, token) => {
+                if(err) reject(err)
+                resolve(token)
+            })
+
     })
 }
 

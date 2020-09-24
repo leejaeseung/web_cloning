@@ -14,11 +14,10 @@ const userRouter = express.Router();
 
 userRouter.get(routes.userCheck, loginChecker, getLoginedUser);
 
-userRouter.get(routes.editProfile(), userLoader, loginChecker, getEditProfile);
-userRouter.patch(routes.editProfile(),  userLoader, loginChecker, userEditValidationRules(), validate, uploadProfile, patchEditProfile);
+userRouter.get(routes.editProfile(), loginChecker, userLoader,  getEditProfile);
+userRouter.patch(routes.editProfile(),  loginChecker, userLoader,  userEditValidationRules(), validate, uploadProfile, patchEditProfile);
 
-
-userRouter.get(routes.myVideos(), userLoader, loginChecker, getMyVideos)
-userRouter.get(routes.userDetail(), userLoader, loginChecker, userDetail);
+userRouter.get(routes.myVideos(), loginChecker, userLoader,  getMyVideos)
+userRouter.get(routes.userDetail(), loginChecker, userLoader,  userDetail);
 
 export default userRouter;
