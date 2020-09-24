@@ -182,7 +182,6 @@ export const getLogin = (req, res) => {
 export const postLogin = (req, res, next) => {
 
     const { body: { userName, password}} = req;
-    const secretKey = process.env.JWT_SECRET
 
     res.set("Content-Type", "text/plain");
 
@@ -226,7 +225,7 @@ export const postLogin = (req, res, next) => {
         else{
             
             //토큰 생성
-            const token = await createToken(user.userName, user.email, '2h', 'Jtube.com', 'userInfo')
+            const token = await createToken(user._id, user.userName, user.email, '2h', 'Jtube.com', 'userInfo')
             /*new Promise((resolve, reject) => {
                 jwt.sign(
                     {
@@ -361,7 +360,7 @@ export const patchEditProfile = async (req, res, next) => {
                         await req.flash("msg", {tag: "userName_msg", text: "아이디가 변경되었습니다.", clr: "green" });
 
                         //현재 이름으로 토큰 생성
-                        const token = await createToken(userName, nowUser.email, '2h', 'Jtube.com', 'userInfo')
+                        const token = await createToken(nowUser.userID, userName, nowUser.email, '2h', 'Jtube.com', 'userInfo')
 
                         //기존 토큰 삭제
                         res.clearCookie("token")
@@ -394,7 +393,7 @@ export const patchEditProfile = async (req, res, next) => {
                         await req.flash("msg", {tag: "email_msg", text: "e-mail이 변경되었습니다.", clr: "green" });
 
                         //현재 이름으로 토큰 생성
-                        const token = await createToken(nowUser.userName, email, '2h', 'Jtube.com', 'userInfo')
+                        const token = await createToken(nowUser.userID, nowUser.userName, email, '2h', 'Jtube.com', 'userInfo')
 
                         //기존 토큰 삭제
                         res.clearCookie("token")

@@ -14,7 +14,7 @@ mixin commentBlock( comment = {})
             if comment.childs !== 0
                 a.openReply(href="javascript:;") 답글 #{comment.childs}개 보기
             a.reply(href="javascript:;") reply
-            if nowUser.userName == comment.author.userName && !comment.isDeleted
+            if userName == comment.author.userName && !comment.isDeleted
                 form.editForm(action=routes.putComment(comment.videoID, comment.id) + "?_method=PUT", method="POST")
                     a.edit(href="javascript:;") edit
                 form.deleteForm(action=routes.deleteComment(comment.videoID, comment.id) + "?_method=DELETE", method="POST")

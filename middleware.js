@@ -220,13 +220,14 @@ export const mailSender = async (dest, code) => {
     })
 }
 
-export const createToken = (userName, email, exp, issuer, sub) => {
+export const createToken = (id, userName, email, exp, issuer, sub) => {
 
     const secretKey = process.env.JWT_SECRET
 
     return new Promise((resolve, reject) => {
         jwt.sign(
             {
+                userID: id,
                 userName: userName,
                 email: email
             },

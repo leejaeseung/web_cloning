@@ -45,14 +45,16 @@ export const home = (req, res) => {
 
 export const search = (req, res) => {
     const {
-        query: {search: searchTerm}
+        query: {search: searchTerm},
+        success
     } = req;
 
     Video.find( {videoName: searchTerm}, (err, videos) => {
     res.render("search", {
         pageTitle: "Search",
         searchTerm,
-        videos
+        videos,
+        isLogin: success
     });
 });
 };
@@ -65,7 +67,9 @@ export const videoDetail = async (req, res, next) => {
         body: {
             video,
             isCreator
-        }
+        },
+        userInfo: nowUser,
+        success
     } = req;
 
     await Comment.find({"videoID": video.id, "parentComment": null}).populate("author").exec((err, comments) => {
@@ -76,7 +80,9 @@ export const videoDetail = async (req, res, next) => {
             video,
             isCreator,
             creator: video.creator.userName,
-            comments
+            comments,
+            userName: nowUser.userName,
+            isLogin: success
         });
     });
 };
@@ -225,23 +231,36 @@ export const postView = async (req, res) => {
     res.status(200);
 };
 
-export const getUpload = (req, res) => {
+export const getUpload = (req, res, next) => {
+
+    const {
+        success
+    } = req
+
+    if(!success)
+        next(new Error("User is not Logined"))
+
     res.render("videoUpload", {
-        pageTitle: "Upload Video"
+        pageTitle: "Upload Video",
+        isLogin: success
     });
 };
 
-export const postUpload = async (req, res) => {
+export const postUpload = async (req, res, next) => {
 
     const {
         body: {
             videoName,
             description
-        }
+        },
+        userInfo: nowUser,
+        success
     } = req;
 
-    var path
+    if(!success)
+        next(new Error("User is not Logined"))
 
+    var path
     
     if(process.env.NODE_ENV == "production") {
         path = req.file.location
@@ -256,7 +275,7 @@ export const postUpload = async (req, res) => {
         description,
         views: 0,
         fileUrl: path,
-        creator: req.session.userID
+        creator: nowUser.userID
     });
 
     //업로드 구현
@@ -265,6 +284,14 @@ export const postUpload = async (req, res) => {
 };
 
 export const deleteVideo = (req, res, next) => {
+
+    const {
+        userInfo: nowUser,
+        success
+    } = req
+
+    if(!success)
+        next(new Error("User is not Logined"))
     
     const videoID = req.params.id;
 
@@ -303,24 +330,31 @@ export const deleteVideo = (req, res, next) => {
                 })
             }
             
-            res.redirect(routes.myVideos(req.session.userName));
+            res.redirect(routes.myVideos(nowUser.userName));
         }
     });
 }
 
-export const getEditVideo = async (req, res) => {
+export const getEditVideo = async (req, res, next) => {
 
     //const videoID = req.params.id;
 
     const {
         body: {
             video
-        }
+        },
+        userInfo: nowUser,
+        success
     } = req;
+
+    if(!success)
+        next(new Error("User is not Logined"))
 
     res.render("editVideo", {
         pageTitle: "Edit Video",
-        video
+        video,
+        userName: nowUser.userName,
+        isLogin: success
     });
 }
 
@@ -331,8 +365,13 @@ export const patchEditVideo = async (req, res, next) => {
             video,
             videoName,
             description
-        }
+        },
+        userInfo: nowUser,
+        success
     } = req;
+
+    if(!success)
+        next(new Error("User is not Logined"))
 
     try{
         await Video.update({_id: video.id}, { $set: { videoName, description}});
@@ -341,5 +380,5 @@ export const patchEditVideo = async (req, res, next) => {
         next(new Error("DB Error"));
     }
 
-    res.redirect(routes.myVideos(req.session.userName));
+    res.redirect(routes.myVideos(nowUser.userName));
 }
