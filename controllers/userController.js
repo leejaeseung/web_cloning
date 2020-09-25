@@ -2,7 +2,6 @@ import routes from "../routes"
 import User from "../DBmodel/users";
 import Video from "../DBmodel/videos";
 import { mailSender, generateCode, createToken } from "../middleware";
-import jwt from "jsonwebtoken";
 
 export const getJoin = async (req, res, next) => {
 
@@ -22,7 +21,15 @@ export const getJoin = async (req, res, next) => {
 };
 
 export const postJoin = async (req, res, next) => {
-    const { body: { userName, email, password1 , password2, err_msg}} = req;
+    const { 
+        body: { 
+            userName, 
+            email, 
+            password1, 
+            password2, 
+            err_msg
+            }
+        } = req;
 
     res.set("Content-Type", "text/plain");
 
@@ -181,7 +188,12 @@ export const getLogin = (req, res) => {
 
 export const postLogin = (req, res, next) => {
 
-    const { body: { userName, password}} = req;
+    const { 
+        body: { 
+            userName, 
+            password
+        }
+    } = req;
 
     res.set("Content-Type", "text/plain");
 
@@ -226,24 +238,6 @@ export const postLogin = (req, res, next) => {
             
             //토큰 생성
             const token = await createToken(user._id, user.userName, user.email, '2h', 'Jtube.com', 'userInfo')
-            /*new Promise((resolve, reject) => {
-                jwt.sign(
-                    {
-                        _id: user._id,
-                        userName: user.userName,
-                        email: user.email
-                    },
-                    secretKey,
-                    {
-                        expiresIn: '2h',
-                        issuer: "Jtube.com",
-                        subject: "userInfo"
-                    }, (err, token) => {
-                        if(err) reject(err)
-                        resolve(token)
-                    })
-
-            })*/
 
             return token
         }
@@ -321,79 +315,83 @@ export const patchEditProfile = async (req, res, next) => {
 
     const {
         body: {
-            user,
-            userName,
-            email,
-            password_ori,
-            password_new1,
-            password_new2,
+            user: nowUser,
+            userName: input_userName,
+            email: input_email,
+            password_ori: input_password_ori,
+            password_new1: input_password_new1,
+            password_new2: input_password_new2,
             err_msg
         },
-        userInfo: nowUser
+        isOwner
     } = req;
 
-    var exDate = new Date(Date.now() + 60 * 60 * 1000 * 24 * 3)
+    if(!isOwner)
+        next(new Error("User is not Logined"))
+
+    const exDate = new Date(Date.now() + 60 * 60 * 1000 * 24 * 3)
 
     res.set("Content-Type", "text/plain");
 
     if(err_msg){
         req.flash("msg", {tag: err_msg.tag + "_msg", text: err_msg.msg, clr: "red" });
-        return res.redirect(routes.editProfile(req.session.userName));
+        return res.redirect(routes.editProfile(nowUser.userName));
     }
             
-            if(userName){
+            if(input_userName){
 
-                User.findOne({"userName" : userName}, async function(err, target) {
+                User.findOne({"userName" : input_userName}, async function(err, target) {
                     if(err) next(new Error("DB 에러"));
                     if(target){
                         await req.flash("msg", {tag: "userName_msg", text: "이미 존재하는 아이디 입니다.", clr: "red" });
                         
                     }
                     else{
-                        await User.update({ userName: user.userName },
+                        await User.update({ "userName": nowUser.userName },
                             {
                                 $set: {
-                                    userName
+                                    "userName": input_userName
                                 }
                             });
 
                         await req.flash("msg", {tag: "userName_msg", text: "아이디가 변경되었습니다.", clr: "green" });
 
                         //현재 이름으로 토큰 생성
-                        const token = await createToken(nowUser.userID, userName, nowUser.email, '2h', 'Jtube.com', 'userInfo')
+                        const token = await createToken(nowUser._id, input_userName, nowUser.email, '2h', 'Jtube.com', 'userInfo')
 
                         //기존 토큰 삭제
                         res.clearCookie("token")
 
                         //새로운 토큰을 쿠키에 등록
                         res.cookie('token', token, {expires: exDate, httpOnly: true, signed: true})
+
+                        nowUser.userName = input_userName
                     }
-                    return res.redirect(routes.editProfile(userName));
+
+                    return res.redirect(routes.editProfile(nowUser.userName));
                 });
             }
-            else if(email){
-
-                console.log("하위")
+            else if(input_email){
 
                 if(req.session.cert_Email !== req.session.nowEmail)
                     return next();
 
-                User.findOne({"email" : email}, async function(err, target) {
+                User.findOne({"email" : input_email}, async function(err, target) {
                     if(err) next(new Error("DB 에러"));
                     if(target){
                         await req.flash("msg", {tag: "email_msg", text: "이미 존재하는 e-mail 입니다.", clr: "red" });
                     }
                     else{
-                        await User.update({ userName: user.userName },
+                        await User.update({ "userName": nowUser.userName },
                             {
                                 $set: {
-                                    email
+                                    "email": input_email
                                     }
                             });
                         await req.flash("msg", {tag: "email_msg", text: "e-mail이 변경되었습니다.", clr: "green" });
 
                         //현재 이름으로 토큰 생성
-                        const token = await createToken(nowUser.userID, nowUser.userName, email, '2h', 'Jtube.com', 'userInfo')
+                        const token = await createToken(nowUser._id, nowUser.userName, input_email, '2h', 'Jtube.com', 'userInfo')
 
                         //기존 토큰 삭제
                         res.clearCookie("token")
@@ -406,23 +404,23 @@ export const patchEditProfile = async (req, res, next) => {
                     //return res.redirect(routes.editProfile(req.session.userName));
                 });
             }
-            else if(password_ori){
+            else if(input_password_ori){
                 //비밀번호 체크 업데이트하자!
 
-                if(password_ori !== user.password){
+                if(input_password_ori !== nowUser.password){
                     req.flash("msg", {tag: "password_ori_msg", text: "기존 비밀번호가 일치하지 않습니다.", clr: "red" });
 
                     return res.redirect(routes.editProfile(nowUser.userName));
                 }
                 else{
-                    if(password_new1 !== password_new2){
+                    if(input_password_new1 !== input_password_new2){
                         //비밀번호 중복 확인
 
                         req.flash("msg", {tag: "password_new_msg", text: "두 비밀번호가 일치하지 않습니다.", clr: "red" });
 
                         return res.redirect(routes.editProfile(nowUser.userName));
                     }
-                    else if(password_new1 == password_ori){
+                    else if(input_password_new1 == input_password_ori){
                         //기존 비밀번호와 일치 여부
 
                         req.flash("msg", {tag: "password_new_msg", text: "기존 비밀번호와 동일한 비밀번호 입니다.", clr: "red" });
@@ -432,10 +430,10 @@ export const patchEditProfile = async (req, res, next) => {
                     else{
                         //비밀번호 변경 성공!
 
-                        await User.update({ userName: user.userName },
+                        await User.update({ "userName": nowUser.userName },
                             {
                                 $set: {
-                                    password: password_new1
+                                    "password": input_password_new1
                                     }
                             });
 
@@ -450,7 +448,7 @@ export const patchEditProfile = async (req, res, next) => {
                     file: {path}
                 } = req;
 
-                await User.update({ userName: nowUser.userName },
+                await User.update({ "userName": nowUser.userName },
                     {
                         $set: {
                             imgUrl: path
@@ -462,20 +460,35 @@ export const patchEditProfile = async (req, res, next) => {
         }
         catch(err){
             console.log(err);
+            next(new Error(err))
         }
 }
 
-export const getMyVideos = async (req, res) => {
+export const getMyVideos = async (req, res, next) => {
 
     const {
-        body: {user}
+        body: {user: nowUser},
+        isOwner,
+        success
     } = req;
 
-    try{
+    if(!isOwner)
+        next(new Error("User is not Logined"))
 
-    const videos = await Video.find({ "creator" : user.id});
+    //try{
 
-    res.render("myVideos", {
+    //const videos = await Video.find({ "creator" : user.id});
+
+    Video.findByCreator(nowUser.id)
+    .then(videos => {
+        res.render("myVideos", {
+            pageTitle: "My Videos",
+            videos,
+            isLogin: success
+        });
+    })
+
+    /*res.render("myVideos", {
         pageTitle: "My Videos",
         videos
     });
@@ -487,23 +500,23 @@ export const getMyVideos = async (req, res) => {
             pageTitle: "My Videos",
             videos: []
         });
-    }
+    }*/
 }
 
 export const userDetail = (req, res) => {
 
     const {
-        body: {user},
+        body: {user: nowUser},
         isOwner,
         success
     } = req;
 
 
     res.render("userDetail", {
-        pageTitle: user.userName + "'s Detail",
-        userName: user.userName,
-        userEmail: user.email,
-        imgUrl: user.imgUrl,
+        pageTitle: nowUser.userName + "'s Detail",
+        userName: nowUser.userName,
+        userEmail: nowUser.email,
+        imgUrl: nowUser.imgUrl,
         isLogin: success,
         isOwner
     })

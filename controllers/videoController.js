@@ -49,14 +49,24 @@ export const search = (req, res) => {
         success
     } = req;
 
-    Video.find( {videoName: searchTerm}, (err, videos) => {
+    Video.findByVideoName(searchTerm)
+    .then(videos => {
+        res.render("search", {
+            pageTitle: "Search",
+            searchTerm,
+            videos,
+            isLogin: success
+        });
+    })
+
+    /*Video.find( {videoName: searchTerm}, (err, videos) => {
     res.render("search", {
         pageTitle: "Search",
         searchTerm,
         videos,
         isLogin: success
-    });
-});
+    });*/
+//});
 };
 
 export const videoDetail = async (req, res, next) => {
@@ -96,8 +106,6 @@ export const postComment = async (req, res) => {
             parent
         }
     } = req;
-
-    console.log(parent);
 
 
     if(!parent){
